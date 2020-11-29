@@ -4,3 +4,4 @@ pub mod star3;
 pub mod star4;
 pub mod star5;
 pub mod star6;
+pub mod star7;
