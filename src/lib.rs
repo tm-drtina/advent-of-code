@@ -1,4 +1,4 @@
-#![feature(iterator_fold_self)]
+#![feature(iterator_fold_self, str_split_once)]
 
 #[cfg(test)]
 mod template;
