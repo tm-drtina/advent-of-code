@@ -10,7 +10,7 @@ pub fn run(input: &str) -> i32 {
             let i: i32 = nums.iter().sum();
             i == 2020
         })
-        .map(|nums| nums.iter().fold(1, |acc, val| acc * *val))
+        .map(|nums| nums.iter().product())
         .next()
         .unwrap()
 }
