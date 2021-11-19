@@ -92,7 +92,7 @@ pub fn run(input: &str) -> i32 {
                 .fold(Traverse::default(), Move::traverse)
                 .visited
         })
-        .fold_first(|set1, set2| set1.intersection(&set2).cloned().collect())
+        .reduce(|set1, set2| set1.intersection(&set2).cloned().collect())
         .unwrap()
         .iter()
         .map(|p| p.manhattan_dist())

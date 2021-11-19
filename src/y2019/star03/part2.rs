@@ -106,7 +106,7 @@ pub fn run(input: &str) -> i32 {
                 .fold(Traverse::default(), Move::traverse)
                 .visited
         })
-        .fold_first(|set1, set2| {
+        .reduce(|set1, set2| {
             set1.iter()
                 .filter_map(|p| {
                     let other = set2.get(p)?;
