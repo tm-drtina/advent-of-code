@@ -2,19 +2,19 @@ use std::collections::HashSet;
 use std::str::FromStr;
 
 enum Direction {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 impl From<&str> for Direction {
     fn from(val: &str) -> Self {
         match val {
-            "U" => Direction::UP,
-            "D" => Direction::DOWN,
-            "L" => Direction::LEFT,
-            "R" => Direction::RIGHT,
+            "U" => Direction::Up,
+            "D" => Direction::Down,
+            "L" => Direction::Left,
+            "R" => Direction::Right,
             _ => panic!("Unrecognized direction {}", val),
         }
     }
@@ -55,19 +55,19 @@ impl From<&str> for Move {
 impl Move {
     fn step(&self, from: &Point) -> Point {
         match self.direction {
-            Direction::UP => Point {
+            Direction::Up => Point {
                 x: from.x,
                 y: from.y + 1,
             },
-            Direction::DOWN => Point {
+            Direction::Down => Point {
                 x: from.x,
                 y: from.y - 1,
             },
-            Direction::LEFT => Point {
+            Direction::Left => Point {
                 x: from.x - 1,
                 y: from.y,
             },
-            Direction::RIGHT => Point {
+            Direction::Right => Point {
                 x: from.x + 1,
                 y: from.y,
             },
@@ -87,8 +87,8 @@ pub fn run(input: &str) -> i32 {
     input
         .lines()
         .map(|line| {
-            line.split(",")
-                .map(|str_move| Move::from(str_move))
+            line.split(',')
+                .map(Move::from)
                 .fold(Traverse::default(), Move::traverse)
                 .visited
         })

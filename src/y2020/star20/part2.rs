@@ -12,9 +12,7 @@ impl Neighbors {
         self.data = rotate_matrix_cc(&self.data);
     }
     fn flip_upside_down(&mut self) {
-        let tmp = self.up;
-        self.up = self.down;
-        self.down = tmp;
+        std::mem::swap(&mut self.up, &mut self.down);
         self.data.reverse();
     }
     fn real_data(&self) -> Vec<Vec<bool>> {
@@ -28,8 +26,7 @@ impl Neighbors {
 fn create_image(neighbors: &HashMap<i32, Neighbors>) -> Vec<Vec<bool>> {
     let mut top_left = neighbors
         .iter()
-        .filter(|(_, n)| n.is_corner())
-        .next()
+        .find(|(_, n)| n.is_corner())
         .unwrap()
         .1
         .clone();
@@ -170,7 +167,7 @@ impl Pattern {
         }
     }
 
-    fn test(&self, image: &Vec<Vec<bool>>, off_y: usize, off_x: usize) -> bool {
+    fn test(&self, image: &[Vec<bool>], off_y: usize, off_x: usize) -> bool {
         self.indices
             .iter()
             .all(|(y, x)| image[y + off_y][x + off_x])
@@ -181,7 +178,7 @@ impl Pattern {
             .for_each(|(y, x)| monsters[y + off_y][x + off_x] = true)
     }
 
-    fn detect_monsters(&self, image: &Vec<Vec<bool>>) -> Vec<Vec<bool>> {
+    fn detect_monsters(&self, image: &[Vec<bool>]) -> Vec<Vec<bool>> {
         let mut monsters: Vec<Vec<bool>> = (0..image.len())
             .map(|_| (0..image[0].len()).map(|_| false).collect())
             .collect();

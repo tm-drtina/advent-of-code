@@ -10,7 +10,7 @@ pub fn run(input: &str) -> i64 {
 
     loop {
         let line = lines.next().unwrap();
-        if line == "" {
+        if line.is_empty() {
             break;
         }
         let (name, rules) = line.split_once(": ").unwrap();
@@ -30,7 +30,7 @@ pub fn run(input: &str) -> i64 {
     let my_ticket: Vec<i32> = lines
         .next()
         .unwrap()
-        .split(",")
+        .split(',')
         .map(|x| i32::from_str(x).unwrap())
         .collect(); // values
 
@@ -51,7 +51,7 @@ pub fn run(input: &str) -> i64 {
     lines.next(); //title
     let mut res_fields = lines
         .map(|line| {
-            line.split(",")
+            line.split(',')
                 .map(|x| i32::from_str(x).unwrap())
                 .collect::<Vec<i32>>()
         })

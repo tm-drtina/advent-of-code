@@ -38,7 +38,7 @@ fn count_rec(map: &HashMap<&str, Vec<Bag>>, bag: &Bag) -> i32 {
 }
 
 pub fn run(input: &str) -> i32 {
-    let m: HashMap<&str, Vec<Bag>> = input.lines().map(|line| parse_line(line)).collect();
+    let m: HashMap<&str, Vec<Bag>> = input.lines().map(parse_line).collect();
     count_rec(
         &m,
         &Bag {

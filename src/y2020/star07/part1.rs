@@ -20,7 +20,7 @@ pub fn run(input: &str) -> i32 {
     let mut map: HashMap<&str, HashSet<&str>> = HashMap::new();
     let empty_set: HashSet<&str> = HashSet::new();
 
-    for (outer_bag, inner_bags) in input.lines().map(|line| parse_line(line)) {
+    for (outer_bag, inner_bags) in input.lines().map(parse_line) {
         for inner_bag in inner_bags {
             map.entry(inner_bag).or_default().insert(outer_bag);
         }
@@ -32,7 +32,7 @@ pub fn run(input: &str) -> i32 {
     loop {
         let new = set
             .iter()
-            .flat_map(|str| map.get(str).unwrap_or_else(|| &empty_set))
+            .flat_map(|str| map.get(str).unwrap_or(&empty_set))
             .collect_vec();
         if !new.iter().fold(false, |acc, str| set.insert(str) || acc) {
             break;

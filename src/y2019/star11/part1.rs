@@ -24,7 +24,7 @@ impl IntcodeProgram {
     pub fn new(tape_str: &str) -> Self {
         Self {
             tape: tape_str
-                .split(",")
+                .split(',')
                 .enumerate()
                 .map(|(index, val)| (index as i64, i64::from_str(val).unwrap()))
                 .collect(),
@@ -80,7 +80,7 @@ impl IntcodeProgram {
                 let val = self
                     .input
                     .pop_front()
-                    .ok_or("No values in input stream.".to_owned())?;
+                    .ok_or_else(|| "No values in input stream.".to_owned())?;
                 *self.op(1) = val;
                 self.position += 2;
             }
@@ -123,10 +123,10 @@ impl IntcodeProgram {
 }
 
 enum Direction {
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT,
+    Up,
+    Right,
+    Down,
+    Left,
 }
 
 pub struct Robot {
@@ -134,35 +134,41 @@ pub struct Robot {
     pub position: (i32, i32),
 }
 
+impl Default for Robot {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 impl Robot {
     pub fn new() -> Self {
         Self {
-            direction: Direction::UP,
+            direction: Direction::Up,
             position: (0, 0),
         }
     }
     pub fn left(&mut self) {
         self.direction = match self.direction {
-            Direction::UP => Direction::LEFT,
-            Direction::RIGHT => Direction::UP,
-            Direction::DOWN => Direction::RIGHT,
-            Direction::LEFT => Direction::DOWN,
+            Direction::Up => Direction::Left,
+            Direction::Right => Direction::Up,
+            Direction::Down=> Direction::Right,
+            Direction::Left=> Direction::Down,
         }
     }
     pub fn right(&mut self) {
         self.direction = match self.direction {
-            Direction::UP => Direction::RIGHT,
-            Direction::RIGHT => Direction::DOWN,
-            Direction::DOWN => Direction::LEFT,
-            Direction::LEFT => Direction::UP,
+            Direction::Up => Direction::Right,
+            Direction::Right => Direction::Down,
+            Direction::Down => Direction::Left,
+            Direction::Left => Direction::Up,
         }
     }
     pub fn step(&mut self) {
         self.position = match self.direction {
-            Direction::UP => (self.position.0, self.position.1 + 1),
-            Direction::RIGHT => (self.position.0 + 1, self.position.1),
-            Direction::DOWN => (self.position.0, self.position.1 - 1),
-            Direction::LEFT => (self.position.0 - 1, self.position.1),
+            Direction::Up => (self.position.0, self.position.1 + 1),
+            Direction::Right => (self.position.0 + 1, self.position.1),
+            Direction::Down => (self.position.0, self.position.1 - 1),
+            Direction::Left => (self.position.0 - 1, self.position.1),
         }
     }
 }

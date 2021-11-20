@@ -52,14 +52,14 @@ pub fn run(input: &str) -> usize {
     let mut rules: HashMap<i32, Vec<Vec<Rule>>> = HashMap::new();
     loop {
         let line = lines.next().unwrap();
-        if line == "" {
+        if line.is_empty() {
             break;
         }
         let (index, r) = line.split_once(": ").unwrap();
         let ruleset = r
             .split(" | ")
             .map(|r2| {
-                r2.split(" ")
+                r2.split(' ')
                     .map(|rule| match rule {
                         "\"a\"" => Rule::Val { v: 'a' },
                         "\"b\"" => Rule::Val { v: 'b' },

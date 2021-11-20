@@ -18,27 +18,27 @@ impl Tile {
     pub fn right_line(&self) -> Vec<bool> {
         self.data.iter().map(|x| *x.last().unwrap()).collect()
     }
-    pub fn is_neighbor(&self, line: &Vec<bool>) -> bool {
-        let mut line_reversed = line.clone();
+    pub fn is_neighbor(&self, line: &[bool]) -> bool {
+        let mut line_reversed = line.to_owned();
         line_reversed.reverse();
 
         let other = self.up_line();
-        if line == &other || line_reversed == other {
+        if line == other || line_reversed == other {
             return true;
         }
 
         let other = self.down_line();
-        if line == &other || line_reversed == other {
+        if line == other || line_reversed == other {
             return true;
         }
 
         let other = self.left_line();
-        if line == &other || line_reversed == other {
+        if line == other || line_reversed == other {
             return true;
         }
 
         let other = self.right_line();
-        if line == &other || line_reversed == other {
+        if line == other || line_reversed == other {
             return true;
         }
 
@@ -49,24 +49,14 @@ impl Tile {
 pub fn parse_tiles(input: &str) -> HashMap<i32, Tile> {
     let mut res = HashMap::new();
     let mut lines = input.lines();
-    loop {
-        let next = if let Some(next) = lines.next() {
-            next
-        } else {
-            break;
-        };
-        let id = i32::from_str(&next[5..next.len() - 1]).unwrap();
+    while let Some(line) = lines.next() {
+        let id = i32::from_str(&line[5..line.len() - 1]).unwrap();
         let mut data: Vec<Vec<bool>> = Vec::new();
-        loop {
-            let next = if let Some(next) = lines.next() {
-                next
-            } else {
-                break;
-            };
-            if next == "" {
+        for line in lines.by_ref() {
+            if line.is_empty() {
                 break;
             }
-            data.push(next.chars().map(|ch| ch == '#').collect());
+            data.push(line.chars().map(|ch| ch == '#').collect());
         }
         res.insert(id, Tile { data });
     }
@@ -118,27 +108,19 @@ pub fn find_neighbors(tiles: &HashMap<i32, Tile>) -> HashMap<i32, Neighbors> {
             data: tile.data.clone(),
             up: tiles
                 .iter()
-                .filter(|(k, _)| *k != id)
-                .filter(|(_, x)| x.is_neighbor(&up))
-                .next()
+                .find(|(k, x)| *k != id && x.is_neighbor(&up))
                 .map(|(key, _)| *key),
             down: tiles
                 .iter()
-                .filter(|(k, _)| *k != id)
-                .filter(|(_, x)| x.is_neighbor(&down))
-                .next()
+                .find(|(k, x)| *k != id && x.is_neighbor(&down))
                 .map(|(key, _)| *key),
             left: tiles
                 .iter()
-                .filter(|(k, _)| *k != id)
-                .filter(|(_, x)| x.is_neighbor(&left))
-                .next()
+                .find(|(k, x)| *k != id && x.is_neighbor(&left))
                 .map(|(key, _)| *key),
             right: tiles
                 .iter()
-                .filter(|(k, _)| *k != id)
-                .filter(|(_, x)| x.is_neighbor(&right))
-                .next()
+                .find(|(k, x)| *k != id && x.is_neighbor(&right))
                 .map(|(key, _)| *key),
         };
         res.insert(*id, neighbors);

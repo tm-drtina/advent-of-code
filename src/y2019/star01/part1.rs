@@ -7,7 +7,7 @@ fn compute_fuel(mass: i32) -> i32 {
 pub fn run(input: &str) -> i32 {
     input.lines()
         .map(|x| i32::from_str(x).unwrap())
-        .map(|mass| compute_fuel(mass))
+        .map(compute_fuel)
         .sum()
 }
 

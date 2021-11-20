@@ -6,7 +6,7 @@ pub fn run(input: &str) -> i64 {
     let mut buses: Vec<(i64, i64)> = lines
         .next()
         .unwrap()
-        .split(",")
+        .split(',')
         .enumerate()
         .filter(|(_index, ch)| *ch != "x")
         .map(|(index, bus)| (index as i64, i64::from_str(bus).unwrap()))

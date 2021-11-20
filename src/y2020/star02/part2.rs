@@ -21,7 +21,7 @@ fn parse_line(line: &str) -> Entry {
 pub fn run(input: &str) -> usize {
     input
         .lines()
-        .map(|line| parse_line(line))
+        .map(parse_line)
         .filter(|entry| {
             let match1 = entry.pwd.chars().nth(entry.min - 1).unwrap() == entry.char;
             let match2 = entry.pwd.chars().nth(entry.max - 1).unwrap() == entry.char;

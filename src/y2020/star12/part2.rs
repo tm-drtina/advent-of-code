@@ -1,10 +1,10 @@
 use std::str::FromStr;
 
 enum Direction {
-    EAST,
-    SOUTH,
-    WEST,
-    NORTH,
+    East,
+    South,
+    West,
+    North,
 }
 
 struct Position {
@@ -31,10 +31,10 @@ impl Position {
 
     fn move_waypoint(&mut self, direction: Direction, len: i64) {
         match direction {
-            Direction::EAST => self.with_waypoint(self.wx + len, self.wy),
-            Direction::SOUTH => self.with_waypoint(self.wx, self.wy - len),
-            Direction::WEST => self.with_waypoint(self.wx - len, self.wy),
-            Direction::NORTH => self.with_waypoint(self.wx, self.wy + len),
+            Direction::East => self.with_waypoint(self.wx + len, self.wy),
+            Direction::South => self.with_waypoint(self.wx, self.wy - len),
+            Direction::West => self.with_waypoint(self.wx - len, self.wy),
+            Direction::North => self.with_waypoint(self.wx, self.wy + len),
         }
     }
 
@@ -65,10 +65,10 @@ impl Position {
 
     fn step(&mut self, op: char, num: i64) {
         match op {
-            'N' => self.move_waypoint(Direction::NORTH, num),
-            'S' => self.move_waypoint(Direction::SOUTH, num),
-            'E' => self.move_waypoint(Direction::EAST, num),
-            'W' => self.move_waypoint(Direction::WEST, num),
+            'N' => self.move_waypoint(Direction::North, num),
+            'S' => self.move_waypoint(Direction::South, num),
+            'E' => self.move_waypoint(Direction::East, num),
+            'W' => self.move_waypoint(Direction::West, num),
             'L' => self.left(num),
             'R' => self.right(num),
             'F' => self.go_to_waypoint(num),

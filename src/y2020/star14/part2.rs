@@ -78,7 +78,7 @@ impl Program {
 pub fn run(input: &str) -> u64 {
     input
         .lines()
-        .map(|line| Op::from(line))
+        .map(Op::from)
         .fold(Program::new(), Program::step)
         .memory_sum()
 }

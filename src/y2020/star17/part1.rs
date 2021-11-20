@@ -61,16 +61,14 @@ pub fn run(input: &str) -> usize {
                             new_min_y = min(new_min_y, y);
                             new_min_z = min(new_min_z, z);
                         }
-                    } else {
-                        if active_neighbors == 3 {
-                            new_map.insert((x, y, z));
-                            new_max_x = max(new_max_x, x);
-                            new_max_y = max(new_max_y, y);
-                            new_max_z = max(new_max_z, z);
-                            new_min_x = min(new_min_x, x);
-                            new_min_y = min(new_min_y, y);
-                            new_min_z = min(new_min_z, z);
-                        }
+                    } else if active_neighbors == 3 {
+                        new_map.insert((x, y, z));
+                        new_max_x = max(new_max_x, x);
+                        new_max_y = max(new_max_y, y);
+                        new_max_z = max(new_max_z, z);
+                        new_min_x = min(new_min_x, x);
+                        new_min_y = min(new_min_y, y);
+                        new_min_z = min(new_min_z, z);
                     }
                 }
             }

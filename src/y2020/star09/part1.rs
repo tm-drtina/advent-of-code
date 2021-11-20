@@ -8,11 +8,10 @@ pub fn run(input: &str, preamble_size: usize) -> i64 {
 
     (0..nums.len() - preamble_size - 1)
         .map(|i| (nums[i + preamble_size], &nums[i..i + preamble_size]))
-        .filter(|(target, preamble)| {
+        .find(|(target, preamble)| {
             !(0..preamble.len())
                 .any(|i| (i + 1..preamble.len()).any(|j| preamble[i] + preamble[j] == *target))
         })
-        .next()
         .unwrap()
         .0
 }
