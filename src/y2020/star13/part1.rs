@@ -6,13 +6,13 @@ pub fn run(input: &str) -> i32 {
     lines
         .next()
         .unwrap()
-        .split(",")
+        .split(',')
         .filter(|ch| *ch != "x")
         .map(|line| i32::from_str(line).unwrap())
         .map(|line| {
             (
                 line,
-                (0..).filter(|x| x * line >= min_time).next().unwrap() * line,
+                (0..).find(|x| x * line >= min_time).unwrap() * line,
             )
         })
         .min_by_key(|(_line, time)| *time)

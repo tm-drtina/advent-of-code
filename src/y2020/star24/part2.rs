@@ -4,12 +4,8 @@ fn to_coords(line: &str) -> (i32, i32) {
     let mut point = (0, 0);
     let mut chars = line.chars();
 
-    loop {
-        let next = match chars.next() {
-            Some(ch) => ch,
-            None => break,
-        };
-        match next {
+    while let Some(ch) = chars.next() {
+        match ch {
             'e' => point.1 += 1,
             'w' => point.1 -= 1,
             's' => {
@@ -47,7 +43,7 @@ fn step(black: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
     let mut white_neighbors: HashMap<(i32, i32), usize> = HashMap::new();
     for x in &black {
         let mut black_neighbors = 0;
-        for neighbor in neighbors(&x) {
+        for neighbor in neighbors(x) {
             if black.contains(&neighbor) {
                 black_neighbors += 1;
             } else {
@@ -72,7 +68,7 @@ pub fn run(input: &str) -> usize {
     let mut black =
         input
             .lines()
-            .map(|line| to_coords(line))
+            .map(to_coords)
             .fold(HashSet::new(), |mut acc, val| {
                 if acc.contains(&val) {
                     acc.remove(&val);

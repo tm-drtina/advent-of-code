@@ -6,14 +6,14 @@ pub fn run(input: &str) -> usize {
 
     input.lines().for_each(|line| {
         let (ingredients_str, allergens_str) = line.split_once(" (contains ").unwrap();
-        let ingredients: HashSet<&str> = ingredients_str.split(" ").collect();
+        let ingredients: HashSet<&str> = ingredients_str.split(' ').collect();
         ingredients.iter().for_each(|ingredient| {
             *ingredient_occurrences.entry(ingredient).or_default() += 1;
         });
         allergens_str[0..allergens_str.len() - 1]
             .split(", ")
             .for_each(|allergen| {
-                let prev_ingredients = allergens.get(allergen).map(|x| x.clone());
+                let prev_ingredients = allergens.get(allergen).cloned();
                 match prev_ingredients {
                     Some(prev_ingredients) => {
                         allergens.insert(

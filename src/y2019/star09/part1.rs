@@ -24,7 +24,7 @@ impl IntcodeProgram {
     pub fn new(tape_str: &str) -> Self {
         Self {
             tape: tape_str
-                .split(",")
+                .split(',')
                 .enumerate()
                 .map(|(index, val)| (index as i64, i64::from_str(val).unwrap()))
                 .collect(),

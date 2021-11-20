@@ -15,19 +15,19 @@ impl From<&str> for Op {
             for ch in val.chars() {
                 match ch {
                     '0' => {
-                        and_mask = and_mask << 1;
-                        or_mask = or_mask << 1;
+                        and_mask <<= 1;
+                        or_mask <<= 1;
                     }
                     '1' => {
-                        and_mask = and_mask << 1;
-                        and_mask = and_mask | 1;
-                        or_mask = or_mask << 1;
-                        or_mask = or_mask | 1;
+                        and_mask <<= 1;
+                        and_mask |= 1;
+                        or_mask <<= 1;
+                        or_mask |= 1;
                     }
                     _ => {
-                        and_mask = and_mask << 1;
-                        and_mask = and_mask | 1;
-                        or_mask = or_mask << 1;
+                        and_mask <<= 1;
+                        and_mask |= 1;
+                        or_mask <<= 1;
                     }
                 }
             }
@@ -78,7 +78,7 @@ impl Program {
 pub fn run(input: &str) -> u64 {
     input
         .lines()
-        .map(|line| Op::from(line))
+        .map(Op::from)
         .fold(Program::new(), Program::step)
         .memory_sum()
 }

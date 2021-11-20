@@ -28,7 +28,7 @@ impl IntcodeProgram {
         output: Rc<RefCell<VecDeque<i32>>>,
     ) -> Self {
         Self {
-            tape: tape.split(",").map(|x| i32::from_str(x).unwrap()).collect(),
+            tape: tape.split(',').map(|x| i32::from_str(x).unwrap()).collect(),
             position: 0,
             input,
             output,
@@ -112,11 +112,11 @@ pub fn run_with_phase_setting(input: &str, phase_setting: Vec<i32>) -> Result<i3
     let o3i4: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
     let o4i5: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
     let o5: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
-    let mut p1 = IntcodeProgram::new(input, i1.clone(), o1i2.clone());
-    let mut p2 = IntcodeProgram::new(input, o1i2.clone(), o2i3.clone());
-    let mut p3 = IntcodeProgram::new(input, o2i3.clone(), o3i4.clone());
-    let mut p4 = IntcodeProgram::new(input, o3i4.clone(), o4i5.clone());
-    let mut p5 = IntcodeProgram::new(input, o4i5.clone(), o5.clone());
+    let mut p1 = IntcodeProgram::new(input, i1, o1i2.clone());
+    let mut p2 = IntcodeProgram::new(input, o1i2, o2i3.clone());
+    let mut p3 = IntcodeProgram::new(input, o2i3, o3i4.clone());
+    let mut p4 = IntcodeProgram::new(input, o3i4, o4i5.clone());
+    let mut p5 = IntcodeProgram::new(input, o4i5, o5);
 
     p1.input.borrow_mut().push_back(phase_setting[0]);
     p2.input.borrow_mut().push_back(phase_setting[1]);

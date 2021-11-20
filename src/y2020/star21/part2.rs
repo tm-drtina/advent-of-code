@@ -7,14 +7,14 @@ pub fn run(input: &str) -> String {
 
     input.lines().for_each(|line| {
         let (ingredients_str, allergens_str) = line.split_once(" (contains ").unwrap();
-        let ingredients: HashSet<&str> = ingredients_str.split(" ").collect();
+        let ingredients: HashSet<&str> = ingredients_str.split(' ').collect();
         ingredients.iter().for_each(|ingredient| {
             *ingredient_occurrences.entry(ingredient).or_default() += 1;
         });
         allergens_str[0..allergens_str.len() - 1]
             .split(", ")
             .for_each(|allergen| {
-                let prev_ingredients = allergens.get(allergen).map(|x| x.clone());
+                let prev_ingredients = allergens.get(allergen).cloned();
                 match prev_ingredients {
                     Some(prev_ingredients) => {
                         allergens.insert(
@@ -35,7 +35,7 @@ pub fn run(input: &str) -> String {
     let mut res: Vec<(&str, &str)> = Vec::new();
 
     for _ in 0..allergens.len() {
-        let (allergen, ingredients) = allergens.iter().filter(|x| x.1.len() == 1).next().unwrap();
+        let (allergen, ingredients) = allergens.iter().find(|x| x.1.len() == 1).unwrap();
         let ingredient = *ingredients.iter().next().unwrap();
         let allergen = *allergen;
         res.push((allergen, ingredient));

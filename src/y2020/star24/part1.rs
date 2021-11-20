@@ -4,12 +4,8 @@ fn to_coords(line: &str) -> (i32, i32) {
     let mut point = (0, 0);
     let mut chars = line.chars();
 
-    loop {
-        let next = match chars.next() {
-            Some(ch) => ch,
-            None => break,
-        };
-        match next {
+    while let Some(ch) = chars.next() {
+        match ch {
             'e' => point.1 += 1,
             'w' => point.1 -= 1,
             's' => {
@@ -34,7 +30,7 @@ fn to_coords(line: &str) -> (i32, i32) {
 pub fn run(input: &str) -> usize {
     input
         .lines()
-        .map(|line| to_coords(line))
+        .map(to_coords)
         .fold(HashSet::new(), |mut acc, val| {
             if acc.contains(&val) {
                 acc.remove(&val);

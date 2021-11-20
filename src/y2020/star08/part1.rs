@@ -2,9 +2,9 @@ use std::collections::HashSet;
 use std::str::FromStr;
 
 enum Op {
-    ACC { val: i32 },
-    JMP { val: i32 },
-    NOP,
+    Acc { val: i32 },
+    Jmp { val: i32 },
+    Nop,
 }
 
 impl From<&str> for Op {
@@ -12,9 +12,9 @@ impl From<&str> for Op {
         let (op, str_val) = s.split_once(" ").unwrap();
         let val = i32::from_str(str_val).unwrap();
         match op {
-            "acc" => Op::ACC { val },
-            "jmp" => Op::JMP { val },
-            "nop" => Op::NOP,
+            "acc" => Op::Acc { val },
+            "jmp" => Op::Jmp { val },
+            "nop" => Op::Nop,
             _ => panic!("Unknown op {}", op),
         }
     }
@@ -39,14 +39,14 @@ impl Program {
             }
             visited.insert(self.ip);
             match self.ops[self.ip as usize] {
-                Op::ACC { val } => {
+                Op::Acc { val } => {
                     self.acc += val;
                     self.ip += 1;
                 }
-                Op::JMP { val } => {
+                Op::Jmp { val } => {
                     self.ip += val;
                 }
-                Op::NOP => {
+                Op::Nop => {
                     self.ip += 1;
                 }
             }
@@ -55,7 +55,7 @@ impl Program {
 }
 
 pub fn run(input: &str) -> i32 {
-    let mut prog = Program::new(input.lines().map(|line| Op::from(line)).collect());
+    let mut prog = Program::new(input.lines().map(Op::from).collect());
     prog.run_until_cycle();
     prog.acc
 }

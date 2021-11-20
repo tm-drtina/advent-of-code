@@ -12,9 +12,10 @@ fn is_valid(num: &i32) -> bool {
     let t3 = num2 == num3;
     let t4 = num3 == num4;
     let t5 = num4 == num5;
-    return non_decreasing && (t1 || t2 || t3 || t4 || t5);
+
+    non_decreasing && (t1 || t2 || t3 || t4 || t5)
 }
 
 pub fn run(min: i32, max: i32) -> usize {
-    (min..max).filter(|i| is_valid(i)).count()
+    (min..max).filter(is_valid).count()
 }

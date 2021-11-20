@@ -18,8 +18,7 @@ impl<'a, T: Iterator<Item = &'a str>> Iterator for Input<'a, T> {
                     }
                     for entry in line.split(' ') {
                         let (key, val) = entry.split_once(':').unwrap();
-                        let foo = res.insert(key, val);
-                        if foo.is_some() {
+                        if res.insert(key, val).is_some() {
                             res.insert("error", "aaa");
                         }
                     }

@@ -28,8 +28,8 @@ impl Expression {
                 .fold(vec![(Op::Add, 0_i64)], |mut acc, (op, expr)| {
                     match op {
                         Op::Add => {
-                            let foo = acc.last_mut().unwrap();
-                            foo.1 += expr.result();
+                            let (_, count) = acc.last_mut().unwrap();
+                            *count += expr.result();
                         }
                         _ => acc.push((Op::Mul, expr.result())),
                     }

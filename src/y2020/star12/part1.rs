@@ -2,10 +2,10 @@ use std::str::FromStr;
 
 #[derive(Copy, Clone)]
 enum Direction {
-    EAST,
-    SOUTH,
-    WEST,
-    NORTH,
+    East,
+    South,
+    West,
+    North,
 }
 
 struct Position {
@@ -19,7 +19,7 @@ impl Position {
         Self {
             x: 0,
             y: 0,
-            direction: Direction::EAST,
+            direction: Direction::East,
         }
     }
     fn with_position(&self, x: i32, y: i32) -> Self {
@@ -39,10 +39,10 @@ impl Position {
 
     fn go(&self, direction: Direction, len: i32) -> Self {
         match direction {
-            Direction::EAST => self.with_position(self.x + len, self.y),
-            Direction::SOUTH => self.with_position(self.x, self.y - len),
-            Direction::WEST => self.with_position(self.x - len, self.y),
-            Direction::NORTH => self.with_position(self.x, self.y + len),
+            Direction::East => self.with_position(self.x + len, self.y),
+            Direction::South => self.with_position(self.x, self.y - len),
+            Direction::West => self.with_position(self.x - len, self.y),
+            Direction::North => self.with_position(self.x, self.y + len),
         }
     }
 
@@ -51,10 +51,10 @@ impl Position {
             self
         } else {
             match self.direction {
-                Direction::EAST => self.with_direction(Direction::NORTH).left(num - 90),
-                Direction::SOUTH => self.with_direction(Direction::EAST).left(num - 90),
-                Direction::WEST => self.with_direction(Direction::SOUTH).left(num - 90),
-                Direction::NORTH => self.with_direction(Direction::WEST).left(num - 90),
+                Direction::East => self.with_direction(Direction::North).left(num - 90),
+                Direction::South => self.with_direction(Direction::East).left(num - 90),
+                Direction::West => self.with_direction(Direction::South).left(num - 90),
+                Direction::North => self.with_direction(Direction::West).left(num - 90),
             }
         }
     }
@@ -64,20 +64,20 @@ impl Position {
             self
         } else {
             match self.direction {
-                Direction::EAST => self.with_direction(Direction::SOUTH).right(num - 90),
-                Direction::SOUTH => self.with_direction(Direction::WEST).right(num - 90),
-                Direction::WEST => self.with_direction(Direction::NORTH).right(num - 90),
-                Direction::NORTH => self.with_direction(Direction::EAST).right(num - 90),
+                Direction::East => self.with_direction(Direction::South).right(num - 90),
+                Direction::South => self.with_direction(Direction::West).right(num - 90),
+                Direction::West => self.with_direction(Direction::North).right(num - 90),
+                Direction::North => self.with_direction(Direction::East).right(num - 90),
             }
         }
     }
 
     fn step(self, op: char, num: i32) -> Self {
         match op {
-            'N' => self.go(Direction::NORTH, num),
-            'S' => self.go(Direction::SOUTH, num),
-            'E' => self.go(Direction::EAST, num),
-            'W' => self.go(Direction::WEST, num),
+            'N' => self.go(Direction::North, num),
+            'S' => self.go(Direction::South, num),
+            'E' => self.go(Direction::East, num),
+            'W' => self.go(Direction::West, num),
             'L' => self.left(num),
             'R' => self.right(num),
             'F' => self.go(self.direction, num),

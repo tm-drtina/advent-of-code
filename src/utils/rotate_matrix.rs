@@ -1,4 +1,4 @@
-pub fn rotate_matrix_cc<T>(mat: &Vec<Vec<T>>) -> Vec<Vec<T>>
+pub fn rotate_matrix_cc<T>(mat: &[Vec<T>]) -> Vec<Vec<T>>
 where
     T: Clone,
 {

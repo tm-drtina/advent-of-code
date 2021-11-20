@@ -1,8 +1,8 @@
 #[derive(Copy, Clone, Debug)]
 enum Seat {
-    FLOOR,
-    EMPTY,
-    OCCUPIED,
+    Floor,
+    Empty,
+    Occupied,
 }
 
 struct Map {
@@ -16,7 +16,7 @@ impl From<&str> for Map {
                 .lines()
                 .map(|line| {
                     line.chars()
-                        .map(|ch| if ch == 'L' { Seat::EMPTY } else { Seat::FLOOR })
+                        .map(|ch| if ch == 'L' { Seat::Empty } else { Seat::Floor })
                         .collect()
                 })
                 .collect(),
@@ -35,7 +35,7 @@ impl Map {
         let mut res: Vec<Seat> = Vec::new();
 
         let mut neigh_y = y;
-        while neigh_y > 0 && matches!(self.positions[neigh_y - 1][x], Seat::FLOOR) {
+        while neigh_y > 0 && matches!(self.positions[neigh_y - 1][x], Seat::Floor) {
             neigh_y -= 1
         }
         if neigh_y > 0 {
@@ -43,7 +43,7 @@ impl Map {
         }
 
         let mut neigh_y = y;
-        while neigh_y < self.height() - 1 && matches!(self.positions[neigh_y + 1][x], Seat::FLOOR) {
+        while neigh_y < self.height() - 1 && matches!(self.positions[neigh_y + 1][x], Seat::Floor) {
             neigh_y += 1
         }
         if neigh_y < self.height() - 1 {
@@ -51,7 +51,7 @@ impl Map {
         }
 
         let mut neigh_x = x;
-        while neigh_x > 0 && matches!(self.positions[y][neigh_x - 1], Seat::FLOOR) {
+        while neigh_x > 0 && matches!(self.positions[y][neigh_x - 1], Seat::Floor) {
             neigh_x -= 1
         }
         if neigh_x > 0 {
@@ -59,7 +59,7 @@ impl Map {
         }
 
         let mut neigh_x = x;
-        while neigh_x < self.width() - 1 && matches!(self.positions[y][neigh_x + 1], Seat::FLOOR) {
+        while neigh_x < self.width() - 1 && matches!(self.positions[y][neigh_x + 1], Seat::Floor) {
             neigh_x += 1
         }
         if neigh_x < self.width() - 1 {
@@ -70,7 +70,7 @@ impl Map {
         let mut neigh_x = x;
         while neigh_y > 0
             && neigh_x > 0
-            && matches!(self.positions[neigh_y - 1][neigh_x - 1], Seat::FLOOR)
+            && matches!(self.positions[neigh_y - 1][neigh_x - 1], Seat::Floor)
         {
             neigh_y -= 1;
             neigh_x -= 1;
@@ -83,7 +83,7 @@ impl Map {
         let mut neigh_x = x;
         while neigh_y < self.height() - 1
             && neigh_x > 0
-            && matches!(self.positions[neigh_y + 1][neigh_x - 1], Seat::FLOOR)
+            && matches!(self.positions[neigh_y + 1][neigh_x - 1], Seat::Floor)
         {
             neigh_y += 1;
             neigh_x -= 1;
@@ -96,7 +96,7 @@ impl Map {
         let mut neigh_x = x;
         while neigh_y > 0
             && neigh_x < self.width() - 1
-            && matches!(self.positions[neigh_y - 1][neigh_x + 1], Seat::FLOOR)
+            && matches!(self.positions[neigh_y - 1][neigh_x + 1], Seat::Floor)
         {
             neigh_y -= 1;
             neigh_x += 1;
@@ -109,7 +109,7 @@ impl Map {
         let mut neigh_x = x;
         while neigh_y < self.height() - 1
             && neigh_x < self.width() - 1
-            && matches!(self.positions[neigh_y + 1][neigh_x + 1], Seat::FLOOR)
+            && matches!(self.positions[neigh_y + 1][neigh_x + 1], Seat::Floor)
         {
             neigh_y += 1;
             neigh_x += 1;
@@ -127,31 +127,31 @@ impl Map {
                 .map(|y| {
                     (0..self.width())
                         .map(|x| match self.positions[y][x] {
-                            Seat::FLOOR => Seat::FLOOR,
-                            Seat::EMPTY => {
+                            Seat::Floor => Seat::Floor,
+                            Seat::Empty => {
                                 if self
                                     .collect_neighbors(x, y)
                                     .iter()
-                                    .all(|seat| !matches!(seat, Seat::OCCUPIED))
+                                    .all(|seat| !matches!(seat, Seat::Occupied))
                                 {
                                     did_change = true;
-                                    Seat::OCCUPIED
+                                    Seat::Occupied
                                 } else {
-                                    Seat::EMPTY
+                                    Seat::Empty
                                 }
                             }
-                            Seat::OCCUPIED => {
+                            Seat::Occupied => {
                                 if self
                                     .collect_neighbors(x, y)
                                     .iter()
-                                    .filter(|seat| matches!(seat, Seat::OCCUPIED))
+                                    .filter(|seat| matches!(seat, Seat::Occupied))
                                     .count()
                                     >= 5
                                 {
                                     did_change = true;
-                                    Seat::EMPTY
+                                    Seat::Empty
                                 } else {
-                                    Seat::OCCUPIED
+                                    Seat::Occupied
                                 }
                             }
                         })
@@ -179,7 +179,7 @@ pub fn run(input: &str) -> usize {
         .run_evolutions()
         .positions
         .iter()
-        .flat_map(|line| line)
-        .filter(|seat| matches!(seat, Seat::OCCUPIED))
+        .flatten()
+        .filter(|seat| matches!(seat, Seat::Occupied))
         .count()
 }

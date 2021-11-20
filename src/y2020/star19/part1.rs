@@ -10,7 +10,7 @@ enum Rule {
 
 fn rule_to_regex(rules: &HashMap<i32, Vec<Vec<Rule>>>, index: i32) -> String {
     let ruleset = rules.get(&index).unwrap();
-    let foo: Vec<String> = ruleset
+    let regexes: Vec<String> = ruleset
         .iter()
         .map(|rule| {
             rule.iter()
@@ -21,12 +21,12 @@ fn rule_to_regex(rules: &HashMap<i32, Vec<Vec<Rule>>>, index: i32) -> String {
                 .join("")
         })
         .collect();
-    if foo.len() == 1 {
-        foo[0].clone()
+    if regexes.len() == 1 {
+        regexes.into_iter().next().unwrap()
     } else {
         format!(
             "({})",
-            foo.into_iter().map(|s| format!("({})", s)).join("|")
+            regexes.into_iter().map(|s| format!("({})", s)).join("|")
         )
     }
 }
@@ -36,14 +36,14 @@ pub fn run(input: &str) -> usize {
     let mut rules: HashMap<i32, Vec<Vec<Rule>>> = HashMap::new();
     loop {
         let line = lines.next().unwrap();
-        if line == "" {
+        if line.is_empty() {
             break;
         }
         let (index, r) = line.split_once(": ").unwrap();
         let ruleset = r
             .split(" | ")
             .map(|r2| {
-                r2.split(" ")
+                r2.split(' ')
                     .map(|rule| match rule {
                         "\"a\"" => Rule::Val { v: 'a' },
                         "\"b\"" => Rule::Val { v: 'b' },
