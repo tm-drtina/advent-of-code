@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap, HashSet, VecDeque};
+use std::collections::{HashMap, HashSet, VecDeque};
 
 use itertools::Itertools;
 
@@ -8,9 +8,40 @@ struct Point {
     y: usize,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+struct Keys(u32);
+impl Keys {
+    fn new() -> Self {
+        Self(0)
+    }
+
+    fn char_to_bitshifted_int(key: char) -> u32 {
+        debug_assert!(key.is_ascii_lowercase());
+        1u32 << (key as u32 - 'a' as u32)
+    }
+
+    fn add_key(&mut self, key: char) {
+        self.0 |= Self::char_to_bitshifted_int(key);
+    }
+
+    fn contains(&self, key: char) -> bool {
+        self.0 & Self::char_to_bitshifted_int(key) != 0
+    }
+
+    fn count(&self) -> usize {
+        self.0.count_ones() as usize
+    }
+}
+
+impl Default for Keys {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 struct Map {
     map: Vec<Vec<char>>,
-    keys: usize,
+    keys: Keys,
     width: usize,
     height: usize,
 }
@@ -22,7 +53,7 @@ impl Map {
         } else if self.map[point.y][point.x].is_ascii_uppercase() {
             state
                 .keys
-                .contains(&self.map[point.y][point.x].to_ascii_lowercase())
+                .contains(self.map[point.y][point.x].to_ascii_lowercase())
         } else {
             true
         }
@@ -30,6 +61,7 @@ impl Map {
 
     fn reachable_keys(&self, state: &State) -> Vec<(Point, usize, char)> {
         let mut visited = HashSet::new();
+
         visited.insert(state.position);
         let mut open = VecDeque::new();
         open.push_back((state.position, 0usize));
@@ -38,11 +70,11 @@ impl Map {
         while !open.is_empty() {
             let (position, distance) = open.pop_front().unwrap();
             let ch = self.map[position.y][position.x];
-            if ch.is_ascii_lowercase() && !state.keys.contains(&ch) {
+            if ch.is_ascii_lowercase() && !state.keys.contains(ch) {
                 reachable.push((position, distance, ch));
             }
 
-            if reachable.len() + state.keys.len() == self.keys {
+            if reachable.len() + state.keys.count() == self.keys.count() {
                 break;
             }
 
@@ -95,17 +127,16 @@ impl Map {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 struct State {
     position: Point,
-    keys: BTreeSet<char>,
-    distance: usize,
+    keys: Keys,
 }
 
 fn load_map(input: &str) -> (Map, Point) {
     let mut map = Map {
         map: Vec::new(),
-        keys: 0,
+        keys: Keys::new(),
         width: 0,
         height: 0,
     };
@@ -123,7 +154,7 @@ fn load_map(input: &str) -> (Map, Point) {
         let chars = line.chars().collect_vec();
         for (x, char) in chars.iter().enumerate() {
             if char.is_ascii_lowercase() {
-                map.keys += 1;
+                map.keys.add_key(*char);
             } else if *char == '@' {
                 start_point = Point { x, y };
             }
@@ -136,37 +167,33 @@ fn load_map(input: &str) -> (Map, Point) {
 
 fn dfs(
     map: &Map,
-    state: &State,
-    mut best_distance: usize,
-    memory: &mut HashMap<(BTreeSet<char>, Point), usize>,
+    state: State,
+    distance_sofar: usize,
+    mut best_total_distance: usize,
+    memory: &mut HashMap<State, usize>,
 ) -> usize {
-    let mut best_rest = usize::MAX / 2 - 1;
-    for (point, distance, key) in map.reachable_keys(state) {
-        let new_distance = state.distance + distance;
-        if state.keys.len() + 1 == map.keys {
-            best_rest = best_rest.min(distance);
-        } else if new_distance < best_distance {
+    let mut distance_to_goal = usize::MAX / 2 - 1;
+    for (point, distance, key) in map.reachable_keys(&state) {
+        if state.keys.count() + 1 == map.keys.count() {
+            distance_to_goal = distance_to_goal.min(distance);
+        } else if distance_sofar + distance < best_total_distance {
             let mut new_state = State {
                 position: point,
-                distance: state.distance + distance,
-                keys: state.keys.clone(),
+                keys: state.keys,
             };
-            new_state.keys.insert(key);
+            new_state.keys.add_key(key);
 
-            let key = (new_state.keys.clone(), point);
-            let rest = if let Some(value) = memory.get(&key) {
+            let distance_rest = if let Some(value) = memory.get(&new_state) {
                 *value
             } else {
-                let rest = dfs(map, &new_state, best_distance, memory);
-                memory.insert(key, rest);
-                rest
+                dfs(map, new_state, distance_sofar + distance, best_total_distance, memory)
             };
-            best_rest = best_rest.min(rest + distance);
-            best_distance = best_distance.min(state.distance + best_rest);
+            distance_to_goal = distance_to_goal.min(distance_rest + distance);
         }
+        best_total_distance = best_total_distance.min(distance_sofar + distance_to_goal);
     }
-    memory.insert((state.keys.clone(), state.position), best_rest);
-    best_rest
+    memory.insert(state, distance_to_goal);
+    distance_to_goal
 }
 
 pub fn run(input: &str) -> usize {
@@ -174,8 +201,7 @@ pub fn run(input: &str) -> usize {
     let (map, start_point) = load_map(input);
     let state = State {
         position: start_point,
-        keys: BTreeSet::new(),
-        distance: 0,
+        keys: Keys::new(),
     };
-    dfs(&map, &state, usize::MAX / 2 - 1, &mut memory)
+    dfs(&map, state, 0, usize::MAX / 2 - 1, &mut memory)
 }

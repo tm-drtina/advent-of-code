@@ -35,7 +35,7 @@ mod tests {
     }
 
     #[test]
-    fn part1() {
+    fn part1_main() {
         let expected = 4246;
         let actual = super::part1::run(include_str!("input.txt"));
         assert_eq!(expected, actual);

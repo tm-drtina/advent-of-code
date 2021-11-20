@@ -9,3 +9,6 @@ edition = "2021"
 [dependencies]
 itertools = "0.10.1"
 regex = "1.5.4"
+
+[profile.test]
+opt-level = 2
