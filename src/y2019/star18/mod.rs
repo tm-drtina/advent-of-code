@@ -40,10 +40,36 @@ mod tests {
         let actual = super::part1::run(include_str!("input.txt"));
         assert_eq!(expected, actual);
     }
+
     #[test]
-    fn part2() {
-        let expected = "Part2 result: Data for the second part";
-        let actual = super::part2::run(include_str!("input.part2.txt"));
+    fn part2_sanity6() {
+        let expected = 8;
+        let actual = super::part2::run(include_str!("input.sanity6.txt"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn part2_sanity7() {
+        let expected = 24;
+        let actual = super::part2::run(include_str!("input.sanity7.txt"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn part2_sanity8() {
+        let expected = 32;
+        let actual = super::part2::run(include_str!("input.sanity8.txt"));
+        assert_eq!(expected, actual);
+    }
+    #[test]
+    fn part2_sanity9() {
+        let expected = 72;
+        let actual = super::part2::run(include_str!("input.sanity9.txt"));
+        assert_eq!(expected, actual);
+    }
+
+    #[test]
+    fn part2_main() {
+        let expected = 1940;
+        let actual = super::part2::run(include_str!("input.txt"));
         assert_eq!(expected, actual);
     }
 }
