@@ -11,3 +11,5 @@ pub mod star10;
 pub mod star11;
 
 pub mod star18;
+
+pub mod star22;
