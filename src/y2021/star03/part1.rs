@@ -19,13 +19,17 @@ pub fn run(input: &str) -> usize {
     let mut epsilon = 0;
 
     for h in hist {
-        if h < 0 {
-            gamma = gamma << 1;
-            epsilon = (epsilon << 1) + 1;
-        } else if h > 0 {
-            gamma = (gamma << 1) + 1;
-            epsilon = epsilon << 1;
-        }
+        match h.cmp(&0) {
+            std::cmp::Ordering::Less => {
+                gamma <<= 1;
+                epsilon = (epsilon << 1) + 1;
+            }
+            std::cmp::Ordering::Greater => {
+                gamma = (gamma << 1) + 1;
+                epsilon <<= 1;
+            }
+            std::cmp::Ordering::Equal => {}
+        };
     }
 
     gamma * epsilon

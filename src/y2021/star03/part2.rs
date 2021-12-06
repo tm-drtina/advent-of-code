@@ -1,5 +1,5 @@
 fn compute_bit_hist(input: &[&str], index: usize) -> i32 {
-    input.into_iter().fold(0, |acc, s| {
+    input.iter().fold(0, |acc, s| {
         if s.chars().nth(index).unwrap() == '0' {
             acc - 1
         } else if s.chars().nth(index).unwrap() == '1' {

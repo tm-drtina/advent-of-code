@@ -175,9 +175,9 @@ fn dfs(
             if state.keys.count() + 1 == map.keys.count() {
                 distance_to_goal = distance_to_goal.min(step_distance);
             } else {
-                let mut positions = state.positions.clone();
+                let mut positions = state.positions;
                 positions[i] = point;
-                let mut keys = state.keys.clone();
+                let mut keys = state.keys;
                 keys.add_key(key);
                 let new_state = State { positions, keys };
 
