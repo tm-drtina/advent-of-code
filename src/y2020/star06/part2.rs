@@ -1,4 +1,3 @@
-use itertools::Itertools;
 use std::collections::HashSet;
 
 struct Input<'a, T: Iterator<Item = &'a str>> {
@@ -37,7 +36,7 @@ pub fn run(input: &str) -> usize {
     .map(|group| {
         group
             .into_iter()
-            .fold1(|set1, set2| set1.intersection(&set2).copied().collect())
+            .reduce(|set1, set2| set1.intersection(&set2).copied().collect())
             .unwrap()
             .len()
     })
