@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::str::FromStr;
 
 const ADD: i64 = 1;
 const MUL: i64 = 2;
@@ -26,7 +25,7 @@ impl IntcodeProgram {
             tape: tape_str
                 .split(',')
                 .enumerate()
-                .map(|(index, val)| (index as i64, i64::from_str(val).unwrap()))
+                .map(|(index, val)| (index as i64, val.parse().unwrap()))
                 .collect(),
             position: 0,
             rel_base: 0,
@@ -151,8 +150,8 @@ impl Robot {
         self.direction = match self.direction {
             Direction::Up => Direction::Left,
             Direction::Right => Direction::Up,
-            Direction::Down=> Direction::Right,
-            Direction::Left=> Direction::Down,
+            Direction::Down => Direction::Right,
+            Direction::Left => Direction::Down,
         }
     }
     pub fn right(&mut self) {

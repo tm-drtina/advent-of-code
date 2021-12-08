@@ -1,8 +1,4 @@
-#![feature(
-    entry_insert,
-    total_cmp,
-    linked_list_cursors
-)]
+#![feature(entry_insert, total_cmp, linked_list_cursors)]
 
 #[cfg(test)]
 mod template;

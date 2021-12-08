@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-use std::str::FromStr;
 
 enum Op {
     Acc { val: i32 },
@@ -10,7 +9,7 @@ enum Op {
 impl From<&str> for Op {
     fn from(s: &str) -> Self {
         let (op, str_val) = s.split_once(" ").unwrap();
-        let val = i32::from_str(str_val).unwrap();
+        let val = str_val.parse().unwrap();
         match op {
             "acc" => Op::Acc { val },
             "jmp" => Op::Jmp { val },

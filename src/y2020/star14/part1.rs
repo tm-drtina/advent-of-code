@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 enum Op {
     Mask { and_mask: u64, or_mask: u64 },
@@ -34,8 +33,8 @@ impl From<&str> for Op {
             Op::Mask { and_mask, or_mask }
         } else {
             Op::Mem {
-                addr: i32::from_str(&op[4..op.len() - 1]).unwrap(),
-                value: u64::from_str(val).unwrap(),
+                addr: op[4..op.len() - 1].parse().unwrap(),
+                value: val.parse().unwrap(),
             }
         }
     }

@@ -1,5 +1,4 @@
 use itertools::Itertools;
-use std::str::FromStr;
 
 struct Moves {
     minus0: i64,
@@ -41,7 +40,7 @@ impl Moves {
 pub fn run(input: &str) -> i64 {
     input
         .lines()
-        .map(|line| i32::from_str(line).unwrap())
+        .map(|line| line.parse().unwrap())
         .sorted()
         .fold((0, Moves::new()), |(last_value, moves), value| {
             (value, moves.step(last_value, value))

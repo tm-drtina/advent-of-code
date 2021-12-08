@@ -9,7 +9,6 @@ fn solve_step(state: [usize; 9]) -> [usize; 9] {
         state[7] + state[0],
         state[8],
         state[0],
-
     ]
 }
 

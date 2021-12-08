@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 struct Input<'a, T: Iterator<Item = &'a str>> {
     data: T,
@@ -34,7 +33,8 @@ fn valid_byr(map: &HashMap<&str, &str>) -> bool {
     map.get("byr")
         .map(|val| {
             val.len() == 4
-                && i32::from_str(val)
+                && val
+                    .parse()
                     .map(|ival| (1920..=2002).contains(&ival))
                     .unwrap_or(false)
         })
@@ -44,7 +44,8 @@ fn valid_iyr(map: &HashMap<&str, &str>) -> bool {
     map.get("iyr")
         .map(|val| {
             val.len() == 4
-                && i32::from_str(val)
+                && val
+                    .parse()
                     .map(|ival| (2010..=2020).contains(&ival))
                     .unwrap_or(false)
         })
@@ -54,7 +55,8 @@ fn valid_eyr(map: &HashMap<&str, &str>) -> bool {
     map.get("eyr")
         .map(|val| {
             val.len() == 4
-                && i32::from_str(val)
+                && val
+                    .parse()
                     .map(|ival| (2020..=2030).contains(&ival))
                     .unwrap_or(false)
         })
@@ -65,9 +67,11 @@ fn valid_hgt(map: &HashMap<&str, &str>) -> bool {
         .map(|val| {
             val.len() > 3
                 && match &val[val.len() - 2..] {
-                    "in" => i32::from_str(&val[0..val.len() - 2])
+                    "in" => val[0..val.len() - 2]
+                        .parse()
                         .map_or(false, |num| (59..=76).contains(&num)),
-                    "cm" => i32::from_str(&val[0..val.len() - 2])
+                    "cm" => val[0..val.len() - 2]
+                        .parse()
                         .map_or(false, |num| (150..=193).contains(&num)),
                     _ => false,
                 }

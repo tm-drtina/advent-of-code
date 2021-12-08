@@ -1,5 +1,4 @@
 use std::collections::{HashSet, VecDeque};
-use std::str::FromStr;
 
 fn play_game(mut p: (VecDeque<i32>, VecDeque<i32>)) -> (bool, VecDeque<i32>) {
     let mut h: HashSet<(VecDeque<i32>, VecDeque<i32>)> = HashSet::new();
@@ -58,14 +57,14 @@ pub fn run(input: &str) -> i64 {
     loop {
         match lines.next() {
             Some("") | None => break,
-            Some(line) => p1.push_back(i32::from_str(line).unwrap()),
+            Some(line) => p1.push_back(line.parse().unwrap()),
         }
     }
     lines.next(); // title
     loop {
         match lines.next() {
             Some("") | None => break,
-            Some(line) => p2.push_back(i32::from_str(line).unwrap()),
+            Some(line) => p2.push_back(line.parse().unwrap()),
         }
     }
 

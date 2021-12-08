@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 pub struct Tile {
     pub data: Vec<Vec<bool>>,
@@ -50,7 +49,7 @@ pub fn parse_tiles(input: &str) -> HashMap<i32, Tile> {
     let mut res = HashMap::new();
     let mut lines = input.lines();
     while let Some(line) = lines.next() {
-        let id = i32::from_str(&line[5..line.len() - 1]).unwrap();
+        let id = line[5..line.len() - 1].parse().unwrap();
         let mut data: Vec<Vec<bool>> = Vec::new();
         for line in lines.by_ref() {
             if line.is_empty() {

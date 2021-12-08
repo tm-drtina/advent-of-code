@@ -1,10 +1,5 @@
-use std::str::FromStr;
-
 pub fn run(input: &str, preamble_size: usize) -> i64 {
-    let nums: Vec<i64> = input
-        .lines()
-        .map(|line| i64::from_str(line).unwrap())
-        .collect();
+    let nums: Vec<i64> = input.lines().map(|line| line.parse().unwrap()).collect();
 
     let target = (0..nums.len() - preamble_size - 1)
         .map(|i| (nums[i + preamble_size], &nums[i..i + preamble_size]))

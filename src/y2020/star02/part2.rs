@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 struct Entry<'a> {
     min: usize,
     max: usize,
@@ -11,8 +9,8 @@ fn parse_line(line: &str) -> Entry {
     let mut parts = line.split(' ');
     let (min, max) = parts.next().unwrap().split_once('-').unwrap();
     Entry {
-        min: usize::from_str(min).unwrap(),
-        max: usize::from_str(max).unwrap(),
+        min: min.parse().unwrap(),
+        max: max.parse().unwrap(),
         char: parts.next().unwrap().chars().next().unwrap(),
         pwd: parts.next().unwrap(),
     }

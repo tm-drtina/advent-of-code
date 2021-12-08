@@ -6,7 +6,7 @@ pub fn run(input: &str) -> usize {
         *pos_counts.entry(s.parse().unwrap()).or_default() += 1;
     }
     let mut keys: Vec<usize> = pos_counts.keys().copied().collect();
-    keys.sort();
+    keys.sort_unstable();
     let mut keys = &keys[..];
     let mut steps = 0;
 
@@ -19,7 +19,7 @@ pub fn run(input: &str) -> usize {
         if first > last {
             let new_last_pos = keys[keys.len() - 2];
             *pos_counts.get_mut(&new_last_pos).unwrap() += last;
-            keys = &keys[..keys.len()-1];
+            keys = &keys[..keys.len() - 1];
             steps += (last_pos - new_last_pos) * last;
         } else {
             let new_first_pos = keys[1];

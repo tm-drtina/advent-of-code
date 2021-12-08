@@ -1,7 +1,6 @@
 use itertools::Itertools;
 use regex::Regex;
 use std::collections::HashMap;
-use std::str::FromStr;
 
 enum Rule {
     Ref { i: i32 },
@@ -64,13 +63,13 @@ pub fn run(input: &str) -> usize {
                         "\"a\"" => Rule::Val { v: 'a' },
                         "\"b\"" => Rule::Val { v: 'b' },
                         _ => Rule::Ref {
-                            i: i32::from_str(rule).unwrap(),
+                            i: rule.parse().unwrap(),
                         },
                     })
                     .collect()
             })
             .collect();
-        rules.insert(i32::from_str(index).unwrap(), ruleset);
+        rules.insert(index.parse().unwrap(), ruleset);
     }
 
     let rule42 = rule_to_regex(&rules, 42);
@@ -89,7 +88,9 @@ pub fn run(input: &str) -> usize {
         .map(|i| format!("({})", rule42.repeat(i) + &rule31.repeat(i)))
         .join("|");
 
-    let re = Regex::from_str(&format!("^({})+({})$", rule42, re_second_part)).unwrap();
+    let re = format!("^({})+({})$", rule42, re_second_part)
+        .parse::<Regex>()
+        .unwrap();
 
     lines.filter(|line| re.is_match(line)).count()
 }

@@ -1,5 +1,4 @@
 use std::collections::VecDeque;
-use std::str::FromStr;
 
 const ADD: i32 = 1;
 const MUL: i32 = 2;
@@ -21,7 +20,7 @@ pub(super) struct IntcodeProgram {
 impl IntcodeProgram {
     pub fn new(tape: &str) -> Self {
         Self {
-            tape: tape.split(',').map(|x| i32::from_str(x).unwrap()).collect(),
+            tape: tape.split(',').map(|x| x.parse().unwrap()).collect(),
             position: 0,
             input: VecDeque::new(),
             output: Vec::new(),

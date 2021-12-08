@@ -1,5 +1,4 @@
 use itertools::Itertools;
-use std::str::FromStr;
 
 struct Diff {
     d1: i32,
@@ -34,7 +33,7 @@ impl Diff {
 pub fn run(input: &str) -> i32 {
     input
         .lines()
-        .map(|line| i32::from_str(line).unwrap())
+        .map(|line| line.parse().unwrap())
         .sorted()
         .fold((0, Diff::new()), |(last_value, diff), value| {
             (value, diff.add_diff(value - last_value))

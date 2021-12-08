@@ -21,8 +21,8 @@ impl Card {
                 nums.insert(num, (row_index, col_index));
             }
         }
-        debug_assert_eq!(BOARD_SIZE*BOARD_SIZE, nums.len());
-        debug_assert_eq!(BOARD_SIZE*BOARD_SIZE, unmarked.len());
+        debug_assert_eq!(BOARD_SIZE * BOARD_SIZE, nums.len());
+        debug_assert_eq!(BOARD_SIZE * BOARD_SIZE, unmarked.len());
 
         Self {
             marked_rows: [0; BOARD_SIZE],

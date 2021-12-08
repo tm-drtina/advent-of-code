@@ -186,7 +186,13 @@ fn dfs(
             let distance_rest = if let Some(value) = memory.get(&new_state) {
                 *value
             } else {
-                dfs(map, new_state, distance_sofar + distance, best_total_distance, memory)
+                dfs(
+                    map,
+                    new_state,
+                    distance_sofar + distance,
+                    best_total_distance,
+                    memory,
+                )
             };
             distance_to_goal = distance_to_goal.min(distance_rest + distance);
         }

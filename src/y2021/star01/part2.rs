@@ -1,6 +1,5 @@
 use itertools::Itertools;
 
-
 pub fn run(input: &str) -> usize {
     input
         .lines()
@@ -11,4 +10,3 @@ pub fn run(input: &str) -> usize {
         .filter(|(a, b)| a < b)
         .count()
 }
-
