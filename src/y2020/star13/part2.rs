@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 pub fn run(input: &str) -> i64 {
     let mut lines = input.lines();
     lines.next();
@@ -9,7 +7,7 @@ pub fn run(input: &str) -> i64 {
         .split(',')
         .enumerate()
         .filter(|(_index, ch)| *ch != "x")
-        .map(|(index, bus)| (index as i64, i64::from_str(bus).unwrap()))
+        .map(|(index, bus)| (index as i64, bus.parse().unwrap()))
         .collect();
 
     buses.sort_by_key(|(_index, bus)| -bus);

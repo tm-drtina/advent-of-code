@@ -34,7 +34,11 @@ const NUMBERS: [usize; 10] = [
 ];
 
 fn convert(num: &[usize], mapper: &[usize]) -> Option<usize> {
-    let mapped = num.iter().copied().map(|n| mapper[n]).fold(0usize, |acc, val| acc+(1 << val));
+    let mapped = num
+        .iter()
+        .copied()
+        .map(|n| mapper[n])
+        .fold(0usize, |acc, val| acc + (1 << val));
     (0..10).find(|v| NUMBERS[*v] == mapped)
 }
 
@@ -55,8 +59,14 @@ pub fn run(input: &str) -> usize {
         .lines()
         .map(|line| {
             let (train, test) = line.split_once(" | ").unwrap();
-            let train: Vec<Vec<usize>> = train.split(' ').map(|s| s.chars().map(|ch| ch as usize - 'a' as usize).collect()).collect();
-            let test: Vec<Vec<usize>> = test.split(' ').map(|s| s.chars().map(|ch| ch as usize - 'a' as usize).collect()).collect();
+            let train: Vec<Vec<usize>> = train
+                .split(' ')
+                .map(|s| s.chars().map(|ch| ch as usize - 'a' as usize).collect())
+                .collect();
+            let test: Vec<Vec<usize>> = test
+                .split(' ')
+                .map(|s| s.chars().map(|ch| ch as usize - 'a' as usize).collect())
+                .collect();
             compute(&train, &test)
         })
         .sum()

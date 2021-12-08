@@ -1,12 +1,11 @@
-use std::str::FromStr;
-
 fn compute_fuel(mass: i32) -> i32 {
     mass / 3 - 2
 }
 
 pub fn run(input: &str) -> i32 {
-    input.lines()
-        .map(|x| i32::from_str(x).unwrap())
+    input
+        .lines()
+        .map(|x| x.parse().unwrap())
         .map(compute_fuel)
         .sum()
 }

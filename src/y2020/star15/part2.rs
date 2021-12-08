@@ -1,11 +1,7 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 pub fn run(input: &str) -> i32 {
-    let init: Vec<i32> = input
-        .split(',')
-        .map(|line| i32::from_str(line).unwrap())
-        .collect();
+    let init: Vec<i32> = input.split(',').map(|line| line.parse().unwrap()).collect();
 
     let mut last_num = init[0];
     let mut index = 0;

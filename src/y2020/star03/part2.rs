@@ -1,5 +1,3 @@
-use std::ops::RangeFrom;
-
 struct Map {
     data: Vec<Vec<bool>>,
 }
@@ -27,7 +25,7 @@ impl Map {
     }
 
     fn count_trees(&self, step_right: usize, step_down: usize) -> usize {
-        RangeFrom { start: 0 }
+        (0..)
             .map(|i| Point {
                 x: i * step_right % self.width(),
                 y: i * step_down,

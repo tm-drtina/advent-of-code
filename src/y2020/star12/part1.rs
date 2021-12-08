@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 #[derive(Copy, Clone)]
 enum Direction {
     East,
@@ -93,12 +91,7 @@ impl Position {
 pub fn run(input: &str) -> i32 {
     input
         .lines()
-        .map(|line| {
-            (
-                line.chars().next().unwrap(),
-                i32::from_str(&line[1..]).unwrap(),
-            )
-        })
+        .map(|line| (line.chars().next().unwrap(), line[1..].parse().unwrap()))
         .fold(Position::new(), |acc, (op, num)| acc.step(op, num))
         .manhattan_distance()
 }

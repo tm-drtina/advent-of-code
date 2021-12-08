@@ -1,7 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::iter::FromIterator;
 use std::ops::Range;
-use std::str::FromStr;
 
 pub fn run(input: &str) -> i64 {
     let mut lines = input.lines();
@@ -18,8 +17,8 @@ pub fn run(input: &str) -> i64 {
             .split(" or ")
             .map(|rule| {
                 let (from_str, to_str) = rule.split_once("-").unwrap();
-                let from = i32::from_str(from_str).unwrap();
-                let to = i32::from_str(to_str).unwrap() + 1;
+                let from = from_str.parse().unwrap();
+                let to = to_str.parse::<i32>().unwrap() + 1;
                 from..to
             })
             .collect();
@@ -31,7 +30,7 @@ pub fn run(input: &str) -> i64 {
         .next()
         .unwrap()
         .split(',')
-        .map(|x| i32::from_str(x).unwrap())
+        .map(|x| x.parse().unwrap())
         .collect(); // values
 
     lines.next(); // empty line
@@ -52,8 +51,8 @@ pub fn run(input: &str) -> i64 {
     let mut res_fields = lines
         .map(|line| {
             line.split(',')
-                .map(|x| i32::from_str(x).unwrap())
-                .collect::<Vec<i32>>()
+                .map(|x| x.parse().unwrap())
+                .collect::<Vec<_>>()
         })
         .filter(|ticket| {
             ticket.iter().all(|tf| {

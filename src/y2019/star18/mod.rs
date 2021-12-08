@@ -66,6 +66,8 @@ mod tests {
         assert_eq!(expected, actual);
     }
 
+    // TODO: make fast and enable test
+    #[ignore = "slow!"]
     #[test]
     fn part2_main() {
         let expected = 1940;

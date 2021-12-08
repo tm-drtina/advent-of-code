@@ -65,18 +65,17 @@ fn step(black: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
 }
 
 pub fn run(input: &str) -> usize {
-    let mut black =
-        input
-            .lines()
-            .map(to_coords)
-            .fold(HashSet::new(), |mut acc, val| {
-                if acc.contains(&val) {
-                    acc.remove(&val);
-                } else {
-                    acc.insert(val);
-                }
-                acc
-            });
+    let mut black = input
+        .lines()
+        .map(to_coords)
+        .fold(HashSet::new(), |mut acc, val| {
+            if acc.contains(&val) {
+                acc.remove(&val);
+            } else {
+                acc.insert(val);
+            }
+            acc
+        });
 
     for _ in 0..100 {
         black = step(black);

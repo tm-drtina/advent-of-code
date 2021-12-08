@@ -1,6 +1,3 @@
-use std::str::FromStr;
-use std::convert::TryInto;
-
 const ADD: i32 = 1;
 const MUL: i32 = 2;
 const EXIT: i32 = 99;
@@ -13,12 +10,14 @@ pub(super) struct IntcodeProgram {
 impl IntcodeProgram {
     pub fn new(tape: &str) -> Self {
         Self {
-            tape: tape.split(',').map(|x| i32::from_str(x).unwrap()).collect(),
+            tape: tape.split(',').map(|x| x.parse().unwrap()).collect(),
             position: 0,
         }
     }
 
-    fn op_as_index(&self, n: usize) -> usize { self.tape[self.position + n].try_into().unwrap() }
+    fn op_as_index(&self, n: usize) -> usize {
+        self.tape[self.position + n] as usize
+    }
 
     pub fn run(&mut self) -> Result<(), String> {
         loop {
@@ -38,7 +37,7 @@ impl IntcodeProgram {
                     self.position += 4;
                 }
                 EXIT => break,
-                _ => return Err(format!("Unknown operation {}", self.tape[self.position]))
+                _ => return Err(format!("Unknown operation {}", self.tape[self.position])),
             }
         }
         Ok(())
@@ -59,24 +58,24 @@ mod tests {
     fn test_intcode_program1() {
         let mut program = super::IntcodeProgram::new("1,0,0,0,99");
         program.run().unwrap();
-        assert_eq!(vec![2,0,0,0,99], program.tape);
+        assert_eq!(vec![2, 0, 0, 0, 99], program.tape);
     }
     #[test]
     fn test_intcode_program2() {
         let mut program = super::IntcodeProgram::new("2,3,0,3,99");
         program.run().unwrap();
-        assert_eq!(vec![2,3,0,6,99], program.tape);
+        assert_eq!(vec![2, 3, 0, 6, 99], program.tape);
     }
     #[test]
     fn test_intcode_program3() {
         let mut program = super::IntcodeProgram::new("2,4,4,5,99,0");
         program.run().unwrap();
-        assert_eq!(vec![2,4,4,5,99,9801], program.tape);
+        assert_eq!(vec![2, 4, 4, 5, 99, 9801], program.tape);
     }
     #[test]
     fn test_intcode_program4() {
         let mut program = super::IntcodeProgram::new("1,1,1,4,99,5,6,0,99");
         program.run().unwrap();
-        assert_eq!(vec![30,1,1,4,2,5,6,0,99], program.tape);
+        assert_eq!(vec![30, 1, 1, 4, 2, 5, 6, 0, 99], program.tape);
     }
 }

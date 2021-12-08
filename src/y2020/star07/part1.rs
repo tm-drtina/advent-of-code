@@ -1,4 +1,3 @@
-use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
 
 fn parse_line(line: &str) -> (&str, Vec<&str>) {
@@ -30,10 +29,10 @@ pub fn run(input: &str) -> i32 {
     set.insert("shiny gold");
 
     loop {
-        let new = set
+        let new: Vec<_> = set
             .iter()
             .flat_map(|str| map.get(str).unwrap_or(&empty_set))
-            .collect_vec();
+            .collect();
         if !new.iter().fold(false, |acc, str| set.insert(str) || acc) {
             break;
         }

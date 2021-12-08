@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::str::FromStr;
 
 struct Bag<'a> {
     name: &'a str,
@@ -19,7 +18,7 @@ fn parse_line(line: &str) -> (&str, Vec<Bag>) {
                     let color = color_bag.rsplit_once(" ").unwrap().0;
                     Bag {
                         name: color,
-                        count: i32::from_str(count).unwrap(),
+                        count: count.parse().unwrap(),
                     }
                 })
                 .collect(),

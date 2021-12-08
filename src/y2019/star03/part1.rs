@@ -1,5 +1,4 @@
 use std::collections::HashSet;
-use std::str::FromStr;
 
 enum Direction {
     Up,
@@ -46,8 +45,8 @@ struct Move {
 impl From<&str> for Move {
     fn from(val: &str) -> Self {
         Self {
-            direction: Direction::from(&val[0..1]),
-            distance: i32::from_str(&val[1..]).expect("Unable to parse distance"),
+            direction: val[0..1].into(),
+            distance: val[1..].parse().expect("Unable to parse distance"),
         }
     }
 }

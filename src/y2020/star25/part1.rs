@@ -1,5 +1,3 @@
-use std::str::FromStr;
-
 fn transform(val: i64, subject: i64) -> i64 {
     (val * subject) % 20201227
 }
@@ -36,8 +34,8 @@ fn guess_private_key(pubkey1: i64, pubkey2: i64) -> (Option<i64>, Option<i64>) {
 
 pub fn run(input: &str) -> i64 {
     let mut lines = input.lines();
-    let pub1 = i64::from_str(lines.next().unwrap()).unwrap();
-    let pub2 = i64::from_str(lines.next().unwrap()).unwrap();
+    let pub1 = lines.next().unwrap().parse().unwrap();
+    let pub2 = lines.next().unwrap().parse().unwrap();
     let priv_keys = guess_private_key(pub1, pub2);
     match priv_keys {
         (Some(priv_key), _) => batch_transform(pub2, priv_key),

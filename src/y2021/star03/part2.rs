@@ -16,8 +16,15 @@ pub fn run(input: &str) -> usize {
     let ox_bin = {
         let mut input = input.clone();
         for i in 0..bit_len {
-            let ch = if compute_bit_hist(&input, i) < 0 { '0' } else { '1' };
-            input = input.into_iter().filter(|s| s.chars().nth(i).unwrap() == ch).collect();
+            let ch = if compute_bit_hist(&input, i) < 0 {
+                '0'
+            } else {
+                '1'
+            };
+            input = input
+                .into_iter()
+                .filter(|s| s.chars().nth(i).unwrap() == ch)
+                .collect();
             if input.len() == 1 {
                 break;
             }
@@ -27,8 +34,15 @@ pub fn run(input: &str) -> usize {
     let co_bin = {
         let mut input = input.clone();
         for i in 0..bit_len {
-            let ch = if compute_bit_hist(&input, i) < 0 { '1' } else { '0' };
-            input = input.into_iter().filter(|s| s.chars().nth(i).unwrap() == ch).collect();
+            let ch = if compute_bit_hist(&input, i) < 0 {
+                '1'
+            } else {
+                '0'
+            };
+            input = input
+                .into_iter()
+                .filter(|s| s.chars().nth(i).unwrap() == ch)
+                .collect();
             if input.len() == 1 {
                 break;
             }

@@ -1,13 +1,16 @@
-use std::str::FromStr;
-
 fn compute_fuel(mass: i32) -> i32 {
     let module_fuel = mass / 3 - 2;
-    if module_fuel > 8 { module_fuel + compute_fuel(module_fuel) } else { module_fuel }
+    if module_fuel > 8 {
+        module_fuel + compute_fuel(module_fuel)
+    } else {
+        module_fuel
+    }
 }
 
 pub fn run(input: &str) -> i32 {
-    input.lines()
-        .map(|x| i32::from_str(x).unwrap())
+    input
+        .lines()
+        .map(|x| x.parse().unwrap())
         .map(compute_fuel)
         .sum()
 }

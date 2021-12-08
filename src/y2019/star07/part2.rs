@@ -2,7 +2,6 @@ use itertools::Itertools;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
-use std::str::FromStr;
 
 const ADD: i32 = 1;
 const MUL: i32 = 2;
@@ -28,7 +27,7 @@ impl IntcodeProgram {
         output: Rc<RefCell<VecDeque<i32>>>,
     ) -> Self {
         Self {
-            tape: tape.split(',').map(|x| i32::from_str(x).unwrap()).collect(),
+            tape: tape.split(',').map(|x| x.parse().unwrap()).collect(),
             position: 0,
             input,
             output,

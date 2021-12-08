@@ -1,5 +1,4 @@
 use std::collections::{HashMap, VecDeque};
-use std::str::FromStr;
 
 const ADD: i64 = 1;
 const MUL: i64 = 2;
@@ -26,7 +25,7 @@ impl IntcodeProgram {
             tape: tape_str
                 .split(',')
                 .enumerate()
-                .map(|(index, val)| (index as i64, i64::from_str(val).unwrap()))
+                .map(|(index, val)| (index as i64, val.parse().unwrap()))
                 .collect(),
             position: 0,
             rel_base: 0,
