@@ -1,30 +1,20 @@
 pub mod part1;
 pub mod part2;
 
+#[macro_use]
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn part1() {
-        let expected = "43896725";
-        let actual = super::part1::run("589174263");
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part1_sanity() {
-        let expected = "67384529";
-        let actual = super::part1::run("389125467");
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2() {
-        let expected = 2911418906;
-        let actual = super::part2::run("589174263");
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2_sanity() {
-        let expected = 149245887792;
-        let actual = super::part2::run("389125467");
-        assert_eq!(expected, actual);
-    }
+    use crate::aoc_test_suite;
+
+    aoc_test_suite!(
+        super::part1::run,
+        (part1_main, "43896725", "589174263"),
+        (part1_sanity, "67384529", "389125467"),
+    );
+
+    aoc_test_suite!(
+        super::part2::run,
+        (part2_main, 2911418906, "589174263"),
+        (part2_sanity, 149245887792, "389125467"),
+    );
 }
