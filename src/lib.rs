@@ -15,7 +15,7 @@ pub mod y2021;
 
 #[macro_export]
 macro_rules! aoc_test_suite {
-    ($func:path, $name:ident, $expected:expr, $input:expr) => {
+    ($func:path, ($name:ident, $expected:expr, $input:expr)) => {
         #[test]
         fn $name() {
             let expected = $expected;
@@ -26,8 +26,8 @@ macro_rules! aoc_test_suite {
             assert_eq!(expected, actual);
         }
     };
-    ($func:path, ($name:ident, $expected:expr, $input:expr), $(($name_tail:ident, $expected_tail:expr, $input_tail:expr)), +) => {
-        aoc_test_suite!($func, $name, $expected, $input);
-        aoc_test_suite!($func, $($name_tail, $expected_tail, $input_tail), +);
+    ($func:path, ($name:ident, $expected:expr, $input:expr) $(, ($name_tail:ident, $expected_tail:expr, $input_tail:expr))+ $(,)?) => {
+        aoc_test_suite!($func, ($name, $expected, $input));
+        aoc_test_suite!($func $(, ($name_tail, $expected_tail, $input_tail))+);
     };
 }
