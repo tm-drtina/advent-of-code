@@ -12,8 +12,6 @@ pub fn run(input: &str) -> i64 {
 
     buses.sort_by_key(|(_index, bus)| -bus);
 
-    println!("{:?}", buses);
-
     let mut res = -buses[0].0;
     let mut n = buses[0].1;
     while res < 0 {

@@ -3,40 +3,19 @@ pub mod part2;
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn part1() {
-        let expected = 26869;
-        let actual = super::part1::run(include_str!("input.txt"));
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part1_sanity() {
-        let expected = 71;
-        let actual = super::part1::run(include_str!("input.test.txt"));
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2() {
-        let expected = 855275529001;
-        let actual = super::part2::run(include_str!("input.txt"));
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2_sanity1() {
-        let expected = 12;
-        let actual = super::part2::run(include_str!("input.test2_1.txt"));
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2_sanity2() {
-        let expected = 11;
-        let actual = super::part2::run(include_str!("input.test2_2.txt"));
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2_sanity3() {
-        let expected = 13;
-        let actual = super::part2::run(include_str!("input.test2_3.txt"));
-        assert_eq!(expected, actual);
-    }
+    use crate::aoc_test_suite;
+
+    aoc_test_suite!(
+        super::part1::run,
+        (part1_main, 26869, include_str!("input.txt")),
+        (part1_sanity1, 71, include_str!("input.sanity1.txt")),
+    );
+
+    aoc_test_suite!(
+        super::part2::run,
+        (part2_main, 855275529001, include_str!("input.txt")),
+        (part2_sanity2, 12, include_str!("input.sanity2.txt")),
+        (part2_sanity3, 11, include_str!("input.sanity3.txt")),
+        (part2_sanity4, 13, include_str!("input.sanity4.txt")),
+    );
 }

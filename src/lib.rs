@@ -11,7 +11,7 @@ pub mod y2021;
 
 #[macro_export]
 macro_rules! aoc_test_suite {
-    ($func:path, ($name:ident, $expected:expr, $input:expr)) => {
+    ($func:path, ($name:ident, $expected:expr, $input:expr) $(,)?) => {
         #[test]
         fn $name() {
             let expected = $expected;
