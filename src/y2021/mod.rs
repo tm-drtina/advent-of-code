@@ -7,3 +7,4 @@ pub mod star06;
 pub mod star07;
 pub mod star08;
 pub mod star09;
+pub mod star10;
