@@ -3,10 +3,10 @@ use std::str::FromStr;
 
 #[derive(Debug, Clone, Copy, Hash, PartialEq, Eq)]
 pub(super) enum Node {
-    START,
-    END,
-    SMALL(u16),
-    BIG(u16),
+    Start,
+    End,
+    Small(u16),
+    Big(u16),
 }
 
 /// Nodes are always 2 chars/bytes, so it's safe to keep them as u16
@@ -20,10 +20,10 @@ impl FromStr for Node {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
-            "start" => Ok(Self::START),
-            "end" => Ok(Self::END),
-            _ if s.chars().all(|ch| ch.is_ascii_lowercase()) => Ok(Self::SMALL(str_to_int(s))),
-            _ if s.chars().all(|ch| ch.is_ascii_uppercase()) => Ok(Self::BIG(str_to_int(s))),
+            "start" => Ok(Self::Start),
+            "end" => Ok(Self::End),
+            _ if s.chars().all(|ch| ch.is_ascii_lowercase()) => Ok(Self::Small(str_to_int(s))),
+            _ if s.chars().all(|ch| ch.is_ascii_uppercase()) => Ok(Self::Big(str_to_int(s))),
             _ => Err(()),
         }
     }
@@ -50,11 +50,11 @@ fn find_paths(visited: &HashSet<Node>, current: Node, lines: &HashMap<Node, Vec<
         .iter()
         .copied()
         .map(|next| match next {
-            Node::START => 0,
-            Node::END => 1,
-            Node::BIG(_) => find_paths(visited, next, lines),
-            Node::SMALL(_) if visited.contains(&next) => 0,
-            Node::SMALL(_) => {
+            Node::Start => 0,
+            Node::End => 1,
+            Node::Big(_) => find_paths(visited, next, lines),
+            Node::Small(_) if visited.contains(&next) => 0,
+            Node::Small(_) => {
                 let mut visited = visited.clone();
                 visited.insert(next);
                 find_paths(&visited, next, lines)
@@ -65,5 +65,5 @@ fn find_paths(visited: &HashSet<Node>, current: Node, lines: &HashMap<Node, Vec<
 
 pub fn run(input: &str) -> usize {
     let lines = parse(input);
-    find_paths(&HashSet::new(), Node::START, &lines)
+    find_paths(&HashSet::new(), Node::Start, &lines)
 }

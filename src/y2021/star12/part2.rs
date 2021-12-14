@@ -14,11 +14,11 @@ fn find_paths(
         .iter()
         .copied()
         .map(|next| match next {
-            Node::START => 0,
-            Node::END => 1,
-            Node::BIG(_) => find_paths(visited, visited_twice, next, lines),
-            Node::SMALL(_) if visited_twice && visited.contains(&next) => 0,
-            Node::SMALL(_) => {
+            Node::Start => 0,
+            Node::End => 1,
+            Node::Big(_) => find_paths(visited, visited_twice, next, lines),
+            Node::Small(_) if visited_twice && visited.contains(&next) => 0,
+            Node::Small(_) => {
                 let mut visited = visited.clone();
                 let visited_twice = visited_twice || visited.contains(&next);
                 visited.insert(next);
@@ -30,5 +30,5 @@ fn find_paths(
 
 pub fn run(input: &str) -> usize {
     let lines = parse(input);
-    find_paths(&HashSet::new(), false, Node::START, &lines)
+    find_paths(&HashSet::new(), false, Node::Start, &lines)
 }
