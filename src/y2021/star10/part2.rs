@@ -32,6 +32,6 @@ fn parse(s: &str) -> Option<usize> {
 
 pub fn run(input: &str) -> usize {
     let mut res: Vec<_> = input.lines().filter_map(parse).collect();
-    res.sort();
+    res.sort_unstable();
     res[res.len() / 2]
 }
