@@ -22,65 +22,74 @@ impl Iterator for Dice {
     }
 }
 
-struct Game {
-    dice: Dice,
-    pos1: usize,
-    score1: usize,
-    pos2: usize,
-    score2: usize,
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub(super) struct Game {
+    pub pos1: usize,
+    pub score1: usize,
+    pub pos2: usize,
+    pub score2: usize,
+    pub p1_turn: bool,
 }
 
 impl Game {
-    fn new(dice: Dice, pos1: usize, pos2: usize) -> Self {
+    fn new(pos1: usize, pos2: usize) -> Self {
         Self {
-            dice,
             pos1: pos1 - 1,
             score1: 0,
             pos2: pos2 - 1,
             score2: 0,
+            p1_turn: true,
         }
     }
 
-    fn step(&mut self) {
-        let throw = self.dice.next().unwrap();
+    pub(super) fn step(&mut self, throw: usize) {
         self.pos1 = (self.pos1 + throw) % 10;
         self.score1 += self.pos1 + 1;
+        self.p1_turn = !self.p1_turn;
         std::mem::swap(&mut self.pos1, &mut self.pos2);
         std::mem::swap(&mut self.score1, &mut self.score2);
     }
 
-    fn run(&mut self) -> usize {
+    fn run(&mut self, mut dice: Dice) -> usize {
         let mut turns = 1;
         loop {
-            self.step();
+            let throw = dice.next().unwrap();
+            self.step(throw);
             if self.score2 >= 1000 {
                 break;
             }
             turns += 1;
-        };
+        }
         turns * 3 * self.score1
     }
 }
 
-pub fn run(input: &str) -> usize {
-    let mut input = input.lines();
-    let mut game = Game::new(
-        Dice::new(100),
-        input
-            .next()
-            .unwrap()
-            .strip_prefix("Player 1 starting position: ")
-            .unwrap()
-            .parse()
-            .unwrap(),
-        input
-            .next()
-            .unwrap()
-            .strip_prefix("Player 2 starting position: ")
-            .unwrap()
-            .parse()
-            .unwrap(),
-    );
+impl std::str::FromStr for Game {
+    type Err = ();
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let mut lines = s.lines();
+        Ok(Self::new(
+            lines
+                .next()
+                .unwrap()
+                .strip_prefix("Player 1 starting position: ")
+                .unwrap()
+                .parse()
+                .unwrap(),
+            lines
+                .next()
+                .unwrap()
+                .strip_prefix("Player 2 starting position: ")
+                .unwrap()
+                .parse()
+                .unwrap(),
+        ))
+    }
+}
 
-    game.run()
+pub fn run(input: &str) -> usize {
+    let dice = Dice::new(100);
+    let mut game: Game = input.parse().unwrap();
+
+    game.run(dice)
 }
