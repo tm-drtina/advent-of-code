@@ -8,7 +8,8 @@ enum Coord {
     Y,
     Z,
 }
-type Rotation = ((Coord, Coord, Coord), (isize, isize, isize));
+type Point3D = (isize, isize, isize);
+type Rotation = ((Coord, Coord, Coord), Point3D);
 const ROTATIONS: [Rotation; 24] = [
     ((Coord::X, Coord::Y, Coord::Z), (1, 1, 1)),
     ((Coord::X, Coord::Z, Coord::Y), (1, 1, -1)),
@@ -38,17 +39,17 @@ const ROTATIONS: [Rotation; 24] = [
 
 #[derive(Debug)]
 pub(super) struct Sensor {
-    rotated_beacons: Vec<Vec<(isize, isize, isize)>>,
+    rotated_beacons: Vec<Vec<Point3D>>,
     mismatch: HashSet<usize>,
 }
 
 #[derive(Debug)]
 pub(super) struct AlignedSensor {
-    sub_sensors: Vec<Vec<(isize, isize, isize)>>,
-    distances: Vec<(isize, isize, isize)>,
+    sub_sensors: Vec<Vec<Point3D>>,
+    distances: Vec<Point3D>,
 }
 
-fn coord(coord: Coord, orig: (isize, isize, isize)) -> isize {
+fn coord(coord: Coord, orig: Point3D) -> isize {
     match coord {
         Coord::X => orig.0,
         Coord::Y => orig.1,
@@ -56,10 +57,7 @@ fn coord(coord: Coord, orig: (isize, isize, isize)) -> isize {
     }
 }
 
-fn rotate_beacons(
-    rotation: &Rotation,
-    beacons: &[(isize, isize, isize)],
-) -> Vec<(isize, isize, isize)> {
+fn rotate_beacons(rotation: &Rotation, beacons: &[Point3D]) -> Vec<Point3D> {
     beacons
         .iter()
         .copied()
@@ -95,7 +93,7 @@ impl std::str::FromStr for AlignedSensor {
         lines.next(); // header
         let beacons = lines
             .map(|line| {
-                let mut parts = line.split(",");
+                let mut parts = line.split(',');
                 (
                     parts.next().unwrap().parse().unwrap(),
                     parts.next().unwrap().parse().unwrap(),
@@ -110,10 +108,7 @@ impl std::str::FromStr for AlignedSensor {
     }
 }
 
-fn align(
-    orig: &[(isize, isize, isize)],
-    beacons: &[(isize, isize, isize)],
-) -> Option<(isize, isize, isize)> {
+fn align(orig: &[Point3D], beacons: &[Point3D]) -> Option<Point3D> {
     for p1 in orig {
         for p2 in beacons {
             let alignment = (p1.0 - p2.0, p1.1 - p2.1, p1.2 - p2.2);
@@ -137,10 +132,7 @@ fn align(
 }
 
 impl AlignedSensor {
-    fn try_align(
-        &mut self,
-        sensor: &mut Sensor,
-    ) -> Option<(Vec<(isize, isize, isize)>, (isize, isize, isize))> {
+    fn try_align(&mut self, sensor: &mut Sensor) -> Option<(Vec<Point3D>, Point3D)> {
         for (index, aligned_sub_sensor) in self.sub_sensors.iter().enumerate() {
             if sensor.mismatch.contains(&index) {
                 continue;
@@ -170,7 +162,7 @@ impl AlignedSensor {
 
     pub(super) fn align_and_merge(&mut self, mut sensors: Vec<Sensor>) {
         while !sensors.is_empty() {
-            for mut sensor in std::mem::replace(&mut sensors, Vec::new()) {
+            for mut sensor in std::mem::take(&mut sensors) {
                 if let Some((aligned_sensor, alignment)) = self.try_align(&mut sensor) {
                     self.sub_sensors.push(aligned_sensor);
                     self.distances.push(alignment);

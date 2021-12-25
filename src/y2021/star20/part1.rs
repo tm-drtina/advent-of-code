@@ -8,9 +8,10 @@ impl std::str::FromStr for Image {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let around_fill = false;
-        let mut data = Vec::new();
-        data.push(Vec::with_capacity(0)); // Placeholder for first empty line
-        data.push(Vec::with_capacity(0)); // Placeholder for first empty line
+        let mut data = vec![
+            Vec::with_capacity(0), // Placeholder for first empty line
+            Vec::with_capacity(0), // Placeholder for first empty line
+        ];
         for line in s.lines() {
             let mut row = Vec::with_capacity(line.len() + 4);
             row.push(around_fill);
