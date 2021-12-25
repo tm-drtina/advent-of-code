@@ -8,7 +8,7 @@ struct Range {
 impl std::str::FromStr for Range {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut split = s.split(",");
+        let mut split = s.split(',');
         let x_str = split
             .next()
             .unwrap()
