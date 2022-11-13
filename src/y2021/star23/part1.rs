@@ -1,4 +1,4 @@
-use lazy_static::lazy_static;
+use once_cell::sync::Lazy;
 use pathfinding::prelude::dijkstra;
 
 /*
@@ -17,130 +17,130 @@ struct Path {
 }
 const RESULT: [u8; 15] = [0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4];
 const COSTS: [usize; 4] = [1, 10, 100, 1000];
-lazy_static! {
-    static ref PATHS: [Vec<Path>; 4] = [
+static PATHS: Lazy<[Vec<Path>; 4]> = Lazy::new(|| {
+    [
         vec![
             Path {
                 steps: 3,
-                avoid: vec![1]
+                avoid: vec![1],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 4,
-                avoid: vec![2]
+                avoid: vec![2],
             },
             Path {
                 steps: 6,
-                avoid: vec![2, 3]
+                avoid: vec![2, 3],
             },
             Path {
                 steps: 8,
-                avoid: vec![2, 3, 4]
+                avoid: vec![2, 3, 4],
             },
             Path {
                 steps: 9,
-                avoid: vec![2, 3, 4, 5]
+                avoid: vec![2, 3, 4, 5],
             },
         ],
         vec![
             Path {
                 steps: 5,
-                avoid: vec![1, 2]
+                avoid: vec![1, 2],
             },
             Path {
                 steps: 4,
-                avoid: vec![2]
+                avoid: vec![2],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 4,
-                avoid: vec![3]
+                avoid: vec![3],
             },
             Path {
                 steps: 6,
-                avoid: vec![3, 4]
+                avoid: vec![3, 4],
             },
             Path {
                 steps: 7,
-                avoid: vec![3, 4, 5]
+                avoid: vec![3, 4, 5],
             },
         ],
         vec![
             Path {
                 steps: 7,
-                avoid: vec![1, 2, 3]
+                avoid: vec![1, 2, 3],
             },
             Path {
                 steps: 6,
-                avoid: vec![2, 3]
+                avoid: vec![2, 3],
             },
             Path {
                 steps: 4,
-                avoid: vec![3]
+                avoid: vec![3],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 4,
-                avoid: vec![4]
+                avoid: vec![4],
             },
             Path {
                 steps: 5,
-                avoid: vec![4, 5]
+                avoid: vec![4, 5],
             },
         ],
         vec![
             Path {
                 steps: 9,
-                avoid: vec![1, 2, 3, 4]
+                avoid: vec![1, 2, 3, 4],
             },
             Path {
                 steps: 8,
-                avoid: vec![2, 3, 4]
+                avoid: vec![2, 3, 4],
             },
             Path {
                 steps: 6,
-                avoid: vec![3, 4]
+                avoid: vec![3, 4],
             },
             Path {
                 steps: 4,
-                avoid: vec![4]
+                avoid: vec![4],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 2,
-                avoid: vec![]
+                avoid: vec![],
             },
             Path {
                 steps: 3,
-                avoid: vec![5]
+                avoid: vec![5],
             },
-        ]
-    ];
-}
+        ],
+    ]
+});
 
 impl std::str::FromStr for Puzzle {
     type Err = ();

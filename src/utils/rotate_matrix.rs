@@ -2,11 +2,10 @@ pub fn rotate_matrix_cc<T>(mat: &[Vec<T>]) -> Vec<Vec<T>>
 where
     T: Clone,
 {
-    let mut res: Vec<Vec<T>> = (0..mat[0].len())
+    (0..mat[0].len())
+        .rev()
         .map(|i| mat.iter().map(|inner| inner[i].clone()).collect())
-        .collect();
-    res.reverse();
-    res
+        .collect()
 }
 
 #[cfg(test)]
