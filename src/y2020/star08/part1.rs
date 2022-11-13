@@ -8,7 +8,7 @@ enum Op {
 
 impl From<&str> for Op {
     fn from(s: &str) -> Self {
-        let (op, str_val) = s.split_once(" ").unwrap();
+        let (op, str_val) = s.split_once(' ').unwrap();
         let val = str_val.parse().unwrap();
         match op {
             "acc" => Op::Acc { val },

@@ -75,7 +75,7 @@ impl std::str::FromStr for Sensor {
     type Err = ();
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let beacons = &s.parse::<AlignedSensor>()?.sub_sensors[0];
-        let rotated_beacons = (&ROTATIONS)
+        let rotated_beacons = ROTATIONS
             .iter()
             .map(|rotation| rotate_beacons(rotation, beacons))
             .collect();

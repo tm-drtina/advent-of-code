@@ -13,7 +13,7 @@ pub fn run(input: &str) -> i32 {
     let mut map: HashMap<&str, Vec<&str>> = HashMap::new();
 
     input.lines().for_each(|line| {
-        let (a, b) = line.split_once(")").unwrap();
+        let (a, b) = line.split_once(')').unwrap();
         map.entry(a).or_default().push(b);
     });
     compute_orbits(1, "COM", &map)
