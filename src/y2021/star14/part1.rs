@@ -33,7 +33,8 @@ pub(super) fn parse(input: &str) -> (Vec<char>, HashMap<(char, char), char>) {
 pub(super) fn score(mut template: Vec<char>) -> usize {
     template.sort_unstable();
 
-    let ((_min_char, min_count), (_max_char, max_count)) = template.clone()
+    let ((_min_char, min_count), (_max_char, max_count)) = template
+        .clone()
         .into_iter()
         .group_by(|x| *x)
         .into_iter()

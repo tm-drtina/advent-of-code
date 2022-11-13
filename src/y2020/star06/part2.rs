@@ -21,11 +21,7 @@ impl<'a, T: Iterator<Item = &'a str>> Iterator for Input<'a, T> {
             }
         }
 
-        if res.is_empty() {
-            None
-        } else {
-            Some(res)
-        }
+        if res.is_empty() { None } else { Some(res) }
     }
 }
 

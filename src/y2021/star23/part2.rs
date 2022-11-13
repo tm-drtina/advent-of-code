@@ -233,7 +233,10 @@ impl Puzzle {
         }
         for i in 0..4 {
             if self.data[i + 7] == 0
-                || (self.data[i + 7] - 1 == i as u8 && self.data[i + 11] - 1 == i as u8 && self.data[i + 15] - 1 == i as u8 && self.data[i + 19] - 1 == i as u8)
+                || (self.data[i + 7] - 1 == i as u8
+                    && self.data[i + 11] - 1 == i as u8
+                    && self.data[i + 15] - 1 == i as u8
+                    && self.data[i + 19] - 1 == i as u8)
             {
                 continue;
             }
@@ -253,7 +256,12 @@ impl Puzzle {
             }
         }
         for i in 0..4 {
-            if self.data[i + 7] != 0 || self.data[i + 11] == 0 || (self.data[i + 11] - 1 == i as u8 && self.data[i + 15] - 1 == i as u8 && self.data[i + 19] - 1 == i as u8) {
+            if self.data[i + 7] != 0
+                || self.data[i + 11] == 0
+                || (self.data[i + 11] - 1 == i as u8
+                    && self.data[i + 15] - 1 == i as u8
+                    && self.data[i + 19] - 1 == i as u8)
+            {
                 continue;
             }
             for target in 0..7 {
@@ -272,7 +280,11 @@ impl Puzzle {
             }
         }
         for i in 0..4 {
-            if self.data[i + 7] != 0 || self.data[i + 11] != 0 || self.data[i + 15] == 0 || (self.data[i + 15] - 1 == i as u8 && self.data[i + 19] - 1 == i as u8) {
+            if self.data[i + 7] != 0
+                || self.data[i + 11] != 0
+                || self.data[i + 15] == 0
+                || (self.data[i + 15] - 1 == i as u8 && self.data[i + 19] - 1 == i as u8)
+            {
                 continue;
             }
             for target in 0..7 {
@@ -291,7 +303,12 @@ impl Puzzle {
             }
         }
         for i in 0..4 {
-            if self.data[i + 7] != 0 || self.data[i + 11] != 0 || self.data[i + 15] != 0 || self.data[i + 19] == 0 || self.data[i + 19] - 1 == i as u8 {
+            if self.data[i + 7] != 0
+                || self.data[i + 11] != 0
+                || self.data[i + 15] != 0
+                || self.data[i + 19] == 0
+                || self.data[i + 19] - 1 == i as u8
+            {
                 continue;
             }
             for target in 0..7 {

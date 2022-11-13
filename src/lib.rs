@@ -9,7 +9,7 @@ pub mod y2019;
 pub mod y2020;
 pub mod y2021;
 
-#[cfg(not(feature="ignore-sanity"))]
+#[cfg(not(feature = "ignore-sanity"))]
 #[macro_export]
 macro_rules! aoc_test_suite {
     ($func:path, ($name:ident, $expected:expr, $input:expr) $(,)?) => {
@@ -29,7 +29,7 @@ macro_rules! aoc_test_suite {
     };
 }
 
-#[cfg(feature="ignore-sanity")]
+#[cfg(feature = "ignore-sanity")]
 #[macro_export]
 macro_rules! aoc_test_suite {
     ($func:path, ($name:ident, $expected:expr, $input:expr) $(, ($name_tail:ident, $expected_tail:expr, $input_tail:expr))* $(,)?) => {
@@ -39,7 +39,12 @@ macro_rules! aoc_test_suite {
             let start = std::time::Instant::now();
             let actual = $func($input);
             let elapsed = start.elapsed();
-            eprintln!("Test {}::{} ran in {:#?}", module_path!(), stringify!($name), elapsed);
+            eprintln!(
+                "Test {}::{} ran in {:#?}",
+                module_path!(),
+                stringify!($name),
+                elapsed
+            );
             assert_eq!(expected, actual);
         }
     };

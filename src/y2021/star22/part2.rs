@@ -1,4 +1,4 @@
-use super::part1::{Command, Area};
+use super::part1::{Area, Command};
 
 pub fn run(input: &str) -> usize {
     let commands: Vec<Command> = input
