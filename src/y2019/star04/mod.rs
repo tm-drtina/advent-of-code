@@ -3,16 +3,15 @@ pub mod part2;
 
 #[cfg(test)]
 mod tests {
-    #[test]
-    fn part1() {
-        let expected = 966;
-        let actual = super::part1::run(264793, 803935);
-        assert_eq!(expected, actual);
-    }
-    #[test]
-    fn part2() {
-        let expected = 628;
-        let actual = super::part2::run(264793, 803935);
-        assert_eq!(expected, actual);
-    }
+    use crate::aoc_test_suite;
+
+    aoc_test_suite!(
+        super::part1::run,
+        (part1_main, 966, include_str!("input.txt")),
+    );
+
+    aoc_test_suite!(
+        super::part2::run,
+        (part2_main, 628, include_str!("input.txt")),
+    );
 }
