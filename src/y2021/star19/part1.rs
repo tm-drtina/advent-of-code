@@ -63,9 +63,9 @@ fn rotate_beacons(rotation: &Rotation, beacons: &[Point3D]) -> Vec<Point3D> {
         .copied()
         .map(|orig| {
             (
-                coord(rotation.0 .0, orig) * rotation.1 .0,
-                coord(rotation.0 .1, orig) * rotation.1 .1,
-                coord(rotation.0 .2, orig) * rotation.1 .2,
+                coord(rotation.0.0, orig) * rotation.1.0,
+                coord(rotation.0.1, orig) * rotation.1.1,
+                coord(rotation.0.2, orig) * rotation.1.2,
             )
         })
         .collect()

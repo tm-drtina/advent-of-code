@@ -12,11 +12,7 @@ fn play_game(mut p1: VecDeque<i32>, mut p2: VecDeque<i32>) -> VecDeque<i32> {
             p2.push_back(c1);
         }
     }
-    if p1.is_empty() {
-        p2
-    } else {
-        p1
-    }
+    if p1.is_empty() { p2 } else { p1 }
 }
 
 fn score(p: VecDeque<i32>) -> i64 {

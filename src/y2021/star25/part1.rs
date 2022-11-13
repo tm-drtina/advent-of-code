@@ -48,7 +48,9 @@ impl Map {
         let height = self.0.len();
         for col in 0..self.0[0].len() {
             let indices: Vec<_> = (0..height)
-                .filter(|i| self.0[*i][col] == Tile::South && self.0[(*i + 1) % height][col] == Tile::Empty)
+                .filter(|i| {
+                    self.0[*i][col] == Tile::South && self.0[(*i + 1) % height][col] == Tile::Empty
+                })
                 .collect();
             for i in indices {
                 res = true;

@@ -19,10 +19,10 @@ pub(super) fn check(target: &((i32, i32), (i32, i32)), x_speed: i32, y_speed: i3
         let x = capped_n * (2 * x_speed - capped_n + 1) / 2;
         let y = n * y_speed - n * (n - 1) / 2;
 
-        if x > target.0 .1 || y < target.1 .0 {
+        if x > target.0.1 || y < target.1.0 {
             return false;
         }
-        if x >= target.0 .0 && y <= target.1 .1 {
+        if x >= target.0.0 && y <= target.1.1 {
             return true;
         }
         n += 1;
@@ -33,12 +33,12 @@ pub fn run(input: &str) -> i32 {
     let target = parse(input);
 
     let min_x = 1;
-    let max_x = target.0 .1 + 1;
-    let max_y = -target.1 .0;
+    let max_x = target.0.1 + 1;
+    let max_y = -target.1.0;
     let mut best_y_speed = 0;
 
     for x_speed in min_x..max_x {
-        if x_speed * (x_speed + 1) / 2 < target.0 .0 {
+        if x_speed * (x_speed + 1) / 2 < target.0.0 {
             continue;
         }
         for y_speed in ((best_y_speed + 1)..max_y).rev() {

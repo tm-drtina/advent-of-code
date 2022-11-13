@@ -37,7 +37,9 @@ impl Map {
     }
 
     fn cost(&self, point: (usize, usize)) -> usize {
-        let mut res = self.raw_map[point.1 % self.height][point.0 % self.width] + point.1 / self.height + point.0 / self.width;
+        let mut res = self.raw_map[point.1 % self.height][point.0 % self.width]
+            + point.1 / self.height
+            + point.0 / self.width;
         while res > 9 {
             res -= 9;
         }
