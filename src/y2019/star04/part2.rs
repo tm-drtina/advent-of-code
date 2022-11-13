@@ -16,6 +16,9 @@ fn is_valid(num: &i32) -> bool {
     non_decreasing && (t1 || t2 || t3 || t4 || t5)
 }
 
-pub fn run(min: i32, max: i32) -> usize {
+pub fn run(input: &str) -> usize {
+    let (min, max) = input.split_once('-').expect("valid input");
+    let min = min.parse::<i32>().unwrap();
+    let max = max.parse::<i32>().unwrap();
     (min..max).filter(is_valid).count()
 }

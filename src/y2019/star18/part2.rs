@@ -166,7 +166,6 @@ fn load_map(input: &str) -> (Map, Point) {
 fn dfs(
     map: &Map,
     state: State,
-    _distance_sofar: usize,
     memory: &mut HashMap<State, usize>,
 ) -> usize {
     let mut distance_to_goal = usize::MAX / 2 - 1;
@@ -184,7 +183,7 @@ fn dfs(
                 let distance_rest = if let Some(value) = memory.get(&new_state) {
                     *value
                 } else {
-                    dfs(map, new_state, _distance_sofar + step_distance, memory)
+                    dfs(map, new_state, memory)
                 };
                 distance_to_goal = distance_to_goal.min(distance_rest + step_distance);
             }
@@ -223,5 +222,5 @@ pub fn run(input: &str) -> usize {
     map.map[start_point.y + 1][start_point.x] = '#';
     map.map[start_point.y][start_point.x - 1] = '#';
     map.map[start_point.y][start_point.x + 1] = '#';
-    dfs(&map, state, 0, &mut memory)
+    dfs(&map, state, &mut memory)
 }
