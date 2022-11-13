@@ -14,8 +14,8 @@ fn parse_line(line: &str) -> (&str, Vec<Bag>) {
             _ => raw_inner
                 .split(", ")
                 .map(|bag_with_count| {
-                    let (count, color_bag) = bag_with_count.split_once(" ").unwrap();
-                    let color = color_bag.rsplit_once(" ").unwrap().0;
+                    let (count, color_bag) = bag_with_count.split_once(' ').unwrap();
+                    let color = color_bag.rsplit_once(' ').unwrap().0;
                     Bag {
                         name: color,
                         count: count.parse().unwrap(),

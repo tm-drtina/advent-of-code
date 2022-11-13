@@ -21,10 +21,7 @@ pub fn run(input: &str) -> usize {
             } else {
                 '1'
             };
-            input = input
-                .into_iter()
-                .filter(|s| s.chars().nth(i).unwrap() == ch)
-                .collect();
+            input.retain(|s| s.chars().nth(i).unwrap() == ch);
             if input.len() == 1 {
                 break;
             }
@@ -39,10 +36,7 @@ pub fn run(input: &str) -> usize {
             } else {
                 '0'
             };
-            input = input
-                .into_iter()
-                .filter(|s| s.chars().nth(i).unwrap() == ch)
-                .collect();
+            input.retain(|s| s.chars().nth(i).unwrap() == ch);
             if input.len() == 1 {
                 break;
             }

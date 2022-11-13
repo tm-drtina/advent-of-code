@@ -31,7 +31,7 @@ pub fn run(input: &str) -> i32 {
     let mut map: HashMap<&str, Vec<&str>> = HashMap::new();
 
     input.lines().for_each(|line| {
-        let (a, b) = line.split_once(")").unwrap();
+        let (a, b) = line.split_once(')').unwrap();
         map.entry(a).or_default().push(b);
     });
     let (res_you, res_san) = compute_jumps("COM", &map);

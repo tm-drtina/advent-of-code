@@ -16,7 +16,7 @@ pub fn run(input: &str) -> i64 {
         let rules = rules
             .split(" or ")
             .map(|rule| {
-                let (from_str, to_str) = rule.split_once("-").unwrap();
+                let (from_str, to_str) = rule.split_once('-').unwrap();
                 let from = from_str.parse().unwrap();
                 let to = to_str.parse::<i32>().unwrap() + 1;
                 from..to

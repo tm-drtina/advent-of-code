@@ -16,9 +16,9 @@ impl Neighbors {
         self.data.reverse();
     }
     fn real_data(&self) -> Vec<Vec<bool>> {
-        (&self.data[1..self.data.len() - 1])
+        self.data[1..self.data.len() - 1]
             .iter()
-            .map(|r| r[1..r.len() - 1].iter().copied().collect())
+            .map(|r| r[1..r.len() - 1].to_vec())
             .collect()
     }
 }
@@ -172,7 +172,7 @@ impl Pattern {
             .iter()
             .all(|(y, x)| image[y + off_y][x + off_x])
     }
-    fn mark(&self, monsters: &mut Vec<Vec<bool>>, off_y: usize, off_x: usize) {
+    fn mark(&self, monsters: &mut [Vec<bool>], off_y: usize, off_x: usize) {
         self.indices
             .iter()
             .for_each(|(y, x)| monsters[y + off_y][x + off_x] = true)
