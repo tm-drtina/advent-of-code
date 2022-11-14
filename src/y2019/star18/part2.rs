@@ -1,5 +1,6 @@
+use std::collections::hash_map::Entry;
 use std::collections::{HashMap, HashSet, VecDeque};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, Condvar};
 
 use itertools::Itertools;
 use rayon::prelude::*;
@@ -177,26 +178,68 @@ fn load_map(input: &str) -> (Map, Point) {
     (map, start_point)
 }
 
+#[derive(Debug, Clone)]
+enum CacheValue {
+    Computing(Arc<(Mutex<bool>, Condvar)>),
+    Ready(Option<usize>),
+}
+
 fn dfs(
     map: &Map,
     state: State,
-    memory: Arc<Mutex<HashMap<State, usize>>>,
-) -> usize {
+    memory: Arc<Mutex<HashMap<State, CacheValue>>>,
+) -> Option<usize> {
     let memory = &memory;
-    let distance_to_goal = map.reachable_states(state).into_par_iter().map(|(new_state, step_distance)| {
+    let distance_to_goal = map.reachable_states(state).into_par_iter().filter_map(|(new_state, step_distance)| {
         if new_state.keys.count() == map.keys.count() {
-            step_distance
+            Some(step_distance)
         } else {
-            let cached_value = memory.lock().unwrap().get(&new_state).copied();
-            let distance_rest = if let Some(value) = cached_value {
-                value
-            } else {
-                dfs(map, new_state, Arc::clone(memory))
+            let mut guard = memory.lock().unwrap();
+            let distance_rest = match guard.entry(new_state) {
+                Entry::Occupied(e) => {
+                    match e.get() {
+                        CacheValue::Computing(state) => {
+                            let state = Arc::clone(state);
+                            drop(guard);
+                            /*let mut computing = state.0.lock().unwrap();
+                            while *computing {
+                                computing = state.1.wait(computing).unwrap();
+                            }*/
+                            let _guard = state.1.wait_while(state.0.lock().unwrap(), |computing| { *computing }).unwrap();
+                            debug_assert!(!*_guard);
+                            match memory.lock().unwrap().get(&new_state).unwrap() {
+                                CacheValue::Computing(_) => unreachable!(),
+                                CacheValue::Ready(value) => *value,
+                            }
+                        },
+                        CacheValue::Ready(value) => *value,
+                    }
+                },
+                Entry::Vacant(e) => {
+                    let value = CacheValue::Computing(Arc::new((Mutex::new(true), Condvar::new())));
+                    e.insert(value);
+                    drop(guard);
+                    dfs(map, new_state, Arc::clone(memory))
+                },
             };
-            distance_rest + step_distance
+            distance_rest.map(|v| v + step_distance)
         }
-    }).min().unwrap_or(usize::MAX / 2 - 1);
-    memory.lock().unwrap().insert(state, distance_to_goal);
+    }).min();
+    let mut guard = memory.lock().unwrap();
+    if let Some(val) = guard.get(&state) {
+        match val {
+            CacheValue::Computing(comp) => {
+                let comp = Arc::clone(comp);
+                guard.insert(state, CacheValue::Ready(distance_to_goal));
+                let mut computing = comp.0.lock().unwrap();
+                *computing = false;
+                comp.1.notify_all();
+            },
+            CacheValue::Ready(_) => unreachable!(),
+        }
+    } else {
+        guard.insert(state, CacheValue::Ready(distance_to_goal));
+    }
     distance_to_goal
 }
 
@@ -229,5 +272,5 @@ pub fn run(input: &str) -> usize {
     map.map[start_point.y + 1][start_point.x] = '#';
     map.map[start_point.y][start_point.x - 1] = '#';
     map.map[start_point.y][start_point.x + 1] = '#';
-    dfs(&map, state, memory)
+    dfs(&map, state, memory).unwrap()
 }
