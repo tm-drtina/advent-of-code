@@ -59,16 +59,20 @@ impl Map {
         }
     }
 
-    fn reachable_states(&self, state: State) -> Vec<(State, usize)> {
-        (0..4).map(move |i| {
-            self.reachable_keys(&state.keys, state.positions[i]).into_iter().map(move |(point, step_distance, key)| {
-                let mut positions = state.positions;
-                positions[i] = point;
-                let mut keys = state.keys;
-                keys.add_key(key);
-                (State { positions, keys }, step_distance)
+    fn reachable_states(&self, state: &State) -> Vec<(State, usize)> {
+        (0..4)
+            .flat_map(move |i| {
+                self.reachable_keys(&state.keys, state.positions[i])
+                    .into_iter()
+                    .map(move |(point, step_distance, key)| {
+                        let mut positions = state.positions;
+                        positions[i] = point;
+                        let mut keys = state.keys;
+                        keys.add_key(key);
+                        (State { positions, keys }, step_distance)
+                    })
             })
-        }).flatten().collect()
+            .collect()
     }
 
     fn reachable_keys(&self, keys: &Keys, position: Point) -> Vec<(Point, usize, char)> {
@@ -177,31 +181,58 @@ fn load_map(input: &str) -> (Map, Point) {
     (map, start_point)
 }
 
-fn dfs(
-    map: &Map,
-    state: State,
-    memory: Arc<Mutex<HashMap<State, usize>>>,
-) -> usize {
-    let memory = &memory;
-    let distance_to_goal = map.reachable_states(state).into_par_iter().map(|(new_state, step_distance)| {
-        if new_state.keys.count() == map.keys.count() {
-            step_distance
-        } else {
-            let cached_value = memory.lock().unwrap().get(&new_state).copied();
-            let distance_rest = if let Some(value) = cached_value {
-                value
-            } else {
-                dfs(map, new_state, Arc::clone(memory))
-            };
-            distance_rest + step_distance
+type CacheInitializer<K, V> = Box<dyn Fn(&K, &Cache<K, V>) -> V + Sync>;
+
+struct Cache<K, V> {
+    memory: Arc<Mutex<HashMap<K, V>>>,
+    initializer: CacheInitializer<K, V>,
+}
+
+impl<K, V> Cache<K, V>
+where
+    K: Eq + std::hash::Hash,
+    V: Clone,
+{
+    pub fn new(initializer: CacheInitializer<K, V>) -> Self {
+        Self {
+            memory: Default::default(),
+            initializer,
         }
-    }).min().unwrap_or(usize::MAX / 2 - 1);
-    memory.lock().unwrap().insert(state, distance_to_goal);
-    distance_to_goal
+    }
+
+    fn get_or_compute(&self, key: K) -> V {
+        let guard = self.memory.lock().unwrap();
+        if let Some(value) = guard.get(&key) {
+            return value.clone();
+        }
+        drop(guard);
+        let value = (self.initializer)(&key, self);
+        self.put(key, value.clone());
+        value
+    }
+
+    fn put(&self, key: K, value: V) {
+        let mut mem = self.memory.lock().unwrap();
+        mem.insert(key, value);
+    }
+}
+
+fn compute(map: &Map, state: &State, cache: &Cache<State, usize>) -> usize {
+    map.reachable_states(state)
+        .into_par_iter()
+        .map(|(new_state, step_distance)| {
+            if new_state.keys.count() == map.keys.count() {
+                step_distance
+            } else {
+                let distance_rest = cache.get_or_compute(new_state);
+                distance_rest + step_distance
+            }
+        })
+        .min()
+        .unwrap()
 }
 
 pub fn run(input: &str) -> usize {
-    let memory = Arc::new(Mutex::new(HashMap::new()));
     let (mut map, start_point) = load_map(input);
     let state = State {
         positions: [
@@ -229,5 +260,7 @@ pub fn run(input: &str) -> usize {
     map.map[start_point.y + 1][start_point.x] = '#';
     map.map[start_point.y][start_point.x - 1] = '#';
     map.map[start_point.y][start_point.x + 1] = '#';
-    dfs(&map, state, memory)
+
+    let cache = Cache::new(Box::new(move |state, cache| compute(&map, state, cache)));
+    cache.get_or_compute(state)
 }
