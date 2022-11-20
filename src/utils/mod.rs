@@ -1,3 +1,5 @@
+pub mod cache;
+pub mod map;
 mod rotate_matrix;
 mod sorted_by_angle;
 
