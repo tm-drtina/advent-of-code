@@ -107,19 +107,31 @@ impl<T> Map<T> {
     pub fn four_neighborhood(&self, point: Point2D) -> Vec<Point2D> {
         let mut points = Vec::with_capacity(4);
         if point.x > 0 {
-            points.push(Point2D { x: point.x - 1, y: point.y });
+            points.push(Point2D {
+                x: point.x - 1,
+                y: point.y,
+            });
         }
 
         if point.x < self.width - 1 {
-            points.push(Point2D { x: point.x + 1, y: point.y });
+            points.push(Point2D {
+                x: point.x + 1,
+                y: point.y,
+            });
         }
 
         if point.y > 0 {
-            points.push(Point2D { x: point.x, y: point.y - 1 });
+            points.push(Point2D {
+                x: point.x,
+                y: point.y - 1,
+            });
         }
 
         if point.y < self.height {
-            points.push(Point2D { x: point.x, y: point.y + 1 });
+            points.push(Point2D {
+                x: point.x,
+                y: point.y + 1,
+            });
         }
 
         points
