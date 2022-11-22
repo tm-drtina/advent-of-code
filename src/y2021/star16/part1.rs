@@ -132,7 +132,7 @@ impl Packet {
     }
 }
 
-pub(super) fn parse(iter: &mut HexStringIter) -> Packet {
+pub(super) fn parse(iter: &mut HexStringIter<'_>) -> Packet {
     let p_version = iter.next_int(3);
     let p_type = iter.next_int(3);
 

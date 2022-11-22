@@ -7,7 +7,7 @@ pub(super) enum Number {
 }
 
 impl Number {
-    pub(super) fn from_str(chars: &mut Chars) -> Self {
+    pub(super) fn from_str(chars: &mut Chars<'_>) -> Self {
         let ch = chars.next().unwrap();
         if ch == '[' {
             let left = Box::new(Self::from_str(chars));

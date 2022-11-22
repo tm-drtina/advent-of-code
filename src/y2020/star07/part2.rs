@@ -5,7 +5,7 @@ struct Bag<'a> {
     count: i32,
 }
 
-fn parse_line(line: &str) -> (&str, Vec<Bag>) {
+fn parse_line(line: &str) -> (&str, Vec<Bag<'_>>) {
     let (raw_outer, raw_inner) = line[0..line.len() - 1].split_once(" contain ").unwrap();
     (
         &raw_outer[0..raw_outer.len() - 5],
@@ -26,7 +26,7 @@ fn parse_line(line: &str) -> (&str, Vec<Bag>) {
     )
 }
 
-fn count_rec(map: &HashMap<&str, Vec<Bag>>, bag: &Bag) -> i32 {
+fn count_rec(map: &HashMap<&str, Vec<Bag<'_>>>, bag: &Bag<'_>) -> i32 {
     map.get(bag.name)
         .map(|bags| {
             bags.iter()
@@ -37,7 +37,7 @@ fn count_rec(map: &HashMap<&str, Vec<Bag>>, bag: &Bag) -> i32 {
 }
 
 pub fn run(input: &str) -> i32 {
-    let m: HashMap<&str, Vec<Bag>> = input.lines().map(parse_line).collect();
+    let m: HashMap<&str, Vec<Bag<'_>>> = input.lines().map(parse_line).collect();
     count_rec(
         &m,
         &Bag {
