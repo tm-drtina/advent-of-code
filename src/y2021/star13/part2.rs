@@ -7,7 +7,7 @@ pub fn run(input: &str) -> String {
     for fold in folds {
         points = points.into_iter().map(|pt| pt.fold(fold)).collect();
     }
-    let res = (0..6)
+    (0..6)
         .map(|y| {
             (0..39)
                 .map(|x| {
@@ -19,7 +19,5 @@ pub fn run(input: &str) -> String {
                 })
                 .join("")
         })
-        .join("\n");
-    eprintln!("{}", res);
-    res
+        .join("\n")
 }

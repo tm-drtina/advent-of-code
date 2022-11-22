@@ -1,6 +1,5 @@
 pub mod part1;
 
-#[macro_use]
 #[cfg(test)]
 mod tests {
     use crate::aoc_test_suite;
