@@ -6,7 +6,7 @@ name: cargo test
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: ${{ matrix.toolchain }}
+    name: test ${{ matrix.toolchain }}
     strategy:
       fail-fast: false
       matrix:

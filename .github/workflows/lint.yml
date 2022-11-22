@@ -4,9 +4,9 @@ on:
   pull_request:
 name: lint
 jobs:
-  style:
+  lint:
     runs-on: ubuntu-latest
-    name: ${{ matrix.toolchain }}
+    name: lint ${{ matrix.toolchain }}
     strategy:
       fail-fast: false
       matrix:
