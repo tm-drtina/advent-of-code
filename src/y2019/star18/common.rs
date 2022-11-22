@@ -10,11 +10,11 @@ impl Keys {
     }
 
     pub fn add_key(&mut self, key: u8) {
-        self.0 |= 1u32<<key;
+        self.0 |= 1u32 << key;
     }
 
     pub fn contains(&self, key: u8) -> bool {
-        self.0 & (1u32<<key) != 0
+        self.0 & (1u32 << key) != 0
     }
 
     pub fn count(&self) -> usize {
@@ -64,20 +64,23 @@ impl Maze {
             match ch {
                 Tile::Key(key) if !keys.contains(key) => {
                     reachable.push((position, distance, key));
-                },
-                _ => {},
+                }
+                _ => {}
             }
 
             //if reachable.len() + keys.count() == self.keys.count() {
             //    break;
             //}
 
-            self.map.four_neighborhood(position).into_iter().for_each(|point| {
-                if !visited.contains(&point) && self.passable(keys, point) {
-                    visited.insert(point);
-                    open.push_back((point, distance + 1));
-                }
-            });
+            self.map
+                .four_neighborhood(position)
+                .into_iter()
+                .for_each(|point| {
+                    if !visited.contains(&point) && self.passable(keys, point) {
+                        visited.insert(point);
+                        open.push_back((point, distance + 1));
+                    }
+                });
         }
 
         reachable
@@ -87,22 +90,20 @@ impl Maze {
         let mut keys = Keys::new();
         let mut start_point = Point2D { x: 0, y: 0 };
 
-        let map = Map::from_str(input, |ch, x, y| {
-            match ch {
-                _ if ch.is_ascii_lowercase() => {
-                    let key = ch as u8 - 'a' as u8;
-                    keys.add_key(key);
-                    Tile::Key(key)
-                },
-                _ if ch.is_ascii_uppercase() => Tile::Door(ch as u8 - 'A' as u8),
-                '#' => Tile::Wall,
-                '.' => Tile::Empty,
-                '@' => {
-                    start_point = Point2D { x, y };
-                    Tile::Empty
-                },
-                _ => unreachable!("Invalid char {}", ch),
+        let map = Map::from_str(input, |ch, x, y| match ch {
+            _ if ch.is_ascii_lowercase() => {
+                let key = ch as u8 - b'a';
+                keys.add_key(key);
+                Tile::Key(key)
             }
+            _ if ch.is_ascii_uppercase() => Tile::Door(ch as u8 - b'A'),
+            '#' => Tile::Wall,
+            '.' => Tile::Empty,
+            '@' => {
+                start_point = Point2D { x, y };
+                Tile::Empty
+            }
+            _ => unreachable!("Invalid char {}", ch),
         });
         (Self { map, keys }, start_point)
     }

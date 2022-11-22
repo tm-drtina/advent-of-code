@@ -12,13 +12,17 @@ mod tests {
 
     aoc_test_suite!(
         super::part2::run,
-        (part2_main, "\
+        (
+            part2_main,
+            "\
 ###  #### ###  #  # #### #  # ###   ## 
 #  # #    #  # #  #    # #  # #  # #  #
 ###  ###  #  # #  #   #  #  # #  # #   
 #  # #    ###  #  #  #   #  # ###  #   
 #  # #    #    #  # #    #  # #    #  #
 ###  #    #     ##  ####  ##  #     ## \
-", include_str!("input.txt")),
+",
+            include_str!("input.txt")
+        ),
     );
 }
