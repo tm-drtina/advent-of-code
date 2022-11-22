@@ -79,7 +79,7 @@ impl Packet {
                 self.p_version
                     + packets
                         .iter()
-                        .map(|packet| packet.version_sum())
+                        .map(Packet::version_sum)
                         .sum::<usize>()
             }
         }
@@ -89,22 +89,21 @@ impl Packet {
         match self.value {
             PacketValue::Literal(value) => value,
             PacketValue::SubPackets(ref packets) => match self.p_type {
-                0 => packets.iter().map(|packet| packet.compute_value()).sum(),
+                0 => packets.iter().map(Packet::compute_value).sum(),
                 1 => packets
                     .iter()
-                    .map(|packet| packet.compute_value())
+                    .map(Packet::compute_value)
                     .product(),
                 2 => packets
                     .iter()
-                    .map(|packet| packet.compute_value())
+                    .map(Packet::compute_value)
                     .min()
                     .unwrap(),
                 3 => packets
                     .iter()
-                    .map(|packet| packet.compute_value())
+                    .map(Packet::compute_value)
                     .max()
                     .unwrap(),
-                4 => unreachable!(),
                 5 => {
                     if packets[0].compute_value() > packets[1].compute_value() {
                         1

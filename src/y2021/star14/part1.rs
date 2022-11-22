@@ -2,7 +2,7 @@ use std::{collections::HashMap, iter::once};
 
 use itertools::Itertools;
 
-pub(super) fn step(template: Vec<char>, rules: &HashMap<(char, char), char>) -> Vec<char> {
+pub(super) fn step(template: &[char], rules: &HashMap<(char, char), char>) -> Vec<char> {
     template
         .iter()
         .tuple_windows()
@@ -50,7 +50,7 @@ pub fn run(input: &str) -> usize {
     let (mut template, rules) = parse(input);
 
     for _ in 0..10 {
-        template = step(template, &rules);
+        template = step(&template, &rules);
     }
 
     score(template)

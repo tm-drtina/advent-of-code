@@ -1,5 +1,13 @@
 #![deny(clippy::all)]
-#![warn(rust_2018_idioms)]
+#![warn(rust_2018_idioms, clippy::pedantic)]
+#![allow(
+    clippy::missing_panics_doc,
+    clippy::must_use_candidate,
+    clippy::cast_possible_truncation,
+    clippy::too_many_lines,
+    clippy::cast_sign_loss,
+    clippy::cast_lossless,
+)]
 
 #[cfg(test)]
 mod template;
