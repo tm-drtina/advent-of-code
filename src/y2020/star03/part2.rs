@@ -20,6 +20,7 @@ impl Map {
     fn width(&self) -> usize {
         self.data.first().unwrap().len()
     }
+
     fn height(&self) -> usize {
         self.data.len()
     }

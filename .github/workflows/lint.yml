@@ -10,7 +10,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        toolchain: [stable, beta]
+        toolchain: [nightly] # Would prefer `[stable, beta]`, but we need `version="Two"` in rustfmt.toml
     steps:
       - uses: actions-rs/toolchain@v1
         with:

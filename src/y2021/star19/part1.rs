@@ -73,6 +73,7 @@ fn rotate_beacons(rotation: &Rotation, beacons: &[Point3D]) -> Vec<Point3D> {
 
 impl std::str::FromStr for Sensor {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let beacons = &s.parse::<AlignedSensor>()?.sub_sensors[0];
         let rotated_beacons = ROTATIONS
@@ -88,6 +89,7 @@ impl std::str::FromStr for Sensor {
 
 impl std::str::FromStr for AlignedSensor {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut lines = s.lines();
         lines.next(); // header

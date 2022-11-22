@@ -1,7 +1,8 @@
-use itertools::Itertools;
 use std::cell::RefCell;
 use std::collections::VecDeque;
 use std::rc::Rc;
+
+use itertools::Itertools;
 
 const ADD: i32 = 1;
 const MUL: i32 = 2;
@@ -45,6 +46,7 @@ impl IntcodeProgram {
             _ => panic!("Unrecognized param mode '{}'", param_mode),
         }
     }
+
     fn operation(&self) -> i32 {
         self.tape[self.position] % 100
     }

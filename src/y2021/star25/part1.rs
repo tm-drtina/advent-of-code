@@ -9,6 +9,7 @@ struct Map(Vec<Vec<Tile>>);
 
 impl std::str::FromStr for Map {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let data = s
             .lines()
@@ -43,6 +44,7 @@ impl Map {
         }
         res
     }
+
     fn step_south(&mut self) -> bool {
         let mut res = false;
         let height = self.0.len();
@@ -60,6 +62,7 @@ impl Map {
         }
         res
     }
+
     fn step(&mut self) -> bool {
         let res1 = self.step_east();
         let res2 = self.step_south();

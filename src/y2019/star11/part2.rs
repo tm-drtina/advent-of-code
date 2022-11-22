@@ -1,6 +1,8 @@
-use super::part1::{IntcodeProgram, Robot};
-use itertools::Itertools;
 use std::collections::HashSet;
+
+use itertools::Itertools;
+
+use super::part1::{IntcodeProgram, Robot};
 
 pub fn run(input: &str) -> String {
     let mut prog = IntcodeProgram::new(input);
