@@ -90,11 +90,11 @@ impl Maze {
         let map = Map::from_str(input, |ch, x, y| {
             match ch {
                 _ if ch.is_ascii_lowercase() => {
-                    let key = ch as u8 - 'a' as u8;
+                    let key = ch as u8 - b'a';
                     keys.add_key(key);
                     Tile::Key(key)
                 },
-                _ if ch.is_ascii_uppercase() => Tile::Door(ch as u8 - 'A' as u8),
+                _ if ch.is_ascii_uppercase() => Tile::Door(ch as u8 - b'A'),
                 '#' => Tile::Wall,
                 '.' => Tile::Empty,
                 '@' => {

@@ -254,10 +254,6 @@ impl Puzzle {
                 res.push((new_state, (path.steps + 1) * cost));
             }
         }
-        /*eprintln!("From:\n{}\nTo:", self);
-        for r in &res {
-            eprintln!("{}", r.0);
-        }*/
         res
     }
     fn success(&self) -> bool {

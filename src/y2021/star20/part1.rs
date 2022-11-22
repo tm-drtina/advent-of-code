@@ -109,9 +109,6 @@ impl Image {
 pub fn run(input: &str) -> usize {
     let (alg, input) = input.split_once("\n\n").unwrap();
     let alg = alg.chars().map(|ch| ch == '#').collect::<Vec<_>>();
-    // eprintln!("{}", input.parse::<Image>().unwrap());
-    // eprintln!("{}", input.parse::<Image>().unwrap().enhance(&alg));
-    // eprintln!("{}", input.parse::<Image>().unwrap().enhance(&alg).enhance(&alg));
     input
         .parse::<Image>()
         .unwrap()
