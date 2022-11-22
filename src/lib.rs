@@ -1,5 +1,3 @@
-#![feature(entry_insert, linked_list_cursors)]
-
 #[cfg(test)]
 mod template;
 
