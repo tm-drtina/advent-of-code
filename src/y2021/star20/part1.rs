@@ -6,6 +6,7 @@ pub(super) struct Image {
 
 impl std::str::FromStr for Image {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let around_fill = false;
         let mut data = vec![

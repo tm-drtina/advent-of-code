@@ -1,6 +1,7 @@
+use std::collections::HashMap;
+
 use super::part1::{find_neighbors, parse_tiles, Neighbors};
 use crate::utils::rotate_matrix_cc;
-use std::collections::HashMap;
 
 impl Neighbors {
     fn rotate_cc(&mut self) {
@@ -11,10 +12,12 @@ impl Neighbors {
         self.left = tmp;
         self.data = rotate_matrix_cc(&self.data);
     }
+
     fn flip_upside_down(&mut self) {
         std::mem::swap(&mut self.up, &mut self.down);
         self.data.reverse();
     }
+
     fn real_data(&self) -> Vec<Vec<bool>> {
         self.data[1..self.data.len() - 1]
             .iter()
@@ -172,6 +175,7 @@ impl Pattern {
             .iter()
             .all(|(y, x)| image[y + off_y][x + off_x])
     }
+
     fn mark(&self, monsters: &mut [Vec<bool>], off_y: usize, off_x: usize) {
         self.indices
             .iter()

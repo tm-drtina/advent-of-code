@@ -1,5 +1,6 @@
-use itertools::Itertools;
 use std::cmp::Ordering;
+
+use itertools::Itertools;
 
 pub trait SortedByAngle<T>
 where
@@ -42,8 +43,9 @@ impl<T, I: Iterator<Item = T>> SortedByAngle<T> for I {}
 
 #[cfg(test)]
 mod tests {
-    use super::SortedByAngle;
     use itertools::Itertools;
+
+    use super::SortedByAngle;
 
     #[derive(Debug, Eq, PartialEq)]
     struct TestI32 {

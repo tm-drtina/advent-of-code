@@ -28,9 +28,11 @@ impl Map {
     fn height(&self) -> usize {
         self.positions.len()
     }
+
     fn width(&self) -> usize {
         self.positions[0].len()
     }
+
     fn collect_neighbors(&self, x: usize, y: usize) -> Vec<Seat> {
         let mut res: Vec<Seat> = Vec::new();
         if y > 0 {

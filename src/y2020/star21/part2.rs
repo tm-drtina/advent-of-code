@@ -1,5 +1,6 @@
-use itertools::Itertools;
 use std::collections::{HashMap, HashSet};
+
+use itertools::Itertools;
 
 pub fn run(input: &str) -> String {
     let mut allergens: HashMap<&str, HashSet<&str>> = HashMap::new();

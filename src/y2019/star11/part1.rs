@@ -65,6 +65,7 @@ impl IntcodeProgram {
             }
         }
     }
+
     pub fn step(&mut self) -> Result<bool, String> {
         match self.operation() {
             ADD => {
@@ -146,6 +147,7 @@ impl Robot {
             position: (0, 0),
         }
     }
+
     pub fn left(&mut self) {
         self.direction = match self.direction {
             Direction::Up => Direction::Left,
@@ -154,6 +156,7 @@ impl Robot {
             Direction::Left => Direction::Down,
         }
     }
+
     pub fn right(&mut self) {
         self.direction = match self.direction {
             Direction::Up => Direction::Right,
@@ -162,6 +165,7 @@ impl Robot {
             Direction::Left => Direction::Up,
         }
     }
+
     pub fn step(&mut self) {
         self.position = match self.direction {
             Direction::Up => (self.position.0, self.position.1 + 1),

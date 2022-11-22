@@ -34,6 +34,7 @@ impl IntcodeProgram {
             _ => panic!("Unrecognized param mode '{}'", param_mode),
         }
     }
+
     fn operation(&self) -> i32 {
         self.tape[self.position] % 100
     }

@@ -7,6 +7,7 @@ impl Dice {
     fn new(size: usize) -> Self {
         Self { size, it: 1..=size }
     }
+
     fn next_num(&mut self) -> usize {
         self.it.next().unwrap_or_else(|| {
             self.it = 1..=self.size;
@@ -17,6 +18,7 @@ impl Dice {
 
 impl Iterator for Dice {
     type Item = usize;
+
     fn next(&mut self) -> Option<Self::Item> {
         Some(self.next_num() + self.next_num() + self.next_num())
     }
@@ -66,6 +68,7 @@ impl Game {
 
 impl std::str::FromStr for Game {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut lines = s.lines();
         Ok(Self::new(

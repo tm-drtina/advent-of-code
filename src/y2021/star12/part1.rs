@@ -18,6 +18,7 @@ fn str_to_int(s: &str) -> u16 {
 
 impl FromStr for Node {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
             "start" => Ok(Self::Start),

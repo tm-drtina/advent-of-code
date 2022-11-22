@@ -7,6 +7,7 @@ struct Range {
 
 impl std::str::FromStr for Range {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut split = s.split(',');
         let x_str = split
@@ -46,6 +47,7 @@ impl Range {
             && self.z.0 <= other.z.0
             && self.z.1 >= other.z.1
     }
+
     fn intersects(&self, other: &Self) -> bool {
         self.x.1 >= other.x.0
             && self.x.0 <= other.x.1
@@ -73,6 +75,7 @@ impl Range {
             },
         )
     }
+
     fn split_y(self, coord: isize) -> (Self, Self) {
         (
             Self {
@@ -87,6 +90,7 @@ impl Range {
             },
         )
     }
+
     fn split_z(self, coord: isize) -> (Self, Self) {
         (
             Self {
@@ -106,6 +110,7 @@ impl Range {
 pub(super) struct Command(bool, Range);
 impl std::str::FromStr for Command {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         if let Some(rest) = s.strip_prefix("on ") {
             Ok(Self(true, rest.parse()?))
