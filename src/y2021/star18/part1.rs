@@ -34,6 +34,7 @@ impl Number {
             }
         }
     }
+
     fn increment_right(&mut self, amount: usize) {
         match self {
             Number::Literal(value) => {

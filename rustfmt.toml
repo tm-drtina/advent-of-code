@@ -1,1 +1,7 @@
 version = "Two"
+
+group_imports = "StdExternalCrate"
+newline_style = "Unix"
+reorder_impl_items = true
+use_field_init_shorthand = true
+use_try_shorthand = true

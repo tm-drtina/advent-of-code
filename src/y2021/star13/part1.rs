@@ -5,6 +5,7 @@ pub(super) struct Point(pub usize, pub usize);
 
 impl FromStr for Point {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let (x, y) = s.split_once(',').unwrap();
         Ok(Self(x.parse().unwrap(), y.parse().unwrap()))

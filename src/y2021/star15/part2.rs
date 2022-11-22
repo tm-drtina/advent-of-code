@@ -10,6 +10,7 @@ struct Map {
 
 impl FromStr for Map {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let raw_map: Vec<Vec<usize>> = s
             .lines()

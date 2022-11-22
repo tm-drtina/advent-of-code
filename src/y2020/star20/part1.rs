@@ -8,15 +8,19 @@ impl Tile {
     pub fn up_line(&self) -> Vec<bool> {
         self.data.first().unwrap().clone()
     }
+
     pub fn down_line(&self) -> Vec<bool> {
         self.data.last().unwrap().clone()
     }
+
     pub fn left_line(&self) -> Vec<bool> {
         self.data.iter().map(|x| *x.first().unwrap()).collect()
     }
+
     pub fn right_line(&self) -> Vec<bool> {
         self.data.iter().map(|x| *x.last().unwrap()).collect()
     }
+
     pub fn is_neighbor(&self, line: &[bool]) -> bool {
         let mut line_reversed = line.to_owned();
         line_reversed.reverse();
@@ -89,6 +93,7 @@ impl Neighbors {
         }
         res
     }
+
     pub fn is_corner(&self) -> bool {
         self.num_neighbors() == 2
     }

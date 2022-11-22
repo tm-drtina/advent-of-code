@@ -11,42 +11,49 @@ impl Point2D {
             y: self.y - 1,
         }
     }
+
     pub fn top(&self) -> Self {
         Self {
             x: self.x,
             y: self.y - 1,
         }
     }
+
     pub fn top_right(&self) -> Self {
         Self {
             x: self.x + 1,
             y: self.y - 1,
         }
     }
+
     pub fn right(&self) -> Self {
         Self {
             x: self.x + 1,
             y: self.y,
         }
     }
+
     pub fn bottom_right(&self) -> Self {
         Self {
             x: self.x + 1,
             y: self.y + 1,
         }
     }
+
     pub fn bottom(&self) -> Self {
         Self {
             x: self.x,
             y: self.y + 1,
         }
     }
+
     pub fn bottom_left(&self) -> Self {
         Self {
             x: self.x - 1,
             y: self.y + 1,
         }
     }
+
     pub fn left(&self) -> Self {
         Self {
             x: self.x - 1,
@@ -91,6 +98,7 @@ impl<T> Map<T> {
     pub fn height(&self) -> usize {
         self.height
     }
+
     #[allow(dead_code)]
     pub fn width(&self) -> usize {
         self.width

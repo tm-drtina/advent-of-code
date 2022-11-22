@@ -148,6 +148,7 @@ static PATHS: Lazy<[Vec<Path>; 4]> = Lazy::new(|| {
 
 impl std::str::FromStr for Puzzle {
     type Err = ();
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let mut lines = s.lines();
         let mut data = [0; 23];
@@ -328,6 +329,7 @@ impl Puzzle {
         }
         res
     }
+
     fn success(&self) -> bool {
         self.data == RESULT
     }

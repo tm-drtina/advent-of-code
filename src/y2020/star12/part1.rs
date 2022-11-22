@@ -20,6 +20,7 @@ impl Position {
             direction: Direction::East,
         }
     }
+
     fn with_position(&self, x: i32, y: i32) -> Self {
         Self {
             x,
@@ -27,6 +28,7 @@ impl Position {
             direction: self.direction,
         }
     }
+
     fn with_direction(self, direction: Direction) -> Self {
         Self {
             x: self.x,

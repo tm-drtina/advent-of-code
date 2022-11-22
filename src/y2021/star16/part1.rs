@@ -13,6 +13,7 @@ impl<'a> HexStringIter<'a> {
             counter: 0,
         }
     }
+
     fn next_int(&mut self, bit_len: usize) -> usize {
         let mut res = 0;
 
@@ -25,6 +26,7 @@ impl<'a> HexStringIter<'a> {
 }
 impl<'a> Iterator for HexStringIter<'a> {
     type Item = u8;
+
     fn next(&mut self) -> Option<Self::Item> {
         let next = self.current.pop();
         if next.is_some() {
@@ -82,6 +84,7 @@ impl Packet {
             }
         }
     }
+
     pub(super) fn compute_value(&self) -> usize {
         match self.value {
             PacketValue::Literal(value) => value,

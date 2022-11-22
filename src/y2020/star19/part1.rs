@@ -1,6 +1,7 @@
+use std::collections::HashMap;
+
 use itertools::Itertools;
 use regex::Regex;
-use std::collections::HashMap;
 
 enum Rule {
     Ref { i: i32 },
