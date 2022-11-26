@@ -2,7 +2,7 @@ use rayon::prelude::*;
 
 use super::common::{Keys, Maze, Tile};
 use crate::utils::cache::sync::Cache;
-use crate::utils::map::Point2D;
+use crate::utils::point::Point2D;
 
 fn reachable_states(maze: &Maze, state: &State) -> Vec<(State, usize)> {
     (0..4)
@@ -22,7 +22,7 @@ fn reachable_states(maze: &Maze, state: &State) -> Vec<(State, usize)> {
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 struct State {
-    positions: [Point2D; 4],
+    positions: [Point2D<usize>; 4],
     keys: Keys,
 }
 

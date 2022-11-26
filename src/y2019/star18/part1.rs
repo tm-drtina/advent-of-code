@@ -1,11 +1,11 @@
 use std::collections::HashMap;
 
 use super::common::{Keys, Maze};
-use crate::utils::map::Point2D;
+use crate::utils::point::Point2D;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
 struct State {
-    position: Point2D,
+    position: Point2D<usize>,
     keys: Keys,
 }
 

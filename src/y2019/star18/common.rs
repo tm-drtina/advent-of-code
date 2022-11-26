@@ -1,6 +1,7 @@
 use std::collections::{HashSet, VecDeque};
 
-use crate::utils::map::{Map, Point2D};
+use crate::utils::map::Map;
+use crate::utils::point::Point2D;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Keys(u32);
@@ -42,7 +43,7 @@ pub struct Maze {
 }
 
 impl Maze {
-    pub fn passable(&self, keys: Keys, point: Point2D) -> bool {
+    pub fn passable(&self, keys: Keys, point: Point2D<usize>) -> bool {
         match self.map.at(point) {
             Tile::Empty | Tile::Key(_) => true,
             Tile::Door(key) => keys.contains(*key),
@@ -50,7 +51,11 @@ impl Maze {
         }
     }
 
-    pub fn reachable_keys(&self, keys: Keys, position: Point2D) -> Vec<(Point2D, usize, u8)> {
+    pub fn reachable_keys(
+        &self,
+        keys: Keys,
+        position: Point2D<usize>,
+    ) -> Vec<(Point2D<usize>, usize, u8)> {
         let mut visited = HashSet::new();
 
         visited.insert(position);
@@ -86,7 +91,7 @@ impl Maze {
         reachable
     }
 
-    pub fn load(input: &str) -> (Self, Point2D) {
+    pub fn load(input: &str) -> (Self, Point2D<usize>) {
         let mut keys = Keys::new();
         let mut start_point = Point2D { x: 0, y: 0 };
 
