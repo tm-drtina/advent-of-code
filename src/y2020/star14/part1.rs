@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+#[derive(Debug, Clone, Copy)]
 enum Op {
     Mask { and_mask: u64, or_mask: u64 },
     Mem { addr: i32, value: u64 },

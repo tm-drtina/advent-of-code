@@ -177,9 +177,9 @@ impl Pattern {
     }
 
     fn mark(&self, monsters: &mut [Vec<bool>], off_y: usize, off_x: usize) {
-        self.indices
-            .iter()
-            .for_each(|(y, x)| monsters[y + off_y][x + off_x] = true)
+        for (y, x) in &self.indices {
+            monsters[y + off_y][x + off_x] = true;
+        }
     }
 
     fn detect_monsters(&self, image: &[Vec<bool>]) -> Vec<Vec<bool>> {

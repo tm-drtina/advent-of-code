@@ -7,6 +7,13 @@
     clippy::too_many_lines,
     clippy::cast_sign_loss,
     clippy::cast_lossless,
+    clippy::cast_possible_wrap,
+    clippy::implicit_hasher,
+    clippy::match_on_vec_items,
+    clippy::maybe_infinite_iter,
+    clippy::if_not_else,
+    clippy::module_name_repetitions,
+    clippy::similar_names
 )]
 
 #[cfg(test)]

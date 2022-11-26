@@ -27,7 +27,7 @@ fn to_coords(line: &str) -> (i32, i32) {
     point
 }
 
-fn neighbors(p: &(i32, i32)) -> Vec<(i32, i32)> {
+fn neighbors(p: (i32, i32)) -> Vec<(i32, i32)> {
     vec![
         (p.0, p.1 + 1),
         (p.0, p.1 - 1),
@@ -38,10 +38,10 @@ fn neighbors(p: &(i32, i32)) -> Vec<(i32, i32)> {
     ]
 }
 
-fn step(black: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
+fn step(black: &HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
     let mut new_black = HashSet::new();
     let mut white_neighbors: HashMap<(i32, i32), usize> = HashMap::new();
-    for x in &black {
+    for &x in black {
         let mut black_neighbors = 0;
         for neighbor in neighbors(x) {
             if black.contains(&neighbor) {
@@ -51,7 +51,7 @@ fn step(black: HashSet<(i32, i32)>) -> HashSet<(i32, i32)> {
             }
         }
         if black_neighbors == 1 || black_neighbors == 2 {
-            new_black.insert(*x);
+            new_black.insert(x);
         }
     }
     white_neighbors
@@ -78,7 +78,7 @@ pub fn run(input: &str) -> usize {
         });
 
     for _ in 0..100 {
-        black = step(black);
+        black = step(&black);
     }
 
     black.len()

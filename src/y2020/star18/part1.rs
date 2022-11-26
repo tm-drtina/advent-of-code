@@ -78,6 +78,6 @@ pub fn run(input: &str) -> i64 {
     input
         .lines()
         .map(|line| Expression::from(line.chars()))
-        .map(|expr| expr.result())
+        .map(Expression::result)
         .sum()
 }

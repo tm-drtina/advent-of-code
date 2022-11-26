@@ -7,8 +7,8 @@ pub fn run(input: &str) -> usize {
         hist[init[index]] = Some(index);
     }
     let mut last_num = init[init.len() - 1];
-    for index in (init.len() - 1)..29999999 {
-        let new_number = hist[last_num].map(|last| index - last).unwrap_or(0);
+    for index in (init.len() - 1)..29_999_999 {
+        let new_number = hist[last_num].map_or(0, |last| index - last);
         hist[last_num] = Some(index);
         last_num = new_number;
     }

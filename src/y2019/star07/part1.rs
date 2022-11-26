@@ -14,15 +14,15 @@ const LT: i32 = 7;
 const EQ: i32 = 8;
 const EXIT: i32 = 99;
 
-pub(super) struct IntcodeProgram {
-    pub tape: Vec<i32>,
+struct IntcodeProgram {
+    tape: Vec<i32>,
     position: usize,
     input: Rc<RefCell<VecDeque<i32>>>,
     output: Rc<RefCell<VecDeque<i32>>>,
 }
 
 impl IntcodeProgram {
-    pub fn new(
+    fn new(
         tape: &str,
         input: Rc<RefCell<VecDeque<i32>>>,
         output: Rc<RefCell<VecDeque<i32>>>,
@@ -106,7 +106,7 @@ impl IntcodeProgram {
     }
 }
 
-pub fn run_with_phase_setting(input: &str, phase_setting: Vec<i32>) -> Result<i32, String> {
+fn run_with_phase_setting(input: &str, phase_setting: &[i32]) -> i32 {
     let i1: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
     let o1i2: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
     let o2i3: Rc<RefCell<VecDeque<i32>>> = Rc::new(RefCell::new(VecDeque::new()));
@@ -131,14 +131,15 @@ pub fn run_with_phase_setting(input: &str, phase_setting: Vec<i32>) -> Result<i3
     p3.run().unwrap();
     p4.run().unwrap();
     p5.run().unwrap();
-    let res = *p5.output.borrow_mut().back().unwrap();
-    Ok(res)
+
+    let output = p5.output.borrow();
+    *output.back().unwrap()
 }
 
 pub fn run(input: &str) -> i32 {
     (0..5)
         .permutations(5)
-        .filter_map(|perm| run_with_phase_setting(input, perm).ok())
+        .map(|perm| run_with_phase_setting(input, &perm))
         .max()
         .unwrap()
 }

@@ -40,14 +40,14 @@ impl Program {
             match mask_bit {
                 '0' => {
                     let addr_bit = (addr >> (self.mask.len() - index - 1)) % 2;
-                    addrs = addrs.iter().map(|addr| (addr << 1) + addr_bit).collect()
+                    addrs = addrs.iter().map(|addr| (addr << 1) + addr_bit).collect();
                 }
                 '1' => addrs = addrs.iter().map(|addr| (addr << 1) + 1).collect(),
                 'X' => {
                     addrs = addrs
                         .iter()
                         .flat_map(|addr| vec![(addr << 1), (addr << 1) + 1])
-                        .collect()
+                        .collect();
                 }
                 _ => panic!("Unknown mask char {}", mask_bit),
             }

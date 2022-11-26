@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, Copy)]
 enum Direction {
     East,
     South,
@@ -5,6 +6,7 @@ enum Direction {
     North,
 }
 
+#[derive(Debug, Clone, Copy)]
 struct Position {
     x: i64,
     y: i64,
@@ -47,7 +49,7 @@ impl Position {
             let wy = self.wy;
             self.wx = -wy;
             self.wy = wx;
-            self.left(num - 90)
+            self.left(num - 90);
         }
     }
 
@@ -57,7 +59,7 @@ impl Position {
             let wy = self.wy;
             self.wx = wy;
             self.wy = -wx;
-            self.right(num - 90)
+            self.right(num - 90);
         }
     }
 

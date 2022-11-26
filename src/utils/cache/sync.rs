@@ -15,7 +15,7 @@ where
 {
     pub fn new(initializer: CacheInitializer<K, V>) -> Self {
         Self {
-            memory: Default::default(),
+            memory: Arc::default(),
             initializer,
         }
     }

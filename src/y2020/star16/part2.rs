@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::iter::FromIterator;
 use std::ops::Range;
 
 pub fn run(input: &str) -> i64 {
@@ -76,7 +75,7 @@ pub fn run(input: &str) -> i64 {
         });
 
     let mut used: HashSet<&str> = HashSet::new();
-    let mut indices: HashSet<usize> = HashSet::from_iter(0..res_fields.len());
+    let mut indices: HashSet<usize> = (0..res_fields.len()).collect();
 
     let mut res = vec![""; res_fields.len()];
 
@@ -84,19 +83,19 @@ pub fn run(input: &str) -> i64 {
         if indices.is_empty() {
             break;
         }
-        for i in indices
+        for &i in indices
             .clone()
             .iter()
-            .filter(|i| res_fields[**i].len() == 1)
+            .filter(|&i| res_fields[*i].len() == 1)
         {
-            let val = res_fields[*i].iter().next().unwrap().0;
+            let val = res_fields[i].iter().next().unwrap().0;
             used.insert(val);
-            indices.remove(i);
-            res[*i] = val;
+            indices.remove(&i);
+            res[i] = val;
         }
-        for i in indices.iter() {
+        for &i in &indices {
             for x in &used {
-                res_fields[*i].remove(x);
+                res_fields[i].remove(x);
             }
         }
     }

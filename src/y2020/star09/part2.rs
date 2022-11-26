@@ -24,10 +24,10 @@ pub fn run(input: &str) -> i64 {
             start_index += 1;
         } else {
             end_index += 1;
-            sum += nums[end_index]
+            sum += nums[end_index];
         }
     }
 
-    nums[start_index..end_index + 1].iter().min().unwrap()
-        + nums[start_index..end_index + 1].iter().max().unwrap()
+    nums[start_index..=end_index].iter().min().unwrap()
+        + nums[start_index..=end_index].iter().max().unwrap()
 }

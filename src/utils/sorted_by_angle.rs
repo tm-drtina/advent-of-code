@@ -18,16 +18,16 @@ where
             let mut angle2 = f64::from(dy2).atan2(f64::from(dx2)) + min_angle;
 
             while angle1 <= -std::f64::consts::PI {
-                angle1 += 2_f64 * std::f64::consts::PI
+                angle1 += 2_f64 * std::f64::consts::PI;
             }
             while angle1 > std::f64::consts::PI {
-                angle1 -= 2_f64 * std::f64::consts::PI
+                angle1 -= 2_f64 * std::f64::consts::PI;
             }
             while angle2 <= -std::f64::consts::PI {
-                angle2 += 2_f64 * std::f64::consts::PI
+                angle2 += 2_f64 * std::f64::consts::PI;
             }
             while angle2 > std::f64::consts::PI {
-                angle2 -= 2_f64 * std::f64::consts::PI
+                angle2 -= 2_f64 * std::f64::consts::PI;
             }
 
             if angle2.lt(&angle1) {

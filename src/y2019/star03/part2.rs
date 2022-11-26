@@ -1,6 +1,7 @@
 use std::collections::HashSet;
 use std::hash::{Hash, Hasher};
 
+#[derive(Debug, Clone, Copy)]
 enum Direction {
     Up,
     Down,
@@ -15,7 +16,7 @@ impl From<&str> for Direction {
             "D" => Direction::Down,
             "L" => Direction::Left,
             "R" => Direction::Right,
-            _ => panic!("Unrecognized direction '{}'", val),
+            _ => panic!("Unrecognized direction {}", val),
         }
     }
 }
@@ -47,6 +48,7 @@ struct Traverse {
     visited: HashSet<Point>,
 }
 
+#[derive(Debug, Clone, Copy)]
 struct Move {
     direction: Direction,
     distance: i32,
@@ -62,7 +64,7 @@ impl From<&str> for Move {
 }
 
 impl Move {
-    fn step(&self, from: &Point) -> Point {
+    fn step(self, from: &Point) -> Point {
         match self.direction {
             Direction::Up => Point {
                 x: from.x,

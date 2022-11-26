@@ -209,7 +209,7 @@ pub fn run(input: &str) -> usize {
             1
         } else {
             0
-        })
+        });
     }
     painted.len()
 }

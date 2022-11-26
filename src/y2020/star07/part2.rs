@@ -28,12 +28,11 @@ fn parse_line(line: &str) -> (&str, Vec<Bag<'_>>) {
 
 fn count_rec(map: &HashMap<&str, Vec<Bag<'_>>>, bag: &Bag<'_>) -> i32 {
     map.get(bag.name)
-        .map(|bags| {
+        .map_or(0, |bags| {
             bags.iter()
                 .map(|bag| bag.count + bag.count * count_rec(map, bag))
                 .sum()
         })
-        .unwrap_or(0)
 }
 
 pub fn run(input: &str) -> i32 {

@@ -31,7 +31,7 @@ impl Expression {
                             let (_, count) = acc.last_mut().unwrap();
                             *count += expr.result();
                         }
-                        _ => acc.push((Op::Mul, expr.result())),
+                        Op::Mul => acc.push((Op::Mul, expr.result())),
                     }
                     acc
                 })
@@ -89,6 +89,6 @@ pub fn run(input: &str) -> i64 {
     input
         .lines()
         .map(|line| Expression::from(line.chars()))
-        .map(|expr| expr.result())
+        .map(Expression::result)
         .sum()
 }
