@@ -1,3 +1,22 @@
+#![deny(clippy::all)]
+#![warn(rust_2018_idioms, clippy::pedantic)]
+#![allow(
+    clippy::missing_panics_doc,
+    clippy::must_use_candidate,
+    clippy::cast_possible_truncation,
+    clippy::too_many_lines,
+    clippy::cast_sign_loss,
+    clippy::cast_lossless,
+    clippy::cast_possible_wrap,
+    clippy::implicit_hasher,
+    clippy::match_on_vec_items,
+    clippy::maybe_infinite_iter,
+    clippy::if_not_else,
+    clippy::module_name_repetitions,
+    clippy::similar_names,
+    clippy::bool_to_int_with_if
+)]
+
 #[cfg(test)]
 mod template;
 

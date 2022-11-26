@@ -7,12 +7,12 @@ pub fn run(input: &str) -> String {
         let cur = nums[0];
         let mut dest = cur - 1;
         if dest == 0 {
-            dest = 9
+            dest = 9;
         }
         while dest == nums[1] || dest == nums[2] || dest == nums[3] {
             dest -= 1;
             if dest == 0 {
-                dest = 9
+                dest = 9;
             }
         }
         let mut next_nums: Vec<i32> = Vec::with_capacity(9);

@@ -7,7 +7,7 @@ pub fn run(input: &str) -> usize {
         } else if let Some(num) = line.strip_prefix("up ") {
             (dist, depth - num.parse::<usize>().unwrap())
         } else {
-            panic!("Unknown input: '{}'", line)
+            panic!("Unknown input: '{line}'")
         }
     });
 

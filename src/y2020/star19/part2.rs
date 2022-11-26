@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use itertools::Itertools;
 use regex::Regex;
 
+const MAX_LINE_LENGTH: usize = 100;
+
 enum Rule {
     Ref { i: i32 },
     Val { v: char },
@@ -79,8 +81,6 @@ pub fn run(input: &str) -> usize {
     let shortest_match_rule42 = shortest_match(&rules, 42);
     let shortest_match_rule31 = shortest_match(&rules, 31);
 
-    const MAX_LINE_LENGTH: usize = 100;
-
     let re_second_part = (1..)
         .take_while(|i| {
             shortest_match_rule42 + i * (shortest_match_rule31 + shortest_match_rule42)
@@ -89,7 +89,7 @@ pub fn run(input: &str) -> usize {
         .map(|i| format!("({})", rule42.repeat(i) + &rule31.repeat(i)))
         .join("|");
 
-    let re = format!("^({})+({})$", rule42, re_second_part)
+    let re = format!("^({rule42})+({re_second_part})$")
         .parse::<Regex>()
         .unwrap();
 

@@ -7,7 +7,7 @@ mod tests {
 
     aoc_test_suite!(
         super::part1::run,
-        (part1_main, 3716293, include_str!("input.txt")),
+        (part1_main, 3_716_293, include_str!("input.txt")),
     );
 
     aoc_test_suite!(

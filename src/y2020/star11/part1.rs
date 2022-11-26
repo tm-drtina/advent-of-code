@@ -36,28 +36,28 @@ impl Map {
     fn collect_neighbors(&self, x: usize, y: usize) -> Vec<Seat> {
         let mut res: Vec<Seat> = Vec::new();
         if y > 0 {
-            res.push(self.positions[y - 1][x])
+            res.push(self.positions[y - 1][x]);
         }
         if y < self.height() - 1 {
-            res.push(self.positions[y + 1][x])
+            res.push(self.positions[y + 1][x]);
         }
         if x > 0 {
-            res.push(self.positions[y][x - 1])
+            res.push(self.positions[y][x - 1]);
         }
         if x < self.width() - 1 {
-            res.push(self.positions[y][x + 1])
+            res.push(self.positions[y][x + 1]);
         }
         if y > 0 && x > 0 {
-            res.push(self.positions[y - 1][x - 1])
+            res.push(self.positions[y - 1][x - 1]);
         }
         if y < self.height() - 1 && x > 0 {
-            res.push(self.positions[y + 1][x - 1])
+            res.push(self.positions[y + 1][x - 1]);
         }
         if y > 0 && x < self.width() - 1 {
-            res.push(self.positions[y - 1][x + 1])
+            res.push(self.positions[y - 1][x + 1]);
         }
         if y < self.height() - 1 && x < self.width() - 1 {
-            res.push(self.positions[y + 1][x + 1])
+            res.push(self.positions[y + 1][x + 1]);
         }
         res
     }

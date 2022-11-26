@@ -29,12 +29,12 @@ pub fn run(input: &str) -> usize {
 
         let mut dest = n0 - 1;
         if dest == 0 {
-            dest = 1_000_000
+            dest = 1_000_000;
         }
         while dest == n1 || dest == n2 || dest == n3 {
             dest -= 1;
             if dest == 0 {
-                dest = 1_000_000
+                dest = 1_000_000;
             }
         }
 

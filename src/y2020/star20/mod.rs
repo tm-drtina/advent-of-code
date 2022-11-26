@@ -7,10 +7,10 @@ mod tests {
 
     aoc_test_suite!(
         super::part1::run,
-        (part1_main, 16937516456219, include_str!("input.txt")),
+        (part1_main, 16_937_516_456_219, include_str!("input.txt")),
         (
             part1_sanity,
-            20899048083289,
+            20_899_048_083_289,
             include_str!("input.sanity.txt")
         ),
     );

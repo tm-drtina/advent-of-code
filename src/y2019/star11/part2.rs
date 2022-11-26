@@ -36,7 +36,7 @@ pub fn run(input: &str) -> String {
             1
         } else {
             0
-        })
+        });
     }
     (0..6)
         .map(|y| {

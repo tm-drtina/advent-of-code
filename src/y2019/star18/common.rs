@@ -13,11 +13,11 @@ impl Keys {
         self.0 |= 1u32 << key;
     }
 
-    pub fn contains(&self, key: u8) -> bool {
+    pub fn contains(self, key: u8) -> bool {
         self.0 & (1u32 << key) != 0
     }
 
-    pub fn count(&self) -> usize {
+    pub fn count(self) -> usize {
         self.0.count_ones() as usize
     }
 }

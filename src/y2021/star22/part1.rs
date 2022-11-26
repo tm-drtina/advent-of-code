@@ -107,6 +107,7 @@ impl Range {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
 pub(super) struct Command(bool, Range);
 impl std::str::FromStr for Command {
     type Err = ();
@@ -224,9 +225,9 @@ impl Area {
 
     pub(super) fn step(&mut self, command: Command) {
         if command.0 {
-            self.insert(command.1)
+            self.insert(command.1);
         } else {
-            self.remove(command.1)
+            self.remove(command.1);
         }
     }
 }

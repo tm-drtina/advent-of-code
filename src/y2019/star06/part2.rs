@@ -10,18 +10,18 @@ fn compute_jumps(name: &str, map: &HashMap<&str, Vec<&str>>) -> (Option<i32>, Op
             return (res_you, res_san);
         }
         if let Some(you) = res_you {
-            depth_you = Some(you + 1)
+            depth_you = Some(you + 1);
         }
         if let Some(san) = res_san {
-            depth_san = Some(san + 1)
+            depth_san = Some(san + 1);
         }
     }
 
     if name == "YOU" {
-        depth_you = Some(-1)
+        depth_you = Some(-1);
     }
     if name == "SAN" {
-        depth_san = Some(-1)
+        depth_san = Some(-1);
     }
 
     (depth_you, depth_san)

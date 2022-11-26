@@ -46,7 +46,7 @@ impl IntcodeProgram {
                 let i = self.tape[&(self.position + n)] + self.rel_base;
                 self.tape.entry(i).or_insert(0)
             }
-            _ => panic!("Unrecognized param mode '{}'", param_mode),
+            _ => panic!("Unrecognized param mode '{param_mode}'"),
         }
     }
 

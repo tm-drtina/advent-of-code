@@ -13,7 +13,7 @@ pub fn run(input: &str) -> i32 {
         index += 1;
     }
     while index < 2019 {
-        let new_number = hist.get(&last_num).map(|last| index - last).unwrap_or(0);
+        let new_number = hist.get(&last_num).map_or(0, |last| index - last);
         hist.insert(last_num, index);
         last_num = new_number;
         index += 1;

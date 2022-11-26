@@ -139,7 +139,7 @@ impl AlignedSensor {
             if sensor.mismatch.contains(&index) {
                 continue;
             }
-            for beacons in sensor.rotated_beacons.iter() {
+            for beacons in &sensor.rotated_beacons {
                 if let Some(alignment) = align(aligned_sub_sensor, beacons) {
                     return Some((
                         beacons

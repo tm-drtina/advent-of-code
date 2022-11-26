@@ -81,7 +81,7 @@ impl Position {
             'L' => self.left(num),
             'R' => self.right(num),
             'F' => self.go(self.direction, num),
-            _ => panic!("Unknown op '{}'", op),
+            _ => panic!("Unknown op '{op}'"),
         }
     }
 

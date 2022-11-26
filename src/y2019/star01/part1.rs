@@ -17,6 +17,6 @@ mod tests {
         assert_eq!(2, super::compute_fuel(12));
         assert_eq!(2, super::compute_fuel(14));
         assert_eq!(654, super::compute_fuel(1969));
-        assert_eq!(33583, super::compute_fuel(100756));
+        assert_eq!(33583, super::compute_fuel(100_756));
     }
 }

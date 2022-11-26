@@ -5,7 +5,7 @@ struct Entry<'a> {
     pwd: &'a str,
 }
 
-fn parse_line(line: &str) -> Entry {
+fn parse_line(line: &str) -> Entry<'_> {
     let mut parts = line.split(' ');
     let (min, max) = parts.next().unwrap().split_once('-').unwrap();
     Entry {
