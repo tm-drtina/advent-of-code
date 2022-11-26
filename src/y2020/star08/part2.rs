@@ -15,7 +15,7 @@ impl From<&str> for Op {
             "acc" => Op::Acc { val },
             "jmp" => Op::Jmp { val },
             "nop" => Op::Nop { val },
-            _ => panic!("Unknown op {}", op),
+            _ => panic!("Unknown op {op}"),
         }
     }
 }
@@ -66,7 +66,7 @@ pub fn run(input: &str) -> i32 {
             match clone.ops[i] {
                 Op::Jmp { val } => clone.ops[i] = Op::Nop { val },
                 Op::Nop { val } => clone.ops[i] = Op::Jmp { val },
-                _ => {}
+                Op::Acc { .. } => {}
             }
             clone
         })

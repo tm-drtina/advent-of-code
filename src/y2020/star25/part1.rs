@@ -1,5 +1,7 @@
+const MODULO: i64 = 20_201_227;
+
 fn transform(val: i64, subject: i64) -> i64 {
-    (val * subject) % 20201227
+    (val * subject) % MODULO
 }
 
 fn batch_transform(subject: i64, i: i64) -> i64 {
@@ -7,9 +9,9 @@ fn batch_transform(subject: i64, i: i64) -> i64 {
         return subject;
     }
     let sub_res = batch_transform(subject, i / 2);
-    let res = (sub_res * sub_res) % 20201227;
+    let res = (sub_res * sub_res) % MODULO;
     if i % 2 == 1 {
-        (res * subject) % 20201227
+        (res * subject) % MODULO
     } else {
         res
     }

@@ -31,7 +31,7 @@ impl std::str::FromStr for Map {
 impl Map {
     fn step_east(&mut self) -> bool {
         let mut res = false;
-        for row in self.0.iter_mut() {
+        for row in &mut self.0 {
             let width = row.len();
             let indices: Vec<_> = (0..row.len())
                 .filter(|i| row[*i] == Tile::East && row[(*i + 1) % width] == Tile::Empty)

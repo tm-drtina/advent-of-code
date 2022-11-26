@@ -7,9 +7,9 @@ pub fn run(input: &str) -> usize {
     input.lines().for_each(|line| {
         let (ingredients_str, allergens_str) = line.split_once(" (contains ").unwrap();
         let ingredients: HashSet<&str> = ingredients_str.split(' ').collect();
-        ingredients.iter().for_each(|ingredient| {
+        for ingredient in &ingredients {
             *ingredient_occurrences.entry(ingredient).or_default() += 1;
-        });
+        }
         allergens_str[0..allergens_str.len() - 1]
             .split(", ")
             .for_each(|allergen| {

@@ -46,7 +46,7 @@ impl IntcodeProgram {
                 let i = self.tape[&(self.position + n)] + self.rel_base;
                 self.tape.entry(i).or_insert(0)
             }
-            _ => panic!("Unrecognized param mode '{}'", param_mode),
+            _ => panic!("Unrecognized param mode '{param_mode}'"),
         }
     }
 
@@ -90,11 +90,11 @@ impl IntcodeProgram {
                     }
                 }
                 LT => {
-                    *self.op(3) = if *self.op(1) < *self.op(2) { 1 } else { 0 };
+                    *self.op(3) = i64::from(*self.op(1) < *self.op(2));
                     self.position += 4;
                 }
                 EQ => {
-                    *self.op(3) = if *self.op(1) == *self.op(2) { 1 } else { 0 };
+                    *self.op(3) = i64::from(*self.op(1) == *self.op(2));
                     self.position += 4;
                 }
                 RBASE => {

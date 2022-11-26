@@ -20,7 +20,7 @@ pub fn run(input: &str) -> i64 {
     for (index, bus) in buses[1..].iter() {
         let mut tmp = -(*index);
         while tmp < 0 {
-            tmp += bus
+            tmp += bus;
         }
         while res % bus != tmp {
             res += n;

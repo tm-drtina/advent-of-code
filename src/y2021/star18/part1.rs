@@ -7,7 +7,7 @@ pub(super) enum Number {
 }
 
 impl Number {
-    pub(super) fn from_str(chars: &mut Chars) -> Self {
+    pub(super) fn from_str(chars: &mut Chars<'_>) -> Self {
         let ch = chars.next().unwrap();
         if ch == '[' {
             let left = Box::new(Self::from_str(chars));
@@ -52,14 +52,10 @@ impl Number {
             Number::Combined(left, right) => {
                 if depth == 3 {
                     if let Number::Combined(inner_left, inner_right) = &**left {
-                        let left_value = if let Number::Literal(value) = **inner_left {
-                            value
-                        } else {
+                        let Number::Literal(left_value) = **inner_left else {
                             unreachable!("Well, this is awkward")
                         };
-                        let right_value = if let Number::Literal(value) = **inner_right {
-                            value
-                        } else {
+                        let Number::Literal(right_value) = **inner_right else {
                             unreachable!("Well, this is awkward")
                         };
 
@@ -67,14 +63,10 @@ impl Number {
                         right.increment_left(right_value);
                         (true, Some(left_value), None)
                     } else if let Number::Combined(inner_left, inner_right) = &**right {
-                        let left_value = if let Number::Literal(value) = **inner_left {
-                            value
-                        } else {
+                        let Number::Literal(left_value) = **inner_left else {
                             unreachable!("Well, this is awkward")
                         };
-                        let right_value = if let Number::Literal(value) = **inner_right {
-                            value
-                        } else {
+                        let Number::Literal(right_value) = **inner_right else {
                             unreachable!("Well, this is awkward")
                         };
 
@@ -158,7 +150,7 @@ impl Number {
 
     pub(super) fn magnitude(&self) -> usize {
         match self {
-            Number::Literal(value) => *value as usize,
+            Number::Literal(value) => *value,
             Number::Combined(left, right) => 3 * left.magnitude() + 2 * right.magnitude(),
         }
     }
@@ -167,8 +159,8 @@ impl Number {
 impl std::fmt::Display for Number {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Number::Literal(val) => f.write_fmt(format_args!("{}", val)),
-            Number::Combined(l, r) => f.write_fmt(format_args!("[{},{}]", l, r)),
+            Number::Literal(val) => f.write_fmt(format_args!("{val}")),
+            Number::Combined(l, r) => f.write_fmt(format_args!("[{l},{r}]")),
         }
     }
 }

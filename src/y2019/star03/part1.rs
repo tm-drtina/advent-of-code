@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+#[derive(Debug, Clone, Copy)]
 enum Direction {
     Up,
     Down,
@@ -14,7 +15,7 @@ impl From<&str> for Direction {
             "D" => Direction::Down,
             "L" => Direction::Left,
             "R" => Direction::Right,
-            _ => panic!("Unrecognized direction {}", val),
+            _ => panic!("Unrecognized direction {val}"),
         }
     }
 }
@@ -26,7 +27,7 @@ struct Point {
 }
 
 impl Point {
-    fn manhattan_dist(&self) -> i32 {
+    fn manhattan_dist(self) -> i32 {
         self.x.abs() + self.y.abs()
     }
 }
@@ -37,6 +38,7 @@ struct Traverse {
     visited: HashSet<Point>,
 }
 
+#[derive(Debug, Clone, Copy)]
 struct Move {
     direction: Direction,
     distance: i32,
@@ -52,7 +54,7 @@ impl From<&str> for Move {
 }
 
 impl Move {
-    fn step(&self, from: &Point) -> Point {
+    fn step(self, from: Point) -> Point {
         match self.direction {
             Direction::Up => Point {
                 x: from.x,
@@ -75,7 +77,7 @@ impl Move {
 
     fn traverse(mut acc: Traverse, value: Self) -> Traverse {
         for _ in 0..value.distance {
-            acc.curr_point = value.step(&acc.curr_point);
+            acc.curr_point = value.step(acc.curr_point);
             acc.visited.insert(acc.curr_point);
         }
         acc
@@ -91,10 +93,10 @@ pub fn run(input: &str) -> i32 {
                 .fold(Traverse::default(), Move::traverse)
                 .visited
         })
-        .reduce(|set1, set2| set1.intersection(&set2).cloned().collect())
+        .reduce(|set1, set2| set1.intersection(&set2).copied().collect())
         .unwrap()
-        .iter()
-        .map(|p| p.manhattan_dist())
+        .into_iter()
+        .map(Point::manhattan_dist)
         .min()
         .unwrap()
 }

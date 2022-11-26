@@ -76,11 +76,7 @@ impl Packet {
         match self.value {
             PacketValue::Literal(_) => self.p_version,
             PacketValue::SubPackets(ref packets) => {
-                self.p_version
-                    + packets
-                        .iter()
-                        .map(|packet| packet.version_sum())
-                        .sum::<usize>()
+                self.p_version + packets.iter().map(Packet::version_sum).sum::<usize>()
             }
         }
     }
@@ -89,22 +85,10 @@ impl Packet {
         match self.value {
             PacketValue::Literal(value) => value,
             PacketValue::SubPackets(ref packets) => match self.p_type {
-                0 => packets.iter().map(|packet| packet.compute_value()).sum(),
-                1 => packets
-                    .iter()
-                    .map(|packet| packet.compute_value())
-                    .product(),
-                2 => packets
-                    .iter()
-                    .map(|packet| packet.compute_value())
-                    .min()
-                    .unwrap(),
-                3 => packets
-                    .iter()
-                    .map(|packet| packet.compute_value())
-                    .max()
-                    .unwrap(),
-                4 => unreachable!(),
+                0 => packets.iter().map(Packet::compute_value).sum(),
+                1 => packets.iter().map(Packet::compute_value).product(),
+                2 => packets.iter().map(Packet::compute_value).min().unwrap(),
+                3 => packets.iter().map(Packet::compute_value).max().unwrap(),
                 5 => {
                     if packets[0].compute_value() > packets[1].compute_value() {
                         1
@@ -132,7 +116,7 @@ impl Packet {
     }
 }
 
-pub(super) fn parse(iter: &mut HexStringIter) -> Packet {
+pub(super) fn parse(iter: &mut HexStringIter<'_>) -> Packet {
     let p_version = iter.next_int(3);
     let p_type = iter.next_int(3);
 

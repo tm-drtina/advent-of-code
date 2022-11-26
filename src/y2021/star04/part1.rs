@@ -75,7 +75,7 @@ pub fn run(input: &str) -> usize {
     }
 
     for number in numbers {
-        for card in cards.iter_mut() {
+        for card in &mut cards {
             if let Some(score) = card.draw(number) {
                 return score;
             }

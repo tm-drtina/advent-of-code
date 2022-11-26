@@ -26,72 +26,57 @@ impl<'a, T: Iterator<Item = &'a str>> Iterator for Input<'a, T> {
 }
 
 fn valid_byr(map: &HashMap<&str, &str>) -> bool {
-    map.get("byr")
-        .map(|val| {
-            val.len() == 4
-                && val
-                    .parse()
-                    .map(|ival| (1920..=2002).contains(&ival))
-                    .unwrap_or(false)
-        })
-        .unwrap_or(false)
+    map.get("byr").map_or(false, |val| {
+        val.len() == 4
+            && val
+                .parse()
+                .map_or(false, |ival| (1920..=2002).contains(&ival))
+    })
 }
 fn valid_iyr(map: &HashMap<&str, &str>) -> bool {
-    map.get("iyr")
-        .map(|val| {
-            val.len() == 4
-                && val
-                    .parse()
-                    .map(|ival| (2010..=2020).contains(&ival))
-                    .unwrap_or(false)
-        })
-        .unwrap_or(false)
+    map.get("iyr").map_or(false, |val| {
+        val.len() == 4
+            && val
+                .parse()
+                .map_or(false, |ival| (2010..=2020).contains(&ival))
+    })
 }
 fn valid_eyr(map: &HashMap<&str, &str>) -> bool {
-    map.get("eyr")
-        .map(|val| {
-            val.len() == 4
-                && val
-                    .parse()
-                    .map(|ival| (2020..=2030).contains(&ival))
-                    .unwrap_or(false)
-        })
-        .unwrap_or(false)
+    map.get("eyr").map_or(false, |val| {
+        val.len() == 4
+            && val
+                .parse()
+                .map_or(false, |ival| (2020..=2030).contains(&ival))
+    })
 }
 fn valid_hgt(map: &HashMap<&str, &str>) -> bool {
-    map.get("hgt")
-        .map(|val| {
-            val.len() > 3
-                && match &val[val.len() - 2..] {
-                    "in" => val[0..val.len() - 2]
-                        .parse()
-                        .map_or(false, |num| (59..=76).contains(&num)),
-                    "cm" => val[0..val.len() - 2]
-                        .parse()
-                        .map_or(false, |num| (150..=193).contains(&num)),
-                    _ => false,
-                }
-        })
-        .unwrap_or(false)
+    map.get("hgt").map_or(false, |val| {
+        val.len() > 3
+            && match &val[val.len() - 2..] {
+                "in" => val[0..val.len() - 2]
+                    .parse()
+                    .map_or(false, |num| (59..=76).contains(&num)),
+                "cm" => val[0..val.len() - 2]
+                    .parse()
+                    .map_or(false, |num| (150..=193).contains(&num)),
+                _ => false,
+            }
+    })
 }
 fn valid_hcl(map: &HashMap<&str, &str>) -> bool {
-    map.get("hcl")
-        .map(|val| {
-            val.len() == 7
-                && val.starts_with('#')
-                && val[1..].chars().all(|ch| ch.is_ascii_hexdigit())
-        })
-        .unwrap_or(false)
+    map.get("hcl").map_or(false, |val| {
+        val.len() == 7 && val.starts_with('#') && val[1..].chars().all(|ch| ch.is_ascii_hexdigit())
+    })
 }
 fn valid_ecl(map: &HashMap<&str, &str>) -> bool {
-    map.get("ecl")
-        .map(|val| matches!(*val, "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth"))
-        .unwrap_or(false)
+    map.get("ecl").map_or(false, |val| {
+        matches!(*val, "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth")
+    })
 }
 fn valid_pid(map: &HashMap<&str, &str>) -> bool {
-    map.get("pid")
-        .map(|val| val.len() == 9 && val.chars().all(|ch| ch.is_numeric()))
-        .unwrap_or(false)
+    map.get("pid").map_or(false, |val| {
+        val.len() == 9 && val.chars().all(char::is_numeric)
+    })
 }
 
 pub fn run(input: &str) -> usize {

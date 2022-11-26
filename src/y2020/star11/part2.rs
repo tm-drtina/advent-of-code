@@ -38,34 +38,34 @@ impl Map {
 
         let mut neigh_y = y;
         while neigh_y > 0 && matches!(self.positions[neigh_y - 1][x], Seat::Floor) {
-            neigh_y -= 1
+            neigh_y -= 1;
         }
         if neigh_y > 0 {
-            res.push(self.positions[neigh_y - 1][x])
+            res.push(self.positions[neigh_y - 1][x]);
         }
 
         let mut neigh_y = y;
         while neigh_y < self.height() - 1 && matches!(self.positions[neigh_y + 1][x], Seat::Floor) {
-            neigh_y += 1
+            neigh_y += 1;
         }
         if neigh_y < self.height() - 1 {
-            res.push(self.positions[neigh_y + 1][x])
+            res.push(self.positions[neigh_y + 1][x]);
         }
 
         let mut neigh_x = x;
         while neigh_x > 0 && matches!(self.positions[y][neigh_x - 1], Seat::Floor) {
-            neigh_x -= 1
+            neigh_x -= 1;
         }
         if neigh_x > 0 {
-            res.push(self.positions[y][neigh_x - 1])
+            res.push(self.positions[y][neigh_x - 1]);
         }
 
         let mut neigh_x = x;
         while neigh_x < self.width() - 1 && matches!(self.positions[y][neigh_x + 1], Seat::Floor) {
-            neigh_x += 1
+            neigh_x += 1;
         }
         if neigh_x < self.width() - 1 {
-            res.push(self.positions[y][neigh_x + 1])
+            res.push(self.positions[y][neigh_x + 1]);
         }
 
         let mut neigh_y = y;
@@ -78,7 +78,7 @@ impl Map {
             neigh_x -= 1;
         }
         if neigh_y > 0 && neigh_x > 0 {
-            res.push(self.positions[neigh_y - 1][neigh_x - 1])
+            res.push(self.positions[neigh_y - 1][neigh_x - 1]);
         }
 
         let mut neigh_y = y;
@@ -91,7 +91,7 @@ impl Map {
             neigh_x -= 1;
         }
         if neigh_y < self.height() - 1 && neigh_x > 0 {
-            res.push(self.positions[neigh_y + 1][neigh_x - 1])
+            res.push(self.positions[neigh_y + 1][neigh_x - 1]);
         }
 
         let mut neigh_y = y;
@@ -104,7 +104,7 @@ impl Map {
             neigh_x += 1;
         }
         if neigh_y > 0 && neigh_x < self.width() - 1 {
-            res.push(self.positions[neigh_y - 1][neigh_x + 1])
+            res.push(self.positions[neigh_y - 1][neigh_x + 1]);
         }
 
         let mut neigh_y = y;
@@ -117,7 +117,7 @@ impl Map {
             neigh_x += 1;
         }
         if neigh_y < self.height() - 1 && neigh_x < self.width() - 1 {
-            res.push(self.positions[neigh_y + 1][neigh_x + 1])
+            res.push(self.positions[neigh_y + 1][neigh_x + 1]);
         }
         res
     }

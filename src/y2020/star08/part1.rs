@@ -14,7 +14,7 @@ impl From<&str> for Op {
             "acc" => Op::Acc { val },
             "jmp" => Op::Jmp { val },
             "nop" => Op::Nop,
-            _ => panic!("Unknown op {}", op),
+            _ => panic!("Unknown op {op}"),
         }
     }
 }

@@ -6,7 +6,7 @@ pub fn run(input: &str) -> i32 {
             let mut program = IntcodeProgram::new(input);
             program.tape[1] = x;
             program.tape[2] = y;
-            if program.run().is_ok() && program.tape[0] == 19690720 {
+            if program.run().is_ok() && program.tape[0] == 19_690_720 {
                 return x * 100 + y;
             }
         }

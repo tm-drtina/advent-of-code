@@ -39,9 +39,7 @@ fn create_image(neighbors: &HashMap<i32, Neighbors>) -> Vec<Vec<bool>> {
     let mut first_row: Vec<Neighbors> = vec![top_left];
     for x in 1.. {
         let prev = &first_row[x - 1];
-        let next_id = if let Some(id) = prev.right {
-            id
-        } else {
+        let Some(next_id) = prev.right else {
             break;
         };
         let mut next = neighbors.get(&next_id).unwrap().clone();
@@ -177,9 +175,9 @@ impl Pattern {
     }
 
     fn mark(&self, monsters: &mut [Vec<bool>], off_y: usize, off_x: usize) {
-        self.indices
-            .iter()
-            .for_each(|(y, x)| monsters[y + off_y][x + off_x] = true)
+        for (y, x) in &self.indices {
+            monsters[y + off_y][x + off_x] = true;
+        }
     }
 
     fn detect_monsters(&self, image: &[Vec<bool>]) -> Vec<Vec<bool>> {
