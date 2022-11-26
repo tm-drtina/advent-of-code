@@ -66,7 +66,7 @@ pub fn run(input: &str) -> i32 {
             match clone.ops[i] {
                 Op::Jmp { val } => clone.ops[i] = Op::Nop { val },
                 Op::Nop { val } => clone.ops[i] = Op::Jmp { val },
-                Op::Acc { .. } => {},
+                Op::Acc { .. } => {}
             }
             clone
         })
