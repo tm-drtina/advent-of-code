@@ -15,7 +15,7 @@ impl From<&str> for Direction {
             "D" => Direction::Down,
             "L" => Direction::Left,
             "R" => Direction::Right,
-            _ => panic!("Unrecognized direction {}", val),
+            _ => panic!("Unrecognized direction {val}"),
         }
     }
 }

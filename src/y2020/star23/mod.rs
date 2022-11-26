@@ -13,7 +13,7 @@ mod tests {
 
     aoc_test_suite!(
         super::part2::run,
-        (part2_main, 2911418906, "589174263"),
-        (part2_sanity, 149245887792, "389125467"),
+        (part2_main, 2_911_418_906, "589174263"),
+        (part2_sanity, 149_245_887_792, "389125467"),
     );
 }

@@ -26,7 +26,7 @@ fn rule_to_regex(rules: &HashMap<i32, Vec<Vec<Rule>>>, index: i32) -> String {
     } else {
         format!(
             "({})",
-            regexes.into_iter().map(|s| format!("({})", s)).join("|")
+            regexes.into_iter().map(|s| format!("({s})")).join("|")
         )
     }
 }

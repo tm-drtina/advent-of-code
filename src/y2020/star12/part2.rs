@@ -72,7 +72,7 @@ impl Position {
             'L' => self.left(num),
             'R' => self.right(num),
             'F' => self.go_to_waypoint(num),
-            _ => panic!("Unknown op '{}'", op),
+            _ => panic!("Unknown op '{op}'"),
         }
     }
 

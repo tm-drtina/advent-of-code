@@ -158,7 +158,7 @@ impl Number {
 
     pub(super) fn magnitude(&self) -> usize {
         match self {
-            Number::Literal(value) => *value as usize,
+            Number::Literal(value) => *value,
             Number::Combined(left, right) => 3 * left.magnitude() + 2 * right.magnitude(),
         }
     }
@@ -167,8 +167,8 @@ impl Number {
 impl std::fmt::Display for Number {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Number::Literal(val) => f.write_fmt(format_args!("{}", val)),
-            Number::Combined(l, r) => f.write_fmt(format_args!("[{},{}]", l, r)),
+            Number::Literal(val) => f.write_fmt(format_args!("{val}")),
+            Number::Combined(l, r) => f.write_fmt(format_args!("[{l},{r}]")),
         }
     }
 }

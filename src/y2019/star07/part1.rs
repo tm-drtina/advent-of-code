@@ -43,7 +43,7 @@ impl IntcodeProgram {
                 &mut self.tape[i]
             }
             1 => &mut self.tape[self.position + n],
-            _ => panic!("Unrecognized param mode '{}'", param_mode),
+            _ => panic!("Unrecognized param mode '{param_mode}'"),
         }
     }
 

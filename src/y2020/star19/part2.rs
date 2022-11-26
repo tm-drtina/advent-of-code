@@ -89,7 +89,7 @@ pub fn run(input: &str) -> usize {
         .map(|i| format!("({})", rule42.repeat(i) + &rule31.repeat(i)))
         .join("|");
 
-    let re = format!("^({})+({})$", rule42, re_second_part)
+    let re = format!("^({rule42})+({re_second_part})$")
         .parse::<Regex>()
         .unwrap();
 

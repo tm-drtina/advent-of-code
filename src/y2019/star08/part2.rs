@@ -18,7 +18,7 @@ pub fn run(input: &str) -> String {
         .map(|ch| match ch {
             '0' => " ",
             '1' => "#",
-            _ => panic!("Unknown image pixel {}", ch),
+            _ => panic!("Unknown image pixel {ch}"),
         })
         .chunks(WIDTH)
         .into_iter()

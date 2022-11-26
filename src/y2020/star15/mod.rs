@@ -19,12 +19,12 @@ mod tests {
 
     aoc_test_suite!(
         super::part2::run,
-        (part2_main, 16671510, "16,1,0,18,12,14,19"),
-        (part2_sanity1, 175594, "0,3,6"),
+        (part2_main, 16_671_510, "16,1,0,18,12,14,19"),
+        (part2_sanity1, 175_594, "0,3,6"),
         (part2_sanity2, 2578, "1,3,2"),
-        (part2_sanity3, 3544142, "2,1,3"),
-        (part2_sanity4, 261214, "1,2,3"),
-        (part2_sanity5, 6895259, "2,3,1"),
+        (part2_sanity3, 3_544_142, "2,1,3"),
+        (part2_sanity4, 261_214, "1,2,3"),
+        (part2_sanity5, 6_895_259, "2,3,1"),
         (part2_sanity6, 18, "3,2,1"),
         (part2_sanity7, 362, "3,1,2"),
     );

@@ -49,7 +49,7 @@ impl Program {
                         .flat_map(|addr| vec![(addr << 1), (addr << 1) + 1])
                         .collect();
                 }
-                _ => panic!("Unknown mask char {}", mask_bit),
+                _ => panic!("Unknown mask char {mask_bit}"),
             }
         }
         addrs

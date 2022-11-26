@@ -23,7 +23,7 @@ pub fn run(input: &str) -> i32 {
                         '0' => acc.black += 1,
                         '1' => acc.white += 1,
                         '2' => acc.transparent += 1,
-                        _ => panic!("Unknown image pixel {}", ch),
+                        _ => panic!("Unknown image pixel {ch}"),
                     }
                     acc
                 })
