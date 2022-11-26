@@ -13,7 +13,8 @@
     clippy::maybe_infinite_iter,
     clippy::if_not_else,
     clippy::module_name_repetitions,
-    clippy::similar_names
+    clippy::similar_names,
+    clippy::bool_to_int_with_if
 )]
 
 #[cfg(test)]

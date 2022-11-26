@@ -52,14 +52,10 @@ impl Number {
             Number::Combined(left, right) => {
                 if depth == 3 {
                     if let Number::Combined(inner_left, inner_right) = &**left {
-                        let left_value = if let Number::Literal(value) = **inner_left {
-                            value
-                        } else {
+                        let Number::Literal(left_value) = **inner_left else {
                             unreachable!("Well, this is awkward")
                         };
-                        let right_value = if let Number::Literal(value) = **inner_right {
-                            value
-                        } else {
+                        let Number::Literal(right_value) = **inner_right else {
                             unreachable!("Well, this is awkward")
                         };
 
@@ -67,14 +63,10 @@ impl Number {
                         right.increment_left(right_value);
                         (true, Some(left_value), None)
                     } else if let Number::Combined(inner_left, inner_right) = &**right {
-                        let left_value = if let Number::Literal(value) = **inner_left {
-                            value
-                        } else {
+                        let Number::Literal(left_value) = **inner_left else {
                             unreachable!("Well, this is awkward")
                         };
-                        let right_value = if let Number::Literal(value) = **inner_right {
-                            value
-                        } else {
+                        let Number::Literal(right_value) = **inner_right else {
                             unreachable!("Well, this is awkward")
                         };
 
