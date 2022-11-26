@@ -1,4 +1,4 @@
-use crate::utils::gcd;
+use num::integer::gcd;
 
 struct Map {
     data: Vec<Vec<bool>>,

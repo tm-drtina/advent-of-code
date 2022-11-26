@@ -1,66 +1,4 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Point2D {
-    pub x: usize,
-    pub y: usize,
-}
-
-impl Point2D {
-    pub fn top_left(&self) -> Self {
-        Self {
-            x: self.x - 1,
-            y: self.y - 1,
-        }
-    }
-
-    pub fn top(&self) -> Self {
-        Self {
-            x: self.x,
-            y: self.y - 1,
-        }
-    }
-
-    pub fn top_right(&self) -> Self {
-        Self {
-            x: self.x + 1,
-            y: self.y - 1,
-        }
-    }
-
-    pub fn right(&self) -> Self {
-        Self {
-            x: self.x + 1,
-            y: self.y,
-        }
-    }
-
-    pub fn bottom_right(&self) -> Self {
-        Self {
-            x: self.x + 1,
-            y: self.y + 1,
-        }
-    }
-
-    pub fn bottom(&self) -> Self {
-        Self {
-            x: self.x,
-            y: self.y + 1,
-        }
-    }
-
-    pub fn bottom_left(&self) -> Self {
-        Self {
-            x: self.x - 1,
-            y: self.y + 1,
-        }
-    }
-
-    pub fn left(&self) -> Self {
-        Self {
-            x: self.x - 1,
-            y: self.y,
-        }
-    }
-}
+use crate::utils::point::Point2D;
 
 pub struct Map<T> {
     map: Vec<Vec<T>>,
@@ -104,15 +42,15 @@ impl<T> Map<T> {
         self.width
     }
 
-    pub fn set(&mut self, point: Point2D, value: T) {
+    pub fn set(&mut self, point: Point2D<usize>, value: T) {
         self.map[point.y][point.x] = value;
     }
 
-    pub fn at(&self, point: Point2D) -> &T {
+    pub fn at(&self, point: Point2D<usize>) -> &T {
         &self.map[point.y][point.x]
     }
 
-    pub fn four_neighborhood(&self, point: Point2D) -> Vec<Point2D> {
+    pub fn four_neighborhood(&self, point: Point2D<usize>) -> Vec<Point2D<usize>> {
         let mut points = Vec::with_capacity(4);
         if point.x > 0 {
             points.push(Point2D {
