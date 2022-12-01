@@ -1,15 +1,14 @@
 pub fn run(input: &str) -> usize {
-    let mut lines = input.lines();
     let mut best = 0;
     let mut current = 0;
-    while let Some(s) = lines.next() {
-        if s.is_empty() {
+    for line in input.lines() {
+        if line.is_empty() {
             if current > best {
                 best = current;
             }
             current = 0;
         } else {
-            current += s.parse::<usize>().unwrap();
+            current += line.parse::<usize>().unwrap();
         }
     }
     std::cmp::max(best, current)
