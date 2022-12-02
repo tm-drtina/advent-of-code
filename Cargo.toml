@@ -5,6 +5,7 @@ authors = ["Tomas Drtina <tm.drtina@gmail.com>"]
 edition = "2021"
 
 [dependencies]
+anyhow = "1.0.66"
 itertools = "0.10.1"
 num = "0.4.0"
 once_cell = "1.16.0"
