@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use anyhow::{bail, Context, Error};
+use anyhow::{bail, Context, Error, Result};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Choice {
@@ -115,10 +115,16 @@ impl Round {
     }
 }
 
-pub fn run(input: &str) -> usize {
-    input
+fn run_safe(input: &str) -> Result<usize> {
+    Ok(input
         .lines()
-        .flat_map(str::parse::<Round>)
+        .map(str::parse::<Round>)
+        .collect::<Result<Vec<_>>>()?
+        .into_iter()
         .map(Round::score)
-        .sum()
+        .sum::<usize>())
+}
+
+pub fn run(input: &str) -> usize {
+    run_safe(input).unwrap()
 }
