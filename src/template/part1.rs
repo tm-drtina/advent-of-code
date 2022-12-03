@@ -1,3 +1,5 @@
-pub fn run(input: &str) -> usize {
-    input.parse::<usize>().unwrap() * 2
+use anyhow::Result;
+
+pub fn run(input: &str) -> Result<usize> {
+    Ok(input.parse::<usize>()? * 2)
 }

@@ -1,4 +1,6 @@
-pub fn run(input: &str) -> usize {
+use anyhow::Result;
+
+pub fn run(input: &str) -> Result<usize> {
     let mut values = Vec::new();
     let mut current = 0;
     for line in input.lines() {
@@ -6,10 +8,10 @@ pub fn run(input: &str) -> usize {
             values.push(current);
             current = 0;
         } else {
-            current += line.parse::<usize>().unwrap();
+            current += line.parse::<usize>()?;
         }
     }
     values.push(current);
     values.sort_unstable();
-    values.iter().rev().take(3).sum()
+    Ok(values.iter().rev().take(3).sum())
 }

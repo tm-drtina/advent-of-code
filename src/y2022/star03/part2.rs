@@ -39,7 +39,7 @@ impl Group {
     }
 }
 
-fn run_safe(input: &str) -> Result<usize> {
+pub fn run(input: &str) -> Result<usize> {
     Ok(input
         .lines()
         .chunks(3)
@@ -49,8 +49,4 @@ fn run_safe(input: &str) -> Result<usize> {
         .iter()
         .map(Group::priority)
         .sum())
-}
-
-pub fn run(input: &str) -> usize {
-    run_safe(input).unwrap()
 }
