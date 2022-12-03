@@ -115,7 +115,7 @@ impl Round {
     }
 }
 
-fn run_safe(input: &str) -> Result<usize> {
+pub fn run(input: &str) -> Result<usize> {
     Ok(input
         .lines()
         .map(str::parse::<Round>)
@@ -123,8 +123,4 @@ fn run_safe(input: &str) -> Result<usize> {
         .into_iter()
         .map(Round::score)
         .sum::<usize>())
-}
-
-pub fn run(input: &str) -> usize {
-    run_safe(input).unwrap()
 }

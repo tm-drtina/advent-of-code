@@ -41,7 +41,7 @@ impl Rucksack {
     }
 }
 
-fn run_safe(input: &str) -> Result<usize> {
+pub fn run(input: &str) -> Result<usize> {
     Ok(input
         .lines()
         .map(str::parse::<Rucksack>)
@@ -49,8 +49,4 @@ fn run_safe(input: &str) -> Result<usize> {
         .iter()
         .map(Rucksack::priority)
         .sum())
-}
-
-pub fn run(input: &str) -> usize {
-    run_safe(input).unwrap()
 }
