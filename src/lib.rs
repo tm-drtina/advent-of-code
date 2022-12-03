@@ -14,7 +14,8 @@
     clippy::if_not_else,
     clippy::module_name_repetitions,
     clippy::similar_names,
-    clippy::bool_to_int_with_if
+    clippy::bool_to_int_with_if,
+    clippy::missing_errors_doc
 )]
 
 #[cfg(test)]
@@ -27,6 +28,32 @@ pub mod y2020;
 pub mod y2021;
 pub mod y2022;
 
+pub(crate) trait IntoResult<T> {
+    fn into_result(self) -> anyhow::Result<T>;
+}
+
+impl<T> IntoResult<T> for anyhow::Result<T> {
+    #[inline]
+    fn into_result(self) -> anyhow::Result<T> {
+        self
+    }
+}
+
+#[macro_export]
+macro_rules! into_result_impl {
+    ($type:path $(,)?) => {
+        impl IntoResult<$type> for $type {
+            #[inline]
+            fn into_result(self) -> anyhow::Result<$type> { Ok(self) }
+        }
+    };
+    ($type:path $(, $types:path)+ $(,)?) => {
+        into_result_impl!($type);
+        into_result_impl!($($types, )+);
+    };
+}
+into_result_impl!(u32, u64, usize, i32, i64, isize, String);
+
 #[cfg(not(feature = "ignore-sanity"))]
 #[macro_export]
 macro_rules! aoc_test_suite {
@@ -38,6 +65,7 @@ macro_rules! aoc_test_suite {
             let actual = $func($($input, )+);
             let elapsed = start.elapsed();
             eprintln!("Test {}::{} ran in {:#?}", module_path!(), stringify!($name), elapsed);
+            let actual = $crate::IntoResult::into_result(actual).unwrap();
             assert_eq!(expected, actual);
         }
     };

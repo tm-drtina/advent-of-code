@@ -1,4 +1,6 @@
-pub fn run(input: &str) -> usize {
+use anyhow::Result;
+
+pub fn run(input: &str) -> Result<usize> {
     let mut best = 0;
     let mut current = 0;
     for line in input.lines() {
@@ -8,8 +10,8 @@ pub fn run(input: &str) -> usize {
             }
             current = 0;
         } else {
-            current += line.parse::<usize>().unwrap();
+            current += line.parse::<usize>()?;
         }
     }
-    std::cmp::max(best, current)
+    Ok(std::cmp::max(best, current))
 }
