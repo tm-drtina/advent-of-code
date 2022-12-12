@@ -73,7 +73,7 @@ impl<T> Map<T> {
             });
         }
 
-        if point.y < self.height {
+        if point.y < self.height - 1 {
             points.push(Point2D {
                 x: point.x,
                 y: point.y + 1,
