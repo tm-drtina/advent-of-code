@@ -63,3 +63,12 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
         }
     }
 }
+
+impl<Coord: Integer + Copy + Default> Default for Point2D<Coord> {
+    fn default() -> Self {
+        Self {
+            x: Default::default(),
+            y: Default::default(),
+        }
+    }
+}
