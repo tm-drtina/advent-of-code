@@ -71,15 +71,15 @@ impl Puzzle {
 }
 
 impl Iterator for Puzzle {
-    type Item = ();
+    type Item = Point;
 
     fn next(&mut self) -> Option<Self::Item> {
         let next = self.simulate();
         self.blocked.insert(next);
-        if next.y == 0 { None } else { Some(()) }
+        Some(next)
     }
 }
 
 pub fn run(input: &str) -> Result<usize> {
-    Ok(input.parse::<Puzzle>()?.count() + 1)
+    Ok(input.parse::<Puzzle>()?.take_while(|p| p.y > 0).count() + 1)
 }
