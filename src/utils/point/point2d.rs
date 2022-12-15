@@ -64,6 +64,22 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
     }
 }
 
+impl<Coord: Integer + Copy + PartialOrd> Point2D<Coord> {
+    pub fn manhattan_distance(self, other: Self) -> Coord {
+        let x_diff = if self.x < other.x {
+            other.x - self.x
+        } else {
+            self.x - other.x
+        };
+        let y_diff = if self.y < other.y {
+            other.y - self.y
+        } else {
+            self.y - other.y
+        };
+        x_diff + y_diff
+    }
+}
+
 impl<Coord: Integer + Copy + Default> Default for Point2D<Coord> {
     fn default() -> Self {
         Self {
