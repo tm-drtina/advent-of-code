@@ -47,39 +47,54 @@ struct Stone(Vec<Point>, usize);
 impl Stone {
     fn spawn(index: usize, top: usize) -> Self {
         let (points, top) = match index % 5 {
-            0 => (vec![
-                Point2D { x: 2, y: top + 4 },
-                Point2D { x: 3, y: top + 4 },
-                Point2D { x: 4, y: top + 4 },
-                Point2D { x: 5, y: top + 4 },
-            ], top+4),
-            1 => (vec![
-                Point2D { x: 3, y: top + 4 },
-                Point2D { x: 2, y: top + 5 },
-                Point2D { x: 3, y: top + 5 },
-                Point2D { x: 4, y: top + 5 },
-                Point2D { x: 3, y: top + 6 },
-            ], top+6),
-            2 => (vec![
-                Point2D { x: 2, y: top + 4 },
-                Point2D { x: 3, y: top + 4 },
-                Point2D { x: 4, y: top + 4 },
-                Point2D { x: 4, y: top + 5 },
-                Point2D { x: 4, y: top + 6 },
-            ], top+6),
-            3 => (vec![
-                Point2D { x: 2, y: top + 4 },
-                Point2D { x: 2, y: top + 5 },
-                Point2D { x: 2, y: top + 6 },
-                Point2D { x: 2, y: top + 7 },
-            ], top+7),
-            4 => (vec![
-                Point2D { x: 2, y: top + 4 },
-                Point2D { x: 3, y: top + 4 },
-                Point2D { x: 2, y: top + 5 },
-                Point2D { x: 3, y: top + 5 },
-            ], top+5),
-            _ => unreachable!()
+            0 => (
+                vec![
+                    Point2D { x: 2, y: top + 4 },
+                    Point2D { x: 3, y: top + 4 },
+                    Point2D { x: 4, y: top + 4 },
+                    Point2D { x: 5, y: top + 4 },
+                ],
+                top + 4,
+            ),
+            1 => (
+                vec![
+                    Point2D { x: 3, y: top + 4 },
+                    Point2D { x: 2, y: top + 5 },
+                    Point2D { x: 3, y: top + 5 },
+                    Point2D { x: 4, y: top + 5 },
+                    Point2D { x: 3, y: top + 6 },
+                ],
+                top + 6,
+            ),
+            2 => (
+                vec![
+                    Point2D { x: 2, y: top + 4 },
+                    Point2D { x: 3, y: top + 4 },
+                    Point2D { x: 4, y: top + 4 },
+                    Point2D { x: 4, y: top + 5 },
+                    Point2D { x: 4, y: top + 6 },
+                ],
+                top + 6,
+            ),
+            3 => (
+                vec![
+                    Point2D { x: 2, y: top + 4 },
+                    Point2D { x: 2, y: top + 5 },
+                    Point2D { x: 2, y: top + 6 },
+                    Point2D { x: 2, y: top + 7 },
+                ],
+                top + 7,
+            ),
+            4 => (
+                vec![
+                    Point2D { x: 2, y: top + 4 },
+                    Point2D { x: 3, y: top + 4 },
+                    Point2D { x: 2, y: top + 5 },
+                    Point2D { x: 3, y: top + 5 },
+                ],
+                top + 5,
+            ),
+            _ => unreachable!(),
         };
         Self(points, top)
     }
@@ -87,30 +102,36 @@ impl Stone {
     fn apply_dir(&mut self, dir: Dir, blocked: &HashSet<Point>) {
         match dir {
             Dir::Left => {
-                if self.0.iter().all(|p| { 
-                    p.x > 0 && !blocked.contains(&p.left())
-                }) {
+                if self
+                    .0
+                    .iter()
+                    .all(|p| p.x > 0 && !blocked.contains(&p.left()))
+                {
                     for p in self.0.iter_mut() {
                         *p = p.left();
                     }
                 }
-            },
+            }
             Dir::Right => {
-                if self.0.iter().all(|p| { 
-                    p.x < 6 && !blocked.contains(&p.right())
-                }) {
+                if self
+                    .0
+                    .iter()
+                    .all(|p| p.x < 6 && !blocked.contains(&p.right()))
+                {
                     for p in self.0.iter_mut() {
                         *p = p.right();
                     }
                 }
-            },
+            }
         }
     }
 
     fn fall(&mut self, blocked: &HashSet<Point>) -> bool {
-        if self.0.iter().all(|p| { 
-            p.y > 1 && !blocked.contains(&p.top())
-        }) {
+        if self
+            .0
+            .iter()
+            .all(|p| p.y > 1 && !blocked.contains(&p.top()))
+        {
             for p in self.0.iter_mut() {
                 *p = p.top();
             }
@@ -130,8 +151,10 @@ impl Stone {
 
 pub(super) struct Cave<T> {
     top: usize,
+    trimmed: usize,
     blocked: HashSet<Point>,
     jet_pattern: T,
+    
 }
 
 impl<T> Cave<T>
@@ -141,23 +164,18 @@ where
     pub(super) fn new(jet_pattern: T) -> Self {
         Self {
             top: 0,
+            trimmed: 0,
             blocked: HashSet::new(),
             jet_pattern,
         }
     }
 
     pub(super) fn height(&self) -> usize {
-        self.top
+        self.top + self.trimmed
     }
 
     pub(super) fn drop_stone(&mut self, index: usize) {
         let mut stone = Stone::spawn(index, self.top);
-
-        if index % 1000 == 0 {
-            self.blocked.retain(|p| {
-                p.y + 1000 > self.top
-            })
-        }
 
         loop {
             let dir = self.jet_pattern.next().unwrap();
@@ -168,16 +186,50 @@ where
                     self.top = top;
                 }
                 stone.stop(&mut self.blocked);
-                break
+                break;
             }
-        };
+        }
+    }
+
+    pub(super) fn canonize(&mut self) {
+        let mut lvl = self.top;
+        while lvl > 1 {
+            if (0..7).all(|x| {
+                self.blocked.contains(&Point2D { x, y: lvl })
+                    || self.blocked.contains(&Point2D { x, y: lvl - 1 })
+            }) {
+                break;
+            }
+            lvl -= 1;
+        }
+        if lvl < 2 {
+            return;
+        }
+        lvl -= 2;
+        self.top -= lvl;
+        self.trimmed += lvl;
+
+        self.blocked = self
+            .blocked
+            .iter()
+            .filter_map(|p| {
+                if p.y < lvl {
+                    None
+                } else {
+                    Some(Point2D {
+                        x: p.x,
+                        y: p.y - lvl,
+                    })
+                }
+            })
+            .collect()
     }
 }
 
 impl<T> std::fmt::Display for Cave<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "+^^^^^^^+")?;
-        for y in (1..self.top+3).rev() {
+        for y in (1..self.top + 3).rev() {
             write!(f, "|")?;
             for x in 0..7 {
                 if self.blocked.contains(&Point2D { x, y }) {
