@@ -1,7 +1,9 @@
-use std::collections::HashSet;
+use std::collections::{HashMap, BTreeSet};
+use std::iter::Cycle;
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
+use num::Integer;
 
 use crate::utils::point::Point2D;
 
@@ -28,16 +30,6 @@ impl FromStr for JetPattern {
             })
             .collect();
         Ok(Self(pattern))
-    }
-}
-
-impl JetPattern {
-    pub(super) fn len(&self) -> usize {
-        self.0.len()
-    }
-
-    pub(super) fn iter(&self) -> impl Iterator<Item = Dir> + '_ {
-        self.0.iter().copied().cycle()
     }
 }
 
@@ -99,7 +91,7 @@ impl Stone {
         Self(points, top)
     }
 
-    fn apply_dir(&mut self, dir: Dir, blocked: &HashSet<Point>) {
+    fn apply_dir(&mut self, dir: Dir, blocked: &BTreeSet<Point>) {
         match dir {
             Dir::Left => {
                 if self
@@ -126,7 +118,7 @@ impl Stone {
         }
     }
 
-    fn fall(&mut self, blocked: &HashSet<Point>) -> bool {
+    fn fall(&mut self, blocked: &BTreeSet<Point>) -> bool {
         if self
             .0
             .iter()
@@ -142,31 +134,33 @@ impl Stone {
         }
     }
 
-    fn stop(self, blocked: &mut HashSet<Point>) {
+    fn stop(self, blocked: &mut BTreeSet<Point>) {
         for point in self.0 {
             blocked.insert(point);
         }
     }
 }
 
-pub(super) struct Cave<T> {
+pub(super) struct Cave {
     top: usize,
     trimmed: usize,
-    blocked: HashSet<Point>,
-    jet_pattern: T,
-    
+    blocked: BTreeSet<Point>,
+    pub repeat: usize,
+    jet_pattern_iter: Cycle<std::vec::IntoIter<Dir>>,
+    cache: HashMap<BTreeSet<Point>, (usize, BTreeSet<Point>)>,
 }
 
-impl<T> Cave<T>
-where
-    T: Iterator<Item = Dir>,
-{
-    pub(super) fn new(jet_pattern: T) -> Self {
+impl Cave {
+    pub(super) fn new(jet_pattern: JetPattern) -> Self {
+        let repeat = jet_pattern.0.len().lcm(&5);
+        eprintln!("repeat: {repeat}");
         Self {
             top: 0,
             trimmed: 0,
-            blocked: HashSet::new(),
-            jet_pattern,
+            blocked: BTreeSet::new(),
+            repeat,
+            jet_pattern_iter: jet_pattern.0.into_iter().cycle(),
+            cache: HashMap::new(),
         }
     }
 
@@ -178,7 +172,7 @@ where
         let mut stone = Stone::spawn(index, self.top);
 
         loop {
-            let dir = self.jet_pattern.next().unwrap();
+            let dir = self.jet_pattern_iter.next().unwrap();
             stone.apply_dir(dir, &self.blocked);
             if !stone.fall(&self.blocked) {
                 let top = stone.1;
@@ -191,7 +185,35 @@ where
         }
     }
 
-    pub(super) fn canonize(&mut self) {
+    pub(super) fn drop_batch(&mut self) {
+        if let Some((height, blocked)) = self.cache.get(&self.blocked) {
+            self.blocked = blocked.clone();
+            self.trimmed += height;
+        } else {
+            let key = self.blocked.clone();
+            for i in 0..self.repeat {
+                self.drop_stone(i);
+            }
+            let value = self.canonize();
+            self.cache.insert(key, (value, self.blocked.clone()));
+        }
+    }
+
+    pub(crate) fn drop_n(&mut self, n: usize) {
+        let mut index = 0;
+        while index + self.repeat < n {
+            if index % 1_000_000 == 0 {
+                eprintln!("Iteration: {index}");
+            }
+            self.drop_batch();
+            index += self.repeat;
+        }
+        for i in index..n {
+            self.drop_stone(i);
+        }
+    }
+
+    pub(super) fn canonize(&mut self) -> usize {
         let mut lvl = self.top;
         while lvl > 1 {
             if (0..7).all(|x| {
@@ -203,7 +225,7 @@ where
             lvl -= 1;
         }
         if lvl < 2 {
-            return;
+            return 0;
         }
         lvl -= 2;
         self.top -= lvl;
@@ -213,7 +235,7 @@ where
             .blocked
             .iter()
             .filter_map(|p| {
-                if p.y < lvl {
+                if p.y <= lvl {
                     None
                 } else {
                     Some(Point2D {
@@ -222,11 +244,12 @@ where
                     })
                 }
             })
-            .collect()
+            .collect();
+        lvl
     }
 }
 
-impl<T> std::fmt::Display for Cave<T> {
+impl std::fmt::Display for Cave {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         writeln!(f, "+^^^^^^^+")?;
         for y in (1..self.top + 3).rev() {
