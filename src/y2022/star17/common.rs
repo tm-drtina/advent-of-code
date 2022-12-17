@@ -147,7 +147,7 @@ pub(super) struct Cave {
     blocked: BTreeSet<Point>,
     pub repeat: usize,
     jet_pattern_iter: Cycle<std::vec::IntoIter<Dir>>,
-    cache: HashMap<BTreeSet<Point>, (usize, BTreeSet<Point>)>,
+    cache: HashMap<(usize, BTreeSet<Point>), (usize, BTreeSet<Point>)>,
 }
 
 impl Cave {
@@ -185,30 +185,42 @@ impl Cave {
         }
     }
 
-    pub(super) fn drop_batch(&mut self) {
-        if let Some((height, blocked)) = self.cache.get(&self.blocked) {
+    pub(super) fn drop_batch(&mut self, size: usize) -> usize {
+        let key = (size, std::mem::take(&mut self.blocked));
+        let cache_entry = self.cache.get(&key);
+        self.blocked = key.1;
+        if let Some((height, blocked)) = cache_entry {
             self.blocked = blocked.clone();
             self.trimmed += height;
+            *height
+        } else if size > 1 {
+            let key = self.blocked.clone();
+            let mut res = 0;
+            if size > 1 {
+                res += self.drop_batch(size / 2);
+                res += self.drop_batch(size / 2);
+            }
+            if size & 1 == 1 {
+                res += self.drop_batch(1);
+            }
+            self.cache.insert((size, key), (res, self.blocked.clone()));
+            res
         } else {
             let key = self.blocked.clone();
             for i in 0..self.repeat {
                 self.drop_stone(i);
             }
             let value = self.canonize();
-            self.cache.insert(key, (value, self.blocked.clone()));
+            self.cache.insert((1, key), (value, self.blocked.clone()));
+            value
         }
     }
 
     pub(crate) fn drop_n(&mut self, n: usize) {
-        let mut index = 0;
-        while index + self.repeat < n {
-            if index % 1_000_000 == 0 {
-                eprintln!("Iteration: {index}");
-            }
-            self.drop_batch();
-            index += self.repeat;
+        if n >= self.repeat {
+            self.drop_batch(n / self.repeat);
         }
-        for i in index..n {
+        for i in 0..(n % self.repeat) {
             self.drop_stone(i);
         }
     }
