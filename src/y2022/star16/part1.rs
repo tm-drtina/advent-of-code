@@ -109,8 +109,14 @@ pub fn run(input: &str) -> Result<u32> {
 
     let mut curr = HashMap::new();
     curr.insert(
-        StateKey { position: Valve::name_to_id("AA"), opened: BTreeSet::new() },
-        vec![StateValue { time: 1, pressure: 0 }]
+        StateKey {
+            position: Valve::name_to_id("AA"),
+            opened: BTreeSet::new(),
+        },
+        vec![StateValue {
+            time: 1,
+            pressure: 0,
+        }],
     );
     let mut res = 0;
 
@@ -132,12 +138,16 @@ pub fn run(input: &str) -> Result<u32> {
             break;
         }
         for values in next.values_mut() {
-            *values = values.iter().copied().filter(|value| {
-                !values.iter().any(|rhs| {
-                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
-                    (value.pressure < rhs.pressure && value.time >= rhs.time)
-                }) 
-            }).collect();
+            *values = values
+                .iter()
+                .copied()
+                .filter(|value| {
+                    !values.iter().any(|rhs| {
+                        (value.pressure <= rhs.pressure && value.time > rhs.time)
+                            || (value.pressure < rhs.pressure && value.time >= rhs.time)
+                    })
+                })
+                .collect();
         }
         curr = next;
     }

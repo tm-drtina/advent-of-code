@@ -121,7 +121,7 @@ pub fn run(input: &str) -> Result<u32> {
     );
     let mut elephant: VecDeque<BTreeMap<StateKey, Vec<StateValue>>> = VecDeque::with_capacity(13);
     for _ in 0..13 {
-        elephant.push_back(Default::default())
+        elephant.push_back(BTreeMap::new());
     }
 
     loop {
@@ -163,7 +163,8 @@ pub fn run(input: &str) -> Result<u32> {
     curr = elephant.pop_front().unwrap();
     let mut res = 0;
     loop {
-        let mut next: BTreeMap<StateKey, Vec<StateValue>> = elephant.pop_front().unwrap_or(BTreeMap::new());
+        let mut next: BTreeMap<StateKey, Vec<StateValue>> =
+            elephant.pop_front().unwrap_or(BTreeMap::new());
         for (key, values) in curr {
             for value in values {
                 let mut last = true;
