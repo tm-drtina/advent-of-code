@@ -11,12 +11,36 @@ impl<Coord: Integer + Copy> Point3D<Coord> {
     pub fn six_neighborhood(self) -> [Self; 6] {
         let Point3D { x, y, z } = self;
         [
-            Point3D { x: x + Coord::one(), y, z },
-            Point3D { x: x - Coord::one(), y, z },
-            Point3D { x, y: y + Coord::one(), z },
-            Point3D { x, y: y - Coord::one(), z },
-            Point3D { x, y, z: z + Coord::one() },
-            Point3D { x, y, z: z - Coord::one() },
+            Point3D {
+                x: x + Coord::one(),
+                y,
+                z,
+            },
+            Point3D {
+                x: x - Coord::one(),
+                y,
+                z,
+            },
+            Point3D {
+                x,
+                y: y + Coord::one(),
+                z,
+            },
+            Point3D {
+                x,
+                y: y - Coord::one(),
+                z,
+            },
+            Point3D {
+                x,
+                y,
+                z: z + Coord::one(),
+            },
+            Point3D {
+                x,
+                y,
+                z: z - Coord::one(),
+            },
         ]
     }
 }

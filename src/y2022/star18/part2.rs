@@ -7,7 +7,7 @@ use crate::utils::point::Point3D;
 type Point = Point3D<i32>;
 
 fn min_max<T: Iterator<Item = Point>>(points: T) -> (Point, Point) {
-   points.fold(
+    points.fold(
         (Point3D { x: 1, y: 1, z: 1 }, Point3D { x: 1, y: 1, z: 1 }),
         |(pmin, pmax), p| {
             (
@@ -39,7 +39,13 @@ fn find_bubble(p: Point, points: &mut HashSet<Point>, pmin: Point, pmax: Point) 
             continue;
         }
         for n in point.six_neighborhood() {
-            if n.x < pmin.x || n.y < pmin.y || n.z < pmin.z || n.x > pmax.x || n.y > pmax.y || n.z > pmax.z {
+            if n.x < pmin.x
+                || n.y < pmin.y
+                || n.z < pmin.z
+                || n.x > pmax.x
+                || n.y > pmax.y
+                || n.z > pmax.z
+            {
                 return 0;
             }
             if visited.contains(&n) {
@@ -77,10 +83,10 @@ pub fn run(input: &str) -> Result<usize> {
 
     let (pmin, pmax) = min_max(points.iter().copied());
 
-    for x in pmin.x+1..pmax.x {
-        for y in pmin.y+1..pmax.y {
-            for z in pmin.z+1..pmax.z {
-                res -= find_bubble(Point3D { x, y, z }, &mut points, pmin, pmax)
+    for x in pmin.x + 1..pmax.x {
+        for y in pmin.y + 1..pmax.y {
+            for z in pmin.z + 1..pmax.z {
+                res -= find_bubble(Point3D { x, y, z }, &mut points, pmin, pmax);
             }
         }
     }
