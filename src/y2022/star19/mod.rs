@@ -12,9 +12,8 @@ mod tests {
         (part1_sanity1, 33, include_str!("input.sanity1.txt")),
     );
 
-    /*aoc_test_suite!(
+    aoc_test_suite!(
         super::part2::run,
-        (part2_main, 369, include_str!("input.txt")),
-        (part2_sanity1, 3, include_str!("input.sanity1.txt")),
-    );*/
+        (part2_main, 3168, include_str!("input.txt")),
+    );
 }
