@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap, HashSet, BTreeMap};
+use std::collections::{BTreeMap, BTreeSet, HashMap};
 use std::str::FromStr;
 
 use anyhow::{anyhow, Error, Result};
@@ -32,7 +32,7 @@ impl FromStr for Valve {
             .or_else(|| s.strip_prefix("tunnel leads to valve "))
             .ok_or(anyhow!("Invalid format"))?
             .split(", ")
-            .map(|s| Self::name_to_id(s))
+            .map(Self::name_to_id)
             .collect();
 
         let id = Self::name_to_id(name);
@@ -84,7 +84,9 @@ fn next_states<'a>(
     })
     .into_iter()
     .map(|(dest, (_, cost))| (dest, cost))
-    .filter(|(dest, cost)| !key.opened.contains(dest) && puzzle.valves[dest].rate > 0 && value.time + cost < 26)
+    .filter(|(dest, cost)| {
+        !key.opened.contains(dest) && puzzle.valves[dest].rate > 0 && value.time + cost < 26
+    })
     .map(|(dest, cost)| {
         (
             StateKey {
@@ -108,43 +110,55 @@ pub fn run(input: &str) -> Result<u32> {
 
     let mut curr = BTreeMap::new();
     curr.insert(
-        StateKey { position: Valve::name_to_id("AA"), opened: BTreeSet::new() },
-        vec![StateValue { time: 1, pressure: 0 }]
+        StateKey {
+            position: Valve::name_to_id("AA"),
+            opened: BTreeSet::new(),
+        },
+        vec![StateValue {
+            time: 1,
+            pressure: 0,
+        }],
     );
-    let mut res = 0;
     let mut elephant: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
 
     loop {
         let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
         for (key, values) in curr {
             for value in values {
-                let mut last = true;
                 for (key, value) in next_states(&key, &value, &puzzle) {
                     next.entry(key).or_default().push(value);
-                    last = false;
                 }
-                if last {
-                    elephant.entry(StateKey { position: Valve::name_to_id("AA"), opened: key.opened.clone() }).or_default().push(StateValue{ time: 1, pressure: value.pressure });
-                    if res < value.pressure {
-                        res = value.pressure;
-                    }
-                }
+                elephant
+                    .entry(StateKey {
+                        position: Valve::name_to_id("AA"),
+                        opened: key.opened.clone(),
+                    })
+                    .or_default()
+                    .push(StateValue {
+                        time: 1,
+                        pressure: value.pressure,
+                    });
             }
         }
         if next.is_empty() {
             break;
         }
         for values in next.values_mut() {
-            *values = values.iter().copied().filter(|value| {
-                !values.iter().any(|rhs| {
-                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
-                    (value.pressure < rhs.pressure && value.time >= rhs.time)
-                }) 
-            }).collect();
+            *values = values
+                .iter()
+                .copied()
+                .filter(|value| {
+                    !values.iter().any(|rhs| {
+                        (value.pressure <= rhs.pressure && value.time > rhs.time)
+                            || (value.pressure < rhs.pressure && value.time >= rhs.time)
+                    })
+                })
+                .collect();
         }
         curr = next;
     }
     curr = elephant;
+    let mut res = 0;
     loop {
         let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
         for (key, values) in curr {
@@ -163,12 +177,16 @@ pub fn run(input: &str) -> Result<u32> {
             break;
         }
         for values in next.values_mut() {
-            *values = values.iter().copied().filter(|value| {
-                !values.iter().any(|rhs| {
-                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
-                    (value.pressure < rhs.pressure && value.time >= rhs.time)
-                }) 
-            }).collect();
+            *values = values
+                .iter()
+                .copied()
+                .filter(|value| {
+                    !values.iter().any(|rhs| {
+                        (value.pressure <= rhs.pressure && value.time > rhs.time)
+                            || (value.pressure < rhs.pressure && value.time >= rhs.time)
+                    })
+                })
+                .collect();
         }
         // eprintln!("{} -- {}", next.len(), next.values().map(Vec::len).sum::<usize>());
         curr = next;

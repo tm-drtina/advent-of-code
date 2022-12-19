@@ -32,7 +32,7 @@ impl FromStr for Valve {
             .or_else(|| s.strip_prefix("tunnel leads to valve "))
             .ok_or(anyhow!("Invalid format"))?
             .split(", ")
-            .map(|s| Self::name_to_id(s))
+            .map(Self::name_to_id)
             .collect();
 
         let id = Self::name_to_id(name);
