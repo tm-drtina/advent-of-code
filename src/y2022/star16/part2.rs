@@ -1,4 +1,4 @@
-use std::collections::{BTreeMap, BTreeSet, HashMap};
+use std::collections::{BTreeMap, BTreeSet, HashMap, VecDeque};
 use std::str::FromStr;
 
 use anyhow::{anyhow, Error, Result};
@@ -119,7 +119,10 @@ pub fn run(input: &str) -> Result<u32> {
             pressure: 0,
         }],
     );
-    let mut elephant: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
+    let mut elephant: VecDeque<BTreeMap<StateKey, Vec<StateValue>>> = VecDeque::with_capacity(13);
+    for _ in 0..13 {
+        elephant.push_back(Default::default())
+    }
 
     loop {
         let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
@@ -128,7 +131,7 @@ pub fn run(input: &str) -> Result<u32> {
                 for (key, value) in next_states(&key, &value, &puzzle) {
                     next.entry(key).or_default().push(value);
                 }
-                elephant
+                elephant[key.opened.len()]
                     .entry(StateKey {
                         position: Valve::name_to_id("AA"),
                         opened: key.opened.clone(),
@@ -157,10 +160,10 @@ pub fn run(input: &str) -> Result<u32> {
         }
         curr = next;
     }
-    curr = elephant;
+    curr = elephant.pop_front().unwrap();
     let mut res = 0;
     loop {
-        let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
+        let mut next: BTreeMap<StateKey, Vec<StateValue>> = elephant.pop_front().unwrap_or(BTreeMap::new());
         for (key, values) in curr {
             for value in values {
                 let mut last = true;
@@ -188,7 +191,6 @@ pub fn run(input: &str) -> Result<u32> {
                 })
                 .collect();
         }
-        // eprintln!("{} -- {}", next.len(), next.values().map(Vec::len).sum::<usize>());
         curr = next;
     }
 
