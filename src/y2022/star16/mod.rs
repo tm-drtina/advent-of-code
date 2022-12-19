@@ -7,13 +7,13 @@ mod tests {
 
     aoc_test_suite!(
         super::part1::run,
-        //(part1_main, 0, include_str!("input.txt")),
+        (part1_main, 1728, include_str!("input.txt")),
         (part1_sanity1, 1651, include_str!("input.sanity1.txt")),
     );
 
     /*aoc_test_suite!(
         super::part2::run,
-        (part2_main, 369, include_str!("input.txt")),
-        (part2_sanity1, 3, include_str!("input.sanity1.txt")),
+        //(part2_main, , include_str!("input.txt")),
+        (part2_sanity1, 1707, include_str!("input.sanity1.txt")),
     );*/
 }

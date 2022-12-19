@@ -1,11 +1,8 @@
-use std::collections::{HashMap, BTreeSet};
+use std::collections::{BTreeSet, HashMap};
 use std::str::FromStr;
-use std::sync::Arc;
 
 use anyhow::{anyhow, Error, Result};
-use rayon::prelude::*;
-
-use crate::utils::cache::sync::Cache;
+use pathfinding::prelude::dijkstra_all;
 
 #[derive(Debug)]
 struct Valve {
@@ -66,66 +63,84 @@ impl FromStr for Puzzle {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
-struct State {
-    time: u32,
+struct StateKey {
     position: u16,
+    opened: BTreeSet<u16>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+struct StateValue {
+    time: u32,
     pressure: u32,
-    opened: Arc<BTreeSet<u16>>,
 }
 
-impl State {
-    fn init() -> Self {
-        Self {
-            time: 1,
-            position: Valve::name_to_id("AA"),
-            pressure: 0,
-            opened: Arc::new(BTreeSet::new()),
-        }
-    }
-
-    fn search(&self, puzzle: &Puzzle, cache: &CacheT) -> u32 {
-        if self.time > 29 {
-            return self.pressure;
-        }
-        let valve = &puzzle.valves[&self.position];
-        let mut next_states = Vec::with_capacity(valve.tunnels.len() + 1);
-        if valve.rate > 0 && !self.opened.contains(&self.position) {
-            let mut opened = BTreeSet::clone(&self.opened);
-            opened.insert(self.position);
-            let pressure = self.pressure + valve.rate * (30 - self.time + 1);
-
-            next_states.push(Self {
-                time: self.time + 1,
-                position: self.position,
-                pressure,
-                opened: Arc::new(opened),
-            });
-        }
-
-        for &next in &valve.tunnels {
-            next_states.push(Self {
-                time: self.time + 1,
-                position: next,
-                pressure: self.pressure,
-                opened: Arc::clone(&self.opened),
-            });
-        }
-
-        next_states
-            .par_iter()
-            .map(|s| s.search(puzzle, cache))
-            .max()
-            .unwrap_or(self.pressure)
-    }
+fn next_states<'a>(
+    key: &'a StateKey,
+    value: &'a StateValue,
+    puzzle: &'a Puzzle,
+) -> impl Iterator<Item = (StateKey, StateValue)> + 'a {
+    dijkstra_all(&key.position, |node| {
+        puzzle.valves[node].tunnels.iter().map(|t| (*t, 1))
+    })
+    .into_iter()
+    .filter(|(dest, _)| !key.opened.contains(dest))
+    .filter(|(dest, _)| puzzle.valves[dest].rate > 0)
+    .filter(|(_, (_, time))| value.time + time < 29)
+    .map(|(dest, (_, cost))| {
+        (
+            StateKey {
+                position: dest,
+                opened: {
+                    let mut tmp = key.opened.clone();
+                    tmp.insert(dest);
+                    tmp
+                },
+            },
+            StateValue {
+                time: value.time + cost + 1,
+                pressure: value.pressure + puzzle.valves[&dest].rate * (30 - value.time - cost),
+            },
+        )
+    })
 }
-
-type CacheT = Cache<State, u32>;
 
 pub fn run(input: &str) -> Result<u32> {
     let puzzle = input.parse::<Puzzle>()?;
-    eprintln!("{:?}", puzzle);
-    let cache = Cache::new(Box::new(move |state: &State, cache| {
-        state.search(&puzzle, cache)
-    }));
-    Ok(cache.get_or_compute(State::init()))
+
+    let mut curr = HashMap::new();
+    curr.insert(
+        StateKey { position: Valve::name_to_id("AA"), opened: BTreeSet::new() },
+        vec![StateValue { time: 1, pressure: 0 }]
+    );
+    let mut res = 0;
+
+    loop {
+        let mut next: HashMap<StateKey, Vec<StateValue>> = HashMap::new();
+        for (key, values) in curr {
+            for value in values {
+                let mut last = true;
+                for (key, value) in next_states(&key, &value, &puzzle) {
+                    next.entry(key).or_default().push(value);
+                    last = false;
+                }
+                if last && res < value.pressure {
+                    res = value.pressure;
+                }
+            }
+        }
+        if next.is_empty() {
+            break;
+        }
+        for values in next.values_mut() {
+            *values = values.iter().copied().filter(|value| {
+                !values.iter().any(|rhs| {
+                    (value.pressure <= rhs.pressure && value.time < rhs.time) ||
+                    (value.pressure < rhs.pressure && value.time <= rhs.time)
+                }) 
+            }).collect();
+        }
+        curr = next;
+    }
+
+    Ok(res)
 }
