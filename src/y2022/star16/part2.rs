@@ -1,4 +1,4 @@
-use std::collections::{BTreeSet, HashMap};
+use std::collections::{BTreeSet, HashMap, HashSet, BTreeMap};
 use std::str::FromStr;
 
 use anyhow::{anyhow, Error, Result};
@@ -62,13 +62,13 @@ impl FromStr for Puzzle {
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, PartialOrd, Ord)]
 struct StateKey {
     position: u16,
     opened: BTreeSet<u16>,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 struct StateValue {
     time: u32,
     pressure: u32,
@@ -83,10 +83,9 @@ fn next_states<'a>(
         puzzle.valves[node].tunnels.iter().map(|t| (*t, 1))
     })
     .into_iter()
-    .filter(|(dest, _)| !key.opened.contains(dest))
-    .filter(|(dest, _)| puzzle.valves[dest].rate > 0)
-    .filter(|(_, (_, time))| value.time + time < 29)
-    .map(|(dest, (_, cost))| {
+    .map(|(dest, (_, cost))| (dest, cost))
+    .filter(|(dest, cost)| !key.opened.contains(dest) && puzzle.valves[dest].rate > 0 && value.time + cost < 26)
+    .map(|(dest, cost)| {
         (
             StateKey {
                 position: dest,
@@ -98,7 +97,7 @@ fn next_states<'a>(
             },
             StateValue {
                 time: value.time + cost + 1,
-                pressure: value.pressure + puzzle.valves[&dest].rate * (30 - value.time - cost),
+                pressure: value.pressure + puzzle.valves[&dest].rate * (26 - value.time - cost),
             },
         )
     })
@@ -107,15 +106,47 @@ fn next_states<'a>(
 pub fn run(input: &str) -> Result<u32> {
     let puzzle = input.parse::<Puzzle>()?;
 
-    let mut curr = HashMap::new();
+    let mut curr = BTreeMap::new();
     curr.insert(
         StateKey { position: Valve::name_to_id("AA"), opened: BTreeSet::new() },
         vec![StateValue { time: 1, pressure: 0 }]
     );
     let mut res = 0;
+    let mut elephant: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
 
     loop {
-        let mut next: HashMap<StateKey, Vec<StateValue>> = HashMap::new();
+        let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
+        for (key, values) in curr {
+            for value in values {
+                let mut last = true;
+                for (key, value) in next_states(&key, &value, &puzzle) {
+                    next.entry(key).or_default().push(value);
+                    last = false;
+                }
+                if last {
+                    elephant.entry(StateKey { position: Valve::name_to_id("AA"), opened: key.opened.clone() }).or_default().push(StateValue{ time: 1, pressure: value.pressure });
+                    if res < value.pressure {
+                        res = value.pressure;
+                    }
+                }
+            }
+        }
+        if next.is_empty() {
+            break;
+        }
+        for values in next.values_mut() {
+            *values = values.iter().copied().filter(|value| {
+                !values.iter().any(|rhs| {
+                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
+                    (value.pressure < rhs.pressure && value.time >= rhs.time)
+                }) 
+            }).collect();
+        }
+        curr = next;
+    }
+    curr = elephant;
+    loop {
+        let mut next: BTreeMap<StateKey, Vec<StateValue>> = BTreeMap::new();
         for (key, values) in curr {
             for value in values {
                 let mut last = true;
@@ -134,11 +165,12 @@ pub fn run(input: &str) -> Result<u32> {
         for values in next.values_mut() {
             *values = values.iter().copied().filter(|value| {
                 !values.iter().any(|rhs| {
-                    (value.pressure <= rhs.pressure && value.time < rhs.time) ||
-                    (value.pressure < rhs.pressure && value.time <= rhs.time)
+                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
+                    (value.pressure < rhs.pressure && value.time >= rhs.time)
                 }) 
             }).collect();
         }
+        // eprintln!("{} -- {}", next.len(), next.values().map(Vec::len).sum::<usize>());
         curr = next;
     }
 

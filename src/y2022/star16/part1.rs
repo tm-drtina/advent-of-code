@@ -134,8 +134,8 @@ pub fn run(input: &str) -> Result<u32> {
         for values in next.values_mut() {
             *values = values.iter().copied().filter(|value| {
                 !values.iter().any(|rhs| {
-                    (value.pressure <= rhs.pressure && value.time < rhs.time) ||
-                    (value.pressure < rhs.pressure && value.time <= rhs.time)
+                    (value.pressure <= rhs.pressure && value.time > rhs.time) ||
+                    (value.pressure < rhs.pressure && value.time >= rhs.time)
                 }) 
             }).collect();
         }
