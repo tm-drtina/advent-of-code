@@ -1,6 +1,6 @@
 use num::Integer;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Point2D<Coord: Integer> {
     pub x: Coord,
     pub y: Coord,
