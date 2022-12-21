@@ -1,9 +1,8 @@
-use std::collections::{HashMap, BTreeSet};
-use std::iter::Cycle;
+use std::collections::BTreeSet;
 use std::str::FromStr;
 
 use anyhow::{Error, Result};
-use num::Integer;
+use pathfinding::prelude::*;
 
 use crate::utils::point::Point2D;
 
@@ -16,6 +15,15 @@ pub(super) enum Dir {
 }
 
 pub(super) struct JetPattern(Vec<Dir>);
+
+impl JetPattern {
+    fn at(&self, index: usize) -> Dir {
+        self.0[index]
+    }
+    fn len(&self) -> usize {
+        self.0.len()
+    }
+}
 
 impl FromStr for JetPattern {
     type Err = Error;
@@ -141,26 +149,29 @@ impl Stone {
     }
 }
 
-pub(super) struct Cave {
+#[derive(Debug, Clone)]
+struct State {
     top: usize,
     trimmed: usize,
+    jet_pattern_index: usize,
+    stone_index: usize,
     blocked: BTreeSet<Point>,
-    pub repeat: usize,
-    jet_pattern_iter: Cycle<std::vec::IntoIter<Dir>>,
-    cache: HashMap<(usize, BTreeSet<Point>), (usize, BTreeSet<Point>)>,
 }
 
-impl Cave {
-    pub(super) fn new(jet_pattern: JetPattern) -> Self {
-        let repeat = jet_pattern.0.len().lcm(&5);
-        eprintln!("repeat: {repeat}");
+impl PartialEq for State {
+    fn eq(&self, other: &Self) -> bool {
+        self.jet_pattern_index == other.jet_pattern_index && self.stone_index == other.stone_index && self.blocked == other.blocked
+    }
+}
+
+impl State {
+    pub(super) fn new() -> Self {
         Self {
             top: 0,
             trimmed: 0,
+            jet_pattern_index: 0,
+            stone_index: 0,
             blocked: BTreeSet::new(),
-            repeat,
-            jet_pattern_iter: jet_pattern.0.into_iter().cycle(),
-            cache: HashMap::new(),
         }
     }
 
@@ -168,64 +179,7 @@ impl Cave {
         self.top + self.trimmed
     }
 
-    pub(super) fn drop_stone(&mut self, index: usize) {
-        let mut stone = Stone::spawn(index, self.top);
-
-        loop {
-            let dir = self.jet_pattern_iter.next().unwrap();
-            stone.apply_dir(dir, &self.blocked);
-            if !stone.fall(&self.blocked) {
-                let top = stone.1;
-                if self.top < top {
-                    self.top = top;
-                }
-                stone.stop(&mut self.blocked);
-                break;
-            }
-        }
-    }
-
-    pub(super) fn drop_batch(&mut self, size: usize) -> usize {
-        let key = (size, std::mem::take(&mut self.blocked));
-        let cache_entry = self.cache.get(&key);
-        self.blocked = key.1;
-        if let Some((height, blocked)) = cache_entry {
-            self.blocked = blocked.clone();
-            self.trimmed += height;
-            *height
-        } else if size > 1 {
-            let key = self.blocked.clone();
-            let mut res = 0;
-            if size > 1 {
-                res += self.drop_batch(size / 2);
-                res += self.drop_batch(size / 2);
-            }
-            if size & 1 == 1 {
-                res += self.drop_batch(1);
-            }
-            self.cache.insert((size, key), (res, self.blocked.clone()));
-            res
-        } else {
-            let key = self.blocked.clone();
-            for i in 0..self.repeat {
-                self.drop_stone(i);
-            }
-            let value = self.canonize();
-            self.cache.insert((1, key), (value, self.blocked.clone()));
-            value
-        }
-    }
-
-    pub(crate) fn drop_n(&mut self, n: usize) {
-        if n >= self.repeat {
-            self.drop_batch(n / self.repeat);
-        }
-        for i in 0..(n % self.repeat) {
-            self.drop_stone(i);
-        }
-    }
-
-    pub(super) fn canonize(&mut self) -> usize {
+    fn canonize(&mut self) -> usize {
         let mut lvl = self.top;
         while lvl > 1 {
             if (0..7).all(|x| {
@@ -259,22 +213,78 @@ impl Cave {
             .collect();
         lvl
     }
+
+    pub(super) fn drop_stone(&self, jet_pattern: &JetPattern) -> Self {
+        let mut stone = Stone::spawn(self.stone_index, self.top);
+        let mut jet_pattern_index = self.jet_pattern_index;
+        let mut blocked = self.blocked.clone();
+        let mut top = self.top;
+
+        loop {
+            let dir = jet_pattern.at(jet_pattern_index);
+            jet_pattern_index = (jet_pattern_index + 1) % jet_pattern.len();
+
+            stone.apply_dir(dir, &blocked);
+            if !stone.fall(&blocked) {
+                top = std::cmp::max(top, stone.1);
+                stone.stop(&mut blocked);
+                break;
+            }
+        }
+
+        let mut new_state = Self {
+            top,
+            trimmed: self.trimmed,
+            jet_pattern_index,
+            stone_index: (self.stone_index + 1) % 5,
+            blocked,
+        };
+        new_state.canonize();
+        new_state
+    }
 }
 
-impl std::fmt::Display for Cave {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        writeln!(f, "+^^^^^^^+")?;
-        for y in (1..self.top + 3).rev() {
-            write!(f, "|")?;
-            for x in 0..7 {
-                if self.blocked.contains(&Point2D { x, y }) {
-                    write!(f, "#")?;
-                } else {
-                    write!(f, ".")?;
-                }
+pub(super) struct Puzzle {
+    jet_pattern: JetPattern,
+    repeat_start_index: usize,
+    repeat_start_state: State,
+    repeat_period: usize,
+}
+
+impl Puzzle {
+    pub(super) fn compute_periodicity(jet_pattern: JetPattern) -> Self {
+        let (repeat_period, repeat_start_state, repeat_start_index) = floyd(State::new(), |prev| prev.drop_stone(&jet_pattern));
+        Self { jet_pattern, repeat_start_index, repeat_start_state, repeat_period }
+    }
+
+    pub(super) fn drop_n(self, n: usize) -> usize {
+        if n >= self.repeat_start_index + self.repeat_period {
+            let mut state = self.repeat_start_state;
+            let height_start = state.height();
+            for _ in 0..self.repeat_period {
+                state = state.drop_stone(&self.jet_pattern);
             }
-            writeln!(f, "|")?;
+            let period_height = state.height() - height_start;
+            let n = n - self.repeat_start_index - self.repeat_period;
+            state.trimmed += period_height * (n / self.repeat_period);
+            let n = n % self.repeat_period;
+            for _ in 0..n {
+                state = state.drop_stone(&self.jet_pattern);
+            }
+            state.height()
+        } else if n >= self.repeat_start_index {
+            let n = n - self.repeat_start_index;
+            let mut state = self.repeat_start_state;
+            for _ in 0..n {
+                state = state.drop_stone(&self.jet_pattern);
+            }
+            state.height()
+        } else {
+            let mut state = State::new();
+            for _ in 0..n {
+                state = state.drop_stone(&self.jet_pattern);
+            }
+            state.height()
         }
-        writeln!(f, "+-------+")
     }
 }

@@ -1,9 +1,7 @@
 use anyhow::Result;
 
-use super::common::Cave;
+use super::common::Puzzle;
 
 pub fn run(input: &str) -> Result<usize> {
-    let mut cave = Cave::new(input.parse()?);
-    cave.drop_n(2022);
-    Ok(cave.height())
+    Ok(Puzzle::compute_periodicity(input.parse()?).drop_n(2022))
 }
