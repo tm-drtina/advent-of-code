@@ -20,6 +20,7 @@ impl JetPattern {
     fn at(&self, index: usize) -> Dir {
         self.0[index]
     }
+
     fn len(&self) -> usize {
         self.0.len()
     }
@@ -107,7 +108,7 @@ impl Stone {
                     .iter()
                     .all(|p| p.x > 0 && !blocked.contains(&p.left()))
                 {
-                    for p in self.0.iter_mut() {
+                    for p in &mut self.0 {
                         *p = p.left();
                     }
                 }
@@ -118,7 +119,7 @@ impl Stone {
                     .iter()
                     .all(|p| p.x < 6 && !blocked.contains(&p.right()))
                 {
-                    for p in self.0.iter_mut() {
+                    for p in &mut self.0 {
                         *p = p.right();
                     }
                 }
@@ -132,7 +133,7 @@ impl Stone {
             .iter()
             .all(|p| p.y > 1 && !blocked.contains(&p.top()))
         {
-            for p in self.0.iter_mut() {
+            for p in &mut self.0 {
                 *p = p.top();
             }
             self.1 -= 1;
@@ -160,7 +161,9 @@ struct State {
 
 impl PartialEq for State {
     fn eq(&self, other: &Self) -> bool {
-        self.jet_pattern_index == other.jet_pattern_index && self.stone_index == other.stone_index && self.blocked == other.blocked
+        self.jet_pattern_index == other.jet_pattern_index
+            && self.stone_index == other.stone_index
+            && self.blocked == other.blocked
     }
 }
 
@@ -253,8 +256,14 @@ pub(super) struct Puzzle {
 
 impl Puzzle {
     pub(super) fn compute_periodicity(jet_pattern: JetPattern) -> Self {
-        let (repeat_period, repeat_start_state, repeat_start_index) = floyd(State::new(), |prev| prev.drop_stone(&jet_pattern));
-        Self { jet_pattern, repeat_start_index, repeat_start_state, repeat_period }
+        let (repeat_period, repeat_start_state, repeat_start_index) =
+            floyd(State::new(), |prev| prev.drop_stone(&jet_pattern));
+        Self {
+            jet_pattern,
+            repeat_start_index,
+            repeat_start_state,
+            repeat_period,
+        }
     }
 
     pub(super) fn drop_n(self, n: usize) -> usize {
