@@ -1,5 +1,18 @@
 use num::Integer;
 
+#[allow(dead_code)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Dir {
+    TopLeft,
+    Top,
+    TopRight,
+    Right,
+    BottomRight,
+    Bottom,
+    BottomLeft,
+    Left,
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Point2D<Coord: Integer> {
     pub x: Coord,
@@ -7,6 +20,20 @@ pub struct Point2D<Coord: Integer> {
 }
 
 impl<Coord: Integer + Copy> Point2D<Coord> {
+    #[allow(dead_code)]
+    pub fn step_dir(&self, dir: Dir) -> Self {
+        match dir {
+            Dir::TopLeft => self.top_left(),
+            Dir::Top => self.top(),
+            Dir::TopRight => self.top_right(),
+            Dir::Right => self.right(),
+            Dir::BottomRight => self.bottom_right(),
+            Dir::Bottom => self.bottom(),
+            Dir::BottomLeft => self.bottom_left(),
+            Dir::Left => self.left(),
+        }
+    }
+
     pub fn top_left(&self) -> Self {
         Self {
             x: self.x - Coord::one(),
@@ -61,6 +88,24 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
             x: self.x - Coord::one(),
             y: self.y,
         }
+    }
+
+    #[allow(dead_code)]
+    pub fn four_neighborhood(&self) -> [Self; 4] {
+        [self.top(), self.right(), self.bottom(), self.left()]
+    }
+
+    pub fn eight_neighborhood(&self) -> [Self; 8] {
+        [
+            self.top_left(),
+            self.top(),
+            self.top_right(),
+            self.right(),
+            self.bottom_right(),
+            self.bottom(),
+            self.bottom_left(),
+            self.left(),
+        ]
     }
 }
 
