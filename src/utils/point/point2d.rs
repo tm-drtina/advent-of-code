@@ -13,6 +13,34 @@ pub enum Dir {
     Left,
 }
 
+impl Dir {
+    pub fn clockwise_90(self) -> Self {
+        match self {
+            Self::TopLeft => Self::TopRight,
+            Self::Top => Self::Right,
+            Self::TopRight => Self::BottomRight,
+            Self::Right => Self::Bottom,
+            Self::BottomRight => Self::BottomLeft,
+            Self::Bottom => Self::Left,
+            Self::BottomLeft => Self::TopLeft,
+            Self::Left => Self::Top,
+        }
+    }
+
+    pub fn counterclockwise_90(self) -> Self {
+        match self {
+            Self::TopLeft => Self::BottomLeft,
+            Self::Top => Self::Left,
+            Self::TopRight => Self::TopLeft,
+            Self::Right => Self::Top,
+            Self::BottomRight => Self::TopRight,
+            Self::Bottom => Self::Right,
+            Self::BottomLeft => Self::BottomRight,
+            Self::Left => Self::Bottom,
+        }
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Point2D<Coord: Integer> {
     pub x: Coord,

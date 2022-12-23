@@ -3,48 +3,13 @@ use std::str::FromStr;
 
 use anyhow::{anyhow, bail, Error, Result};
 
+use crate::utils::point::Dir;
+
 #[derive(Debug, Clone, Copy)]
 enum Command {
     Step(usize),
     Left,
     Right,
-}
-
-#[derive(Debug, Clone, Copy)]
-enum Dir {
-    Right,
-    Down,
-    Left,
-    Up,
-}
-
-impl Dir {
-    fn value(self) -> usize {
-        match self {
-            Dir::Right => 0,
-            Dir::Down => 1,
-            Dir::Left => 2,
-            Dir::Up => 3,
-        }
-    }
-
-    fn left(self) -> Self {
-        match self {
-            Dir::Right => Dir::Up,
-            Dir::Down => Dir::Right,
-            Dir::Left => Dir::Down,
-            Dir::Up => Dir::Left,
-        }
-    }
-
-    fn right(self) -> Self {
-        match self {
-            Dir::Right => Dir::Down,
-            Dir::Down => Dir::Left,
-            Dir::Left => Dir::Up,
-            Dir::Up => Dir::Right,
-        }
-    }
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -128,10 +93,10 @@ impl Puzzle {
             match command {
                 Command::Step(n) => self.step(n),
                 Command::Left => {
-                    self.dir = self.dir.left();
+                    self.dir = self.dir.counterclockwise_90();
                 }
                 Command::Right => {
-                    self.dir = self.dir.right();
+                    self.dir = self.dir.clockwise_90();
                 }
             }
         }
@@ -152,7 +117,7 @@ impl Puzzle {
                     .last()
                     .unwrap_or(self.x);
             }
-            Dir::Down => {
+            Dir::Bottom => {
                 self.y = self
                     .map
                     .iter()
@@ -180,7 +145,7 @@ impl Puzzle {
                     .last()
                     .unwrap_or(self.x);
             }
-            Dir::Up => {
+            Dir::Top => {
                 self.y = self
                     .map
                     .iter()
@@ -195,11 +160,22 @@ impl Puzzle {
                     .last()
                     .unwrap_or(self.y);
             }
+            _ => unreachable!(),
+        }
+    }
+
+    fn dir_value(dir: Dir) -> usize {
+        match dir {
+            Dir::Right => 0,
+            Dir::Bottom => 1,
+            Dir::Left => 2,
+            Dir::Top => 3,
+            _ => unreachable!(),
         }
     }
 
     fn password(&self) -> usize {
-        1000 * (self.y + 1) + 4 * (self.x + 1) + self.dir.value()
+        1000 * (self.y + 1) + 4 * (self.x + 1) + Self::dir_value(self.dir)
     }
 }
 
