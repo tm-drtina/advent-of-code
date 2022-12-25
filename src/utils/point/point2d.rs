@@ -1,7 +1,7 @@
 use num::Integer;
 
 #[allow(dead_code)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Dir {
     TopLeft,
     Top,
