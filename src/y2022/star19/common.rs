@@ -1,9 +1,8 @@
 use std::str::FromStr;
 
 use anyhow::{anyhow, Error, Result};
-use rayon::prelude::*;
 
-use crate::utils::cache::sync::Cache;
+use crate::utils::cache::unsync::Cache;
 
 #[derive(Debug, Clone, Copy)]
 pub(super) struct Blueprint {
@@ -33,11 +32,15 @@ impl FromStr for Blueprint {
         let (clay_robot_ore, s) = s
             .split_once(" ore. Each obsidian robot costs ")
             .ok_or_else(|| anyhow!("Invalid format"))?;
-        let (obsidian_robot_ore, s) = s.split_once(" ore and ").ok_or_else(|| anyhow!("Invalid format"))?;
+        let (obsidian_robot_ore, s) = s
+            .split_once(" ore and ")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (obsidian_robot_clay, s) = s
             .split_once(" clay. Each geode robot costs ")
             .ok_or_else(|| anyhow!("Invalid format"))?;
-        let (geode_robot_ore, s) = s.split_once(" ore and ").ok_or_else(|| anyhow!("Invalid format"))?;
+        let (geode_robot_ore, s) = s
+            .split_once(" ore and ")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let geode_robot_obsidian = s
             .strip_suffix(" obsidian.")
             .ok_or_else(|| anyhow!("Invalid format"))?;
@@ -64,24 +67,24 @@ impl FromStr for Blueprint {
 }
 
 impl Blueprint {
-    pub(super) fn max_geodes(self, minutes: u32) -> u32 {
-        let cache = Cache::new(Box::new(move |state: &State, cache| {
-            if state.minute == minutes {
+    pub(super) fn max_geodes<const N: u32>(self) -> u32 {
+        let cache = Cache::new(Box::new(move |state: &State<N>, cache| {
+            if state.minute == N {
                 state.materials.geode + state.robots.geode
             } else {
                 state
                     .next_states(self)
-                    .into_par_iter()
+                    .into_iter()
                     .map(|s| cache.get_or_compute(s))
                     .max()
                     .unwrap()
             }
         }));
-        cache.get_or_compute(State::init())
+        cache.get_or_compute(State::<N>::init())
     }
 
-    pub(super) fn quality(&self, minutes: u32) -> u32 {
-        self.max_geodes(minutes) * self.id
+    pub(super) fn quality<const N: u32>(&self) -> u32 {
+        self.max_geodes::<N>() * self.id
     }
 }
 
@@ -162,14 +165,14 @@ impl std::ops::Add for Items {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Hash)]
-struct State {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+struct State<const N: u32> {
     minute: u32,
     robots: Items,
     materials: Items,
 }
 
-impl State {
+impl<const N: u32> State<N> {
     fn init() -> Self {
         Self {
             minute: 1,
@@ -178,60 +181,114 @@ impl State {
         }
     }
 
+    fn build_geode(&self, blueprint: Blueprint) -> Option<Self> {
+        if self.robots.obsidian == 0 {
+            return None;
+        }
+        let mut state = *self;
+        while blueprint.geode_robot.0 > state.materials.ore
+            || blueprint.geode_robot.1 > state.materials.obsidian
+        {
+            state.materials += state.robots;
+            state.minute += 1;
+        }
+        if state.minute >= N {
+            return None;
+        }
+        state.materials.ore -= blueprint.geode_robot.0;
+        state.materials.obsidian -= blueprint.geode_robot.1;
+        state.materials += state.robots;
+        state.minute += 1;
+        state.robots += Items::geode();
+        Some(state)
+    }
+
+    fn build_obsidian(&self, blueprint: Blueprint) -> Option<Self> {
+        if self.robots.clay == 0 {
+            return None;
+        }
+        let mut state = *self;
+        while blueprint.obsidian_robot.0 > state.materials.ore
+            || blueprint.obsidian_robot.1 > state.materials.clay
+        {
+            state.materials += state.robots;
+            state.minute += 1;
+        }
+        if state.minute >= N {
+            return None;
+        }
+        state.materials.ore -= blueprint.obsidian_robot.0;
+        state.materials.clay -= blueprint.obsidian_robot.1;
+        state.materials += state.robots;
+        state.robots += Items::obsidian();
+        state.minute += 1;
+        Some(state)
+    }
+
+    fn build_clay(&self, blueprint: Blueprint) -> Option<Self> {
+        let mut state = *self;
+        while blueprint.clay_robot > state.materials.ore {
+            state.materials += state.robots;
+            state.minute += 1;
+        }
+        if state.minute >= N {
+            return None;
+        }
+        state.materials.ore -= blueprint.clay_robot;
+        state.materials += state.robots;
+        state.robots += Items::clay();
+        state.minute += 1;
+        Some(state)
+    }
+
+    fn build_ore(&self, blueprint: Blueprint) -> Option<Self> {
+        let mut state = *self;
+        while blueprint.ore_robot > state.materials.ore {
+            state.materials += state.robots;
+            state.minute += 1;
+        }
+        if state.minute >= N {
+            return None;
+        }
+        state.materials.ore -= blueprint.ore_robot;
+        state.materials += state.robots;
+        state.robots += Items::ore();
+        state.minute += 1;
+        Some(state)
+    }
+
+    fn end(&self) -> Self {
+        let mut state = *self;
+        while state.minute < N {
+            state.materials += state.robots;
+            state.minute += 1;
+        }
+        state
+    }
+
     fn next_states(&self, blueprint: Blueprint) -> Vec<Self> {
-        if blueprint.geode_robot.0 <= self.materials.ore
-            && blueprint.geode_robot.1 <= self.materials.obsidian
-        {
-            let mut materials = self.materials;
-            materials.ore -= blueprint.geode_robot.0;
-            materials.obsidian -= blueprint.geode_robot.1;
-            materials += self.robots;
-            return vec![State {
-                minute: self.minute + 1,
-                robots: self.robots + Items::geode(),
-                materials,
-            }];
-        }
         let mut res = Vec::with_capacity(4);
-        if blueprint.obsidian_robot.0 <= self.materials.ore
-            && blueprint.obsidian_robot.1 <= self.materials.clay
-            && self.robots.obsidian < blueprint.max_obsidian
-        {
-            let mut materials = self.materials;
-            materials.ore -= blueprint.obsidian_robot.0;
-            materials.clay -= blueprint.obsidian_robot.1;
-            materials += self.robots;
-            res.push(State {
-                minute: self.minute + 1,
-                robots: self.robots + Items::obsidian(),
-                materials,
-            });
+        if let Some(s) = self.build_geode(blueprint) {
+            res.push(s);
         }
-        if blueprint.clay_robot <= self.materials.ore && self.robots.clay < blueprint.max_clay {
-            let mut materials = self.materials;
-            materials.ore -= blueprint.clay_robot;
-            materials += self.robots;
-            res.push(State {
-                minute: self.minute + 1,
-                robots: self.robots + Items::clay(),
-                materials,
-            });
+        if self.robots.obsidian < blueprint.max_obsidian {
+            if let Some(s) = self.build_obsidian(blueprint) {
+                res.push(s);
+            }
         }
-        if blueprint.ore_robot <= self.materials.ore && self.robots.ore < blueprint.max_ore {
-            let mut materials = self.materials;
-            materials.ore -= blueprint.ore_robot;
-            materials += self.robots;
-            res.push(State {
-                minute: self.minute + 1,
-                robots: self.robots + Items::ore(),
-                materials,
-            });
+        if self.robots.clay < blueprint.max_clay {
+            if let Some(s) = self.build_clay(blueprint) {
+                res.push(s);
+            }
         }
-        res.push(State {
-            minute: self.minute + 1,
-            robots: self.robots,
-            materials: self.materials + self.robots,
-        });
+        if self.robots.ore < blueprint.max_ore {
+            if let Some(s) = self.build_ore(blueprint) {
+                res.push(s);
+            }
+        }
+        if res.is_empty() {
+            res.push(self.end());
+        }
         res
     }
 }
