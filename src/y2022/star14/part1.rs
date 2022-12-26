@@ -21,10 +21,14 @@ impl FromStr for Puzzle {
         let mut max_y = 0;
         for line in s.lines() {
             for (from, to) in line.split(" -> ").tuple_windows() {
-                let (from_x, from_y) = from.split_once(',').ok_or(anyhow!("Invalid format"))?;
+                let (from_x, from_y) = from
+                    .split_once(',')
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
                 let mut from_x = from_x.parse()?;
                 let mut from_y = from_y.parse()?;
-                let (to_x, to_y) = to.split_once(',').ok_or(anyhow!("Invalid format"))?;
+                let (to_x, to_y) = to
+                    .split_once(',')
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
                 let mut to_x = to_x.parse()?;
                 let mut to_y = to_y.parse()?;
 

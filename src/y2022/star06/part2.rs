@@ -15,5 +15,5 @@ pub fn run(input: &str) -> Result<usize> {
             true
         })
         .map(|x| x + 14)
-        .ok_or(anyhow!("Pattern not found"))
+        .ok_or_else(|| anyhow!("Pattern not found"))
 }

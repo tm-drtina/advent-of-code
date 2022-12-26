@@ -21,7 +21,7 @@ impl FromStr for Puzzle {
         let mut lines = input.lines().peekable();
         let mut acc: Vec<Vec<Option<char>>> = Vec::new();
         loop {
-            let line = lines.next().ok_or(anyhow!("Invalid format"))?;
+            let line = lines.next().ok_or_else(|| anyhow!("Invalid format"))?;
             if lines.peek().map_or(true, |s| s.is_empty()) {
                 break;
             }
@@ -50,9 +50,13 @@ impl FromStr for Puzzle {
             .map(|line| {
                 let line = line
                     .strip_prefix("move ")
-                    .ok_or(anyhow!("Invalid format"))?;
-                let (amount, line) = line.split_once(" from ").ok_or(anyhow!("Invalid format"))?;
-                let (from, to) = line.split_once(" to ").ok_or(anyhow!("Invalid format"))?;
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
+                let (amount, line) = line
+                    .split_once(" from ")
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
+                let (from, to) = line
+                    .split_once(" to ")
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
                 Ok(Move {
                     amount: amount.parse()?,
                     from: from.parse::<usize>()? - 1,

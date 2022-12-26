@@ -10,6 +10,6 @@ pub fn run(input: &str) -> Result<usize> {
         |p| puzzle.successors(*p),
         |p| puzzle.is_end(*p),
     )
-    .ok_or(anyhow!("solution not found"))?
+    .ok_or_else(|| anyhow!("solution not found"))?
     .1)
 }

@@ -26,7 +26,9 @@ impl FromStr for Operation {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (op, rhs) = s.split_once(' ').ok_or(anyhow!("Invalid op format"))?;
+        let (op, rhs) = s
+            .split_once(' ')
+            .ok_or_else(|| anyhow!("Invalid op format"))?;
 
         Ok(match op {
             "+" => Operation::Add(rhs.parse()?),
@@ -50,41 +52,47 @@ impl<'a> TryFrom<&mut Lines<'a>> for Monkey {
     type Error = Error;
 
     fn try_from(lines: &mut Lines<'a>) -> Result<Self, Self::Error> {
-        let name = lines.next().ok_or(anyhow!("Missing name"))?;
+        let name = lines.next().ok_or_else(|| anyhow!("Missing name"))?;
         debug_assert!(name.starts_with("Monkey "));
 
-        let items = lines.next().ok_or(anyhow!("Missing items"))?;
+        let items = lines.next().ok_or_else(|| anyhow!("Missing items"))?;
         let items = items
             .strip_prefix("  Starting items: ")
-            .ok_or(anyhow!("Invalid items line"))?;
+            .ok_or_else(|| anyhow!("Invalid items line"))?;
         let items = items
             .split(", ")
             .map(str::parse::<usize>)
             .collect::<Result<_, _>>()
             .context("Invalid items str")?;
 
-        let op = lines.next().ok_or(anyhow!("Missing operation"))?;
+        let op = lines.next().ok_or_else(|| anyhow!("Missing operation"))?;
         let op = op
             .strip_prefix("  Operation: new = old ")
-            .ok_or(anyhow!("Invalid op line"))?;
+            .ok_or_else(|| anyhow!("Invalid op line"))?;
         let op = op.parse().context("Invalid operation str")?;
 
-        let divisible = lines.next().ok_or(anyhow!("Missing divisible line"))?;
+        let divisible = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing divisible line"))?;
         let divisible = divisible
             .strip_prefix("  Test: divisible by ")
-            .ok_or(anyhow!("Invalid divisible line"))?;
+            .ok_or_else(|| anyhow!("Invalid divisible line"))?;
         let divisible = divisible.parse().context("Invalid divisible str")?;
 
-        let true_cond = lines.next().ok_or(anyhow!("Missing true cond line"))?;
+        let true_cond = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing true cond line"))?;
         let true_cond = true_cond
             .strip_prefix("    If true: throw to monkey ")
-            .ok_or(anyhow!("Invalid true cond line"))?;
+            .ok_or_else(|| anyhow!("Invalid true cond line"))?;
         let true_cond = true_cond.parse().context("Invalid true cond str")?;
 
-        let false_cond = lines.next().ok_or(anyhow!("Missing false cond line"))?;
+        let false_cond = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing false cond line"))?;
         let false_cond = false_cond
             .strip_prefix("    If false: throw to monkey ")
-            .ok_or(anyhow!("Invalid false cond line"))?;
+            .ok_or_else(|| anyhow!("Invalid false cond line"))?;
         let false_cond = false_cond.parse().context("Invalid false cond str")?;
 
         Ok(Self {

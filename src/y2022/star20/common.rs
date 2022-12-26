@@ -89,7 +89,7 @@ impl Puzzle {
         let start = values
             .iter()
             .position(|v| v.value == 0)
-            .ok_or(anyhow!("Zero value not found"))?;
+            .ok_or_else(|| anyhow!("Zero value not found"))?;
         Ok(values[(start + 1000) % values.len()].value
             + values[(start + 2000) % values.len()].value
             + values[(start + 3000) % values.len()].value)
