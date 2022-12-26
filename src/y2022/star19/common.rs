@@ -23,24 +23,24 @@ impl FromStr for Blueprint {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s
             .strip_prefix("Blueprint ")
-            .ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (id, s) = s
             .split_once(": Each ore robot costs ")
-            .ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (ore_robot_ore, s) = s
             .split_once(" ore. Each clay robot costs ")
-            .ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (clay_robot_ore, s) = s
             .split_once(" ore. Each obsidian robot costs ")
-            .ok_or(anyhow!("Invalid format"))?;
-        let (obsidian_robot_ore, s) = s.split_once(" ore and ").ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
+        let (obsidian_robot_ore, s) = s.split_once(" ore and ").ok_or_else(|| anyhow!("Invalid format"))?;
         let (obsidian_robot_clay, s) = s
             .split_once(" clay. Each geode robot costs ")
-            .ok_or(anyhow!("Invalid format"))?;
-        let (geode_robot_ore, s) = s.split_once(" ore and ").ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
+        let (geode_robot_ore, s) = s.split_once(" ore and ").ok_or_else(|| anyhow!("Invalid format"))?;
         let geode_robot_obsidian = s
             .strip_suffix(" obsidian.")
-            .ok_or(anyhow!("Invalid format"))?;
+            .ok_or_else(|| anyhow!("Invalid format"))?;
 
         let ore_robot = ore_robot_ore.parse()?;
         let clay_robot = clay_robot_ore.parse()?;
