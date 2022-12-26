@@ -8,6 +8,6 @@ pub fn run(input: &str) -> Result<u32> {
         .map(str::parse)
         .collect::<Result<Vec<Blueprint>>>()?
         .iter()
-        .map(|b| b.quality::<24>())
+        .map(Blueprint::quality::<24>)
         .sum())
 }
