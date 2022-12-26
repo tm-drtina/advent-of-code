@@ -151,7 +151,7 @@ impl Puzzle {
     }
 
     fn step(&mut self, line: &str) -> Result<()> {
-        let (dir, amount) = line.split_once(' ').ok_or(anyhow!("Invalid format"))?;
+        let (dir, amount) = line.split_once(' ').ok_or_else(|| anyhow!("Invalid format"))?;
         let amount = amount.parse::<usize>()?;
         match dir {
             "L" => (0..amount).for_each(|_| self.left(0)),

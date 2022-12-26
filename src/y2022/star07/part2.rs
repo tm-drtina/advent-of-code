@@ -32,5 +32,5 @@ pub fn run(input: &'static str) -> Result<usize> {
         Node::File { size, .. } | Node::Dir { size, .. } => *size,
     };
 
-    find(&root, root_size - 40_000_000).ok_or(anyhow!("Not found"))
+    find(&root, root_size - 40_000_000).ok_or_else(|| anyhow!("Not found"))
 }

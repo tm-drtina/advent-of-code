@@ -14,7 +14,7 @@ mod tests {
 
     aoc_test_suite!(
         super::part2::run,
-        (part2_main, 136182, include_str!("input.txt")),
+        (part2_main, 136_182, include_str!("input.txt")),
         (part2_sanity1, 5031, include_str!("input.sanity1.txt")),
     );
 }

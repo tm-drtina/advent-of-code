@@ -10,14 +10,14 @@ impl FromStr for Pair {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (l, r) = s.split_once(',').ok_or(anyhow!("Invalid line syntax"))?;
+        let (l, r) = s.split_once(',').ok_or_else(|| anyhow!("Invalid line syntax"))?;
 
-        let (l_start, l_end) = l.split_once('-').ok_or(anyhow!("Invalid range syntax"))?;
+        let (l_start, l_end) = l.split_once('-').ok_or_else(|| anyhow!("Invalid range syntax"))?;
         let l_start = l_start.parse()?;
         let l_end = l_end.parse()?;
         let l = l_start..=l_end;
 
-        let (r_start, r_end) = r.split_once('-').ok_or(anyhow!("Invalid range syntax"))?;
+        let (r_start, r_end) = r.split_once('-').ok_or_else(|| anyhow!("Invalid range syntax"))?;
         let r_start = r_start.parse()?;
         let r_end = r_end.parse()?;
         let r = r_start..=r_end;
