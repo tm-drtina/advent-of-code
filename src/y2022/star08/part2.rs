@@ -24,5 +24,5 @@ pub fn run(input: &str) -> Result<usize> {
             })
         })
         .max()
-        .ok_or(anyhow!("No trees found"))
+        .ok_or_else(|| anyhow!("No trees found"))
 }

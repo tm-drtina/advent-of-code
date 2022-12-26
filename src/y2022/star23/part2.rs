@@ -7,5 +7,5 @@ pub fn run(input: &str) -> Result<usize> {
     (2..)
         .take_while(|_| state.round())
         .last()
-        .ok_or(anyhow!("Solution not found"))
+        .ok_or_else(|| anyhow!("Solution not found"))
 }

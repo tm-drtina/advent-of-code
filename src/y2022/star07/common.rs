@@ -44,7 +44,7 @@ impl Node {
                     let dir = &line[5..];
                     *size += childs
                         .get_mut(dir)
-                        .ok_or(anyhow!("Dir not found"))?
+                        .ok_or_else(|| anyhow!("Dir not found"))?
                         .load(lines)?;
                 }
                 _ if line.starts_with("dir ") => {
@@ -59,8 +59,9 @@ impl Node {
                     );
                 }
                 _ => {
-                    let (fsize, name) =
-                        line.split_once(' ').ok_or(anyhow!("Invalid file format"))?;
+                    let (fsize, name) = line
+                        .split_once(' ')
+                        .ok_or_else(|| anyhow!("Invalid file format"))?;
                     let fsize = fsize.parse::<usize>()?;
                     childs.insert(name, Node::File { name, size: fsize });
                     *size += fsize;

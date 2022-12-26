@@ -19,7 +19,7 @@ pub mod star18;
 // pub mod star19;
 pub mod star20;
 pub mod star21;
-// pub mod star22;
+pub mod star22;
 pub mod star23;
 pub mod star24;
 pub mod star25;
