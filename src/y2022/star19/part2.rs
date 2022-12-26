@@ -8,7 +8,7 @@ pub fn run(input: &str) -> Result<u32> {
         .take(3)
         .map(str::parse)
         .collect::<Result<Vec<Blueprint>>>()?
-        .iter()
-        .map(|b| b.max_geodes::<32>())
+        .into_iter()
+        .map(Blueprint::max_geodes::<32>)
         .product())
 }
