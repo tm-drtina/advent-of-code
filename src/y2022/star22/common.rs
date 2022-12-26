@@ -39,7 +39,10 @@ impl State {
     fn new(map: &Map) -> Self {
         Self {
             pos: Point2D {
-                x: map[0].iter().position(|n| matches!(n, Node::Empty)).unwrap(),
+                x: map[0]
+                    .iter()
+                    .position(|n| matches!(n, Node::Empty))
+                    .unwrap(),
                 y: 0,
             },
             dir: Dir::Right,
@@ -47,24 +50,8 @@ impl State {
     }
 
     fn go(&mut self, command: Command, map: &Map) {
-            match command {
-                Command::Step(n) => self.step(n, map),
-                Command::Left => {
-                    self.dir = self.dir.counterclockwise_90();
-                }
-                Command::Right => {
-                    self.dir = self.dir.clockwise_90();
-                }
-        }
-    }
-
-    fn go_cube(&mut self, command: Command, transitions: &HashMap<State, State>) {
         match command {
-            Command::Step(n) => {
-                for _ in 0..n {
-                    *self = transitions[self];
-                }
-            },
+            Command::Step(n) => self.step(n, map),
             Command::Left => {
                 self.dir = self.dir.counterclockwise_90();
             }
@@ -207,117 +194,244 @@ impl Puzzle {
         state
     }
 
-    fn transition_top(&self, transitions: &mut HashMap<State, State>, pos: Point) {
-        let from = State {
-            pos,
-            dir: Dir::Top,
-        };
-        if pos.y > 0 {
-            match self.map[pos.y - 1][pos.x] {
-                Node::Wall => {
-                    transitions.insert(from, from);
-                    return
-                },
-                Node::Empty => {
-                    transitions.insert(from, State { pos: Point2D { x: pos.x, y: pos.y - 1 }, dir: Dir::Top });
-                    return
-                },
-                Node::Missing => {
-                    todo!("wrap")
-                },
-            }
-        }
-        todo!("wrap")
+    pub(super) fn into_cube(self) -> Cube {
+        Cube::new(self)
     }
-    fn transition_right(&self, transitions: &mut HashMap<State, State>, pos: Point) {
-        let from = State {
-            pos,
-            dir: Dir::Right,
-        };
-        if pos.x < self.map[pos.y].len() - 1 {
-            match self.map[pos.y][pos.x + 1] {
-                Node::Wall => {
-                    transitions.insert(from, from);
-                    return
-                },
-                Node::Empty => {
-                    transitions.insert(from, State { pos: Point2D { x: pos.x + 1, y: pos.y }, dir: Dir::Right });
-                    return
-                },
-                Node::Missing => {
-                    todo!("wrap")
-                },
-            }
-        }
-        todo!("wrap")
-    }
-    fn transition_bottom(&self, transitions: &mut HashMap<State, State>, pos: Point) {
-        let from = State {
-            pos,
-            dir: Dir::Bottom,
-        };
-        if pos.y < self.map.len() - 1 {
-            match self.map[pos.y + 1][pos.x] {
-                Node::Wall => {
-                    transitions.insert(from, from);
-                    return
-                },
-                Node::Empty => {
-                    transitions.insert(from, State { pos: Point2D { x: pos.x, y: pos.y + 1 }, dir: Dir::Bottom });
-                    return
-                },
-                Node::Missing => {
-                    todo!("wrap")
-                },
-            }
-        }
-        todo!("wrap")
-    }
-    fn transition_left(&self, transitions: &mut HashMap<State, State>, pos: Point) {
-        let from = State {
-            pos,
-            dir: Dir::Left,
-        };
-        if pos.x > 0 {
-            match self.map[pos.y][pos.x - 1] {
-                Node::Wall => {
-                    transitions.insert(from, from);
-                    return
-                },
-                Node::Empty => {
-                    transitions.insert(from, State { pos: Point2D { x: pos.x - 1, y: pos.y }, dir: Dir::Left });
-                    return
-                },
-                Node::Missing => {
-                    todo!("wrap")
-                },
-            }
-        }
-        todo!("wrap")
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+enum Transition {
+    OuterEdge,
+    Straight,
+    InnerEdge,
+}
+
+#[derive(Debug, Clone, Copy)]
+struct Edge {
+    start: Point,
+    end: Point,
+    transition: Transition,
+    dir: Dir,
+}
+
+pub(super) struct Cube {
+    puzzle: Puzzle,
+    teleports: HashMap<State, State>,
+}
+
+impl Cube {
+    pub(super) fn new(puzzle: Puzzle) -> Self {
+        let teleports = Self::init_teleports(&puzzle);
+        Self { puzzle, teleports }
     }
 
-    fn transitions(&self) -> HashMap<State, State> {
-        let mut transitions = HashMap::new();
-        let count = self.map.iter().flatten().filter(|n| matches!(n, Node::Empty | Node::Wall)).count();
-        let side_len = (1usize..).find(|i| i * i * 6 == count).unwrap();
-        for (y, row) in self.map.iter().enumerate() {
-            for (x, _node) in row.iter().enumerate().filter(|(_, node)| matches!(node, Node::Empty)) {
-                let pos = Point2D { x, y };
-                self.transition_top(&mut transitions, pos);
-                self.transition_right(&mut transitions, pos);
-                self.transition_bottom(&mut transitions, pos);
-                self.transition_left(&mut transitions, pos);
+    pub(super) fn go(self) -> State {
+        let mut state = State::new(&self.puzzle.map);
+        for command in self.puzzle.commands {
+            match command {
+                Command::Step(n) => {
+                    for _ in 0..n {
+                        state = self.teleports.get(&state).cloned().unwrap_or_else(|| {
+                            let pos = state.pos.step_dir(state.dir);
+                            if matches!(self.puzzle.map[pos.y][pos.x], Node::Empty) {
+                                State {
+                                    pos: state.pos.step_dir(state.dir),
+                                    dir: state.dir,
+                                }
+                            } else {
+                                state
+                            }
+                        });
+                    }
+                }
+                Command::Left => {
+                    state.dir = state.dir.counterclockwise_90();
+                }
+                Command::Right => {
+                    state.dir = state.dir.clockwise_90();
+                }
             }
-        }
-        transitions
-    }
-
-    pub(super) fn go_cube(self) -> State {
-        let mut state = State::new(&self.map);
-        let transitions = self.transitions();
-        for command in self.commands {
-            state.go_cube(command, &transitions);
         }
         state
+    }
+
+    fn next_edge(puzzle: &Puzzle, edge: &mut Edge, side_len: usize) {
+        // try inner edge
+        if let Some(pt @ Point2D { x, y }) = edge
+            .end
+            .try_step_dir(edge.dir)
+            .map(|p| p.try_step_dir(edge.dir.clockwise_90()))
+            .flatten()
+        {
+            if puzzle.map.get(y).map_or(false, |row| {
+                matches!(row.get(x), Some(Node::Empty) | Some(Node::Wall))
+            }) {
+                let mut end = pt;
+                for _ in 1..side_len {
+                    end = end.step_dir(edge.dir);
+                }
+                *edge = Edge {
+                    start: pt,
+                    end,
+                    transition: Transition::InnerEdge,
+                    dir: edge.dir.counterclockwise_90(),
+                };
+                return;
+            }
+        }
+
+        // try straight
+        if let Some(pt @ Point2D { x, y }) = edge.end.try_step_dir(edge.dir.clockwise_90()) {
+            if puzzle.map.get(y).map_or(false, |row| {
+                matches!(row.get(x), Some(Node::Empty) | Some(Node::Wall))
+            }) {
+                let mut end = pt;
+                for _ in 1..side_len {
+                    end = end.step_dir(edge.dir.clockwise_90());
+                }
+                *edge = Edge {
+                    start: pt,
+                    end,
+                    transition: Transition::Straight,
+                    dir: edge.dir,
+                };
+                return;
+            }
+        }
+
+        // outer edge
+        let mut end = edge.end;
+        for _ in 1..side_len {
+            end = end.step_dir(edge.dir.clockwise_90().clockwise_90());
+        }
+        *edge = Edge {
+            start: edge.end,
+            end,
+            transition: Transition::OuterEdge,
+            dir: edge.dir.clockwise_90(),
+        };
+    }
+
+    fn gen_teleports(e1: Edge, e2: Edge, side_len: usize, puzzle: &Puzzle, teleports: &mut HashMap<State, State>) {
+        let mut pt1 = e1.start;
+        let mut pt2 = e2.end;
+        for i in 0..side_len {
+            if matches!(puzzle.map[pt2.y][pt2.x], Node::Wall) {
+                teleports.insert(
+                    State {
+                        pos: pt1,
+                        dir: e1.dir,
+                    },
+                    State {
+                        pos: pt1,
+                        dir: e1.dir,
+                    },
+                );
+            } else {
+                teleports.insert(
+                    State {
+                        pos: pt1,
+                        dir: e1.dir,
+                    },
+                    State {
+                        pos: pt2,
+                        dir: e2.dir.clockwise_90().clockwise_90(),
+                    },
+                );
+            }
+            if matches!(puzzle.map[pt1.y][pt1.x], Node::Wall) {
+                teleports.insert(
+                    State {
+                        pos: pt2,
+                        dir: e2.dir,
+                    },
+                    State {
+                        pos: pt2,
+                        dir: e2.dir,
+                    },
+                );
+            } else {
+                teleports.insert(
+                    State {
+                        pos: pt2,
+                        dir: e2.dir,
+                    },
+                    State {
+                        pos: pt1,
+                        dir: e1.dir.clockwise_90().clockwise_90(),
+                    },
+                );
+            }
+            if i < side_len - 1 {
+                pt1 = pt1.step_dir(e1.dir.clockwise_90());
+                pt2 = pt2.step_dir(e2.dir.counterclockwise_90());
+            }
+        }
+    }
+
+    fn init_teleports(puzzle: &Puzzle) -> HashMap<State, State> {
+        let mut teleports = HashMap::new();
+        let count = puzzle
+            .map
+            .iter()
+            .flatten()
+            .filter(|n| matches!(n, Node::Empty | Node::Wall))
+            .count();
+        let side_len = (1usize..).find(|i| i * i * 6 == count).unwrap();
+        let start_x = puzzle.map[0]
+            .iter()
+            .position(|n| matches!(n, Node::Empty))
+            .unwrap();
+
+        let mut edge = Edge {
+            start: Point2D { x: start_x, y: 0 },
+            end: Point2D {
+                x: start_x + side_len - 1,
+                y: 0,
+            },
+            dir: Dir::Top,
+            transition: Transition::OuterEdge,
+        };
+        let mut stack = vec![edge];
+        let mut end_transitions = vec![Transition::OuterEdge];
+        let mut pull = false;
+        let mut tps = 0;
+
+        while tps < 7 {
+            Self::next_edge(puzzle, &mut edge, side_len);
+            match edge.transition {
+                Transition::OuterEdge => {
+                    if pull
+                        && stack.len() > 0
+                        && end_transitions.last() == Some(&Transition::Straight)
+                    {
+                        Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                        end_transitions.pop();
+                        tps += 1;
+                    } else {
+                        pull = false;
+                        stack.push(edge);
+                        end_transitions.push(Transition::OuterEdge);
+                    }
+                }
+                Transition::Straight => {
+                    if pull && stack.len() > 0 {
+                        Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                        end_transitions.pop();
+                        tps += 1;
+                    } else {
+                        pull = false;
+                        stack.push(edge);
+                        end_transitions.push(Transition::Straight);
+                    }
+                }
+                Transition::InnerEdge => {
+                    pull = true;
+                    Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                    tps += 1;
+                }
+            }
+        }
+        teleports
     }
 }

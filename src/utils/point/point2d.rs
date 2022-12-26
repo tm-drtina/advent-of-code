@@ -1,4 +1,4 @@
-use num::Integer;
+use num::{Integer, Unsigned};
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -134,6 +134,123 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
             self.bottom_left(),
             self.left(),
         ]
+    }
+}
+
+impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
+    #[allow(dead_code)]
+    pub fn try_step_dir(&self, dir: Dir) -> Option<Self> {
+        match dir {
+            Dir::TopLeft => self.try_top_left(),
+            Dir::Top => self.try_top(),
+            Dir::TopRight => self.try_top_right(),
+            Dir::Right => self.try_right(),
+            Dir::BottomRight => self.try_bottom_right(),
+            Dir::Bottom => self.try_bottom(),
+            Dir::BottomLeft => self.try_bottom_left(),
+            Dir::Left => self.try_left(),
+        }
+    }
+
+    pub fn try_top_left(&self) -> Option<Self> {
+        if self.x.is_zero() || self.y.is_zero() {
+            return None;
+        }
+        Some(Self {
+            x: self.x - Coord::one(),
+            y: self.y - Coord::one(),
+        })
+    }
+
+    pub fn try_top(&self) -> Option<Self> {
+        if self.y.is_zero() {
+            return None;
+        }
+        Some(Self {
+            x: self.x,
+            y: self.y - Coord::one(),
+        })
+    }
+
+    pub fn try_top_right(&self) -> Option<Self> {
+        if self.y.is_zero() {
+            return None;
+        }
+        Some(Self {
+            x: self.x + Coord::one(),
+            y: self.y - Coord::one(),
+        })
+    }
+
+    pub fn try_right(&self) -> Option<Self> {
+        Some(Self {
+            x: self.x + Coord::one(),
+            y: self.y,
+        })
+    }
+
+    pub fn try_bottom_right(&self) -> Option<Self> {
+        Some(Self {
+            x: self.x + Coord::one(),
+            y: self.y + Coord::one(),
+        })
+    }
+
+    pub fn try_bottom(&self) -> Option<Self> {
+        Some(Self {
+            x: self.x,
+            y: self.y + Coord::one(),
+        })
+    }
+
+    pub fn try_bottom_left(&self) -> Option<Self> {
+        if self.x.is_zero() {
+            return None;
+        }
+        Some(Self {
+            x: self.x - Coord::one(),
+            y: self.y + Coord::one(),
+        })
+    }
+
+    pub fn try_left(&self) -> Option<Self> {
+        if self.x.is_zero() {
+            return None;
+        }
+        Some(Self {
+            x: self.x - Coord::one(),
+            y: self.y,
+        })
+    }
+
+    #[allow(dead_code)]
+    pub fn try_four_neighborhood(&self) -> Vec<Self> {
+        vec![
+            self.try_top(),
+            self.try_right(),
+            self.try_bottom(),
+            self.try_left(),
+        ]
+        .into_iter()
+        .filter_map(|x| x)
+        .collect()
+    }
+
+    #[allow(dead_code)]
+    pub fn try_eight_neighborhood(&self) -> Vec<Self> {
+        vec![
+            self.try_top_left(),
+            self.try_top(),
+            self.try_top_right(),
+            self.try_right(),
+            self.try_bottom_right(),
+            self.try_bottom(),
+            self.try_bottom_left(),
+            self.try_left(),
+        ]
+        .into_iter()
+        .filter_map(|x| x)
+        .collect()
     }
 }
 
