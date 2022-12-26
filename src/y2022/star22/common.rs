@@ -163,7 +163,11 @@ impl FromStr for Puzzle {
 
         let mut commands = Vec::new();
         let mut buffer = 0;
-        for b in lines.next().ok_or_else(|| anyhow!("Invalid format"))?.bytes() {
+        for b in lines
+            .next()
+            .ok_or_else(|| anyhow!("Invalid format"))?
+            .bytes()
+        {
             match b {
                 b'0'..=b'9' => buffer = buffer * 10 + (b - b'0') as usize,
                 b'R' => {
@@ -311,7 +315,13 @@ impl Cube {
         };
     }
 
-    fn gen_teleports(e1: Edge, e2: Edge, side_len: usize, puzzle: &Puzzle, teleports: &mut HashMap<State, State>) {
+    fn gen_teleports(
+        e1: Edge,
+        e2: Edge,
+        side_len: usize,
+        puzzle: &Puzzle,
+        teleports: &mut HashMap<State, State>,
+    ) {
         let mut pt1 = e1.start;
         let mut pt2 = e2.end;
         for i in 0..side_len {
@@ -404,7 +414,13 @@ impl Cube {
                         && !stack.is_empty()
                         && end_transitions.last() == Some(&Transition::Straight)
                     {
-                        Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                        Self::gen_teleports(
+                            stack.pop().unwrap(),
+                            edge,
+                            side_len,
+                            puzzle,
+                            &mut teleports,
+                        );
                         end_transitions.pop();
                         tps += 1;
                     } else {
@@ -415,7 +431,13 @@ impl Cube {
                 }
                 Transition::Straight => {
                     if pull && !stack.is_empty() {
-                        Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                        Self::gen_teleports(
+                            stack.pop().unwrap(),
+                            edge,
+                            side_len,
+                            puzzle,
+                            &mut teleports,
+                        );
                         end_transitions.pop();
                         tps += 1;
                     } else {
@@ -426,7 +448,13 @@ impl Cube {
                 }
                 Transition::InnerEdge => {
                     pull = true;
-                    Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
+                    Self::gen_teleports(
+                        stack.pop().unwrap(),
+                        edge,
+                        side_len,
+                        puzzle,
+                        &mut teleports,
+                    );
                     tps += 1;
                 }
             }

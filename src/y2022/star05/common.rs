@@ -51,8 +51,12 @@ impl FromStr for Puzzle {
                 let line = line
                     .strip_prefix("move ")
                     .ok_or_else(|| anyhow!("Invalid format"))?;
-                let (amount, line) = line.split_once(" from ").ok_or_else(|| anyhow!("Invalid format"))?;
-                let (from, to) = line.split_once(" to ").ok_or_else(|| anyhow!("Invalid format"))?;
+                let (amount, line) = line
+                    .split_once(" from ")
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
+                let (from, to) = line
+                    .split_once(" to ")
+                    .ok_or_else(|| anyhow!("Invalid format"))?;
                 Ok(Move {
                     amount: amount.parse()?,
                     from: from.parse::<usize>()? - 1,

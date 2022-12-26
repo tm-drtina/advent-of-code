@@ -69,9 +69,18 @@ pub fn run(input: &str) -> Result<usize> {
     for line in input.lines() {
         let mut split = line.split(',');
         let p: Point = Point3D {
-            x: split.next().ok_or_else(|| anyhow!("Invalid format"))?.parse()?,
-            y: split.next().ok_or_else(|| anyhow!("Invalid format"))?.parse()?,
-            z: split.next().ok_or_else(|| anyhow!("Invalid format"))?.parse()?,
+            x: split
+                .next()
+                .ok_or_else(|| anyhow!("Invalid format"))?
+                .parse()?,
+            y: split
+                .next()
+                .ok_or_else(|| anyhow!("Invalid format"))?
+                .parse()?,
+            z: split
+                .next()
+                .ok_or_else(|| anyhow!("Invalid format"))?
+                .parse()?,
         };
         res += 6;
         points.insert(p);

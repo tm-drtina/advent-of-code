@@ -119,7 +119,9 @@ impl FromStr for Puzzle {
         Ok(Self(
             s.lines()
                 .map(|line| {
-                    let (name, line) = line.split_once(": ").ok_or_else(|| anyhow!("Invalid format"))?;
+                    let (name, line) = line
+                        .split_once(": ")
+                        .ok_or_else(|| anyhow!("Invalid format"))?;
                     let addr = Self::name_to_addr(name);
                     let node = if let Some((l, r)) = line.split_once(" + ") {
                         Node::Add(Self::name_to_addr(l), Self::name_to_addr(r))

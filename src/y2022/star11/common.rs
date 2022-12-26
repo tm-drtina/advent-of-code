@@ -26,7 +26,9 @@ impl FromStr for Operation {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (op, rhs) = s.split_once(' ').ok_or_else(|| anyhow!("Invalid op format"))?;
+        let (op, rhs) = s
+            .split_once(' ')
+            .ok_or_else(|| anyhow!("Invalid op format"))?;
 
         Ok(match op {
             "+" => Operation::Add(rhs.parse()?),
@@ -69,19 +71,25 @@ impl<'a> TryFrom<&mut Lines<'a>> for Monkey {
             .ok_or_else(|| anyhow!("Invalid op line"))?;
         let op = op.parse().context("Invalid operation str")?;
 
-        let divisible = lines.next().ok_or_else(|| anyhow!("Missing divisible line"))?;
+        let divisible = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing divisible line"))?;
         let divisible = divisible
             .strip_prefix("  Test: divisible by ")
             .ok_or_else(|| anyhow!("Invalid divisible line"))?;
         let divisible = divisible.parse().context("Invalid divisible str")?;
 
-        let true_cond = lines.next().ok_or_else(|| anyhow!("Missing true cond line"))?;
+        let true_cond = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing true cond line"))?;
         let true_cond = true_cond
             .strip_prefix("    If true: throw to monkey ")
             .ok_or_else(|| anyhow!("Invalid true cond line"))?;
         let true_cond = true_cond.parse().context("Invalid true cond str")?;
 
-        let false_cond = lines.next().ok_or_else(|| anyhow!("Missing false cond line"))?;
+        let false_cond = lines
+            .next()
+            .ok_or_else(|| anyhow!("Missing false cond line"))?;
         let false_cond = false_cond
             .strip_prefix("    If false: throw to monkey ")
             .ok_or_else(|| anyhow!("Invalid false cond line"))?;

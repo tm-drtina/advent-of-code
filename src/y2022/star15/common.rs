@@ -20,11 +20,15 @@ impl FromStr for Sensor {
         let s = s
             .strip_prefix("Sensor at x=")
             .ok_or_else(|| anyhow!("Invalid format"))?;
-        let (p_x, s) = s.split_once(", y=").ok_or_else(|| anyhow!("Invalid format"))?;
+        let (p_x, s) = s
+            .split_once(", y=")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (p_y, s) = s
             .split_once(": closest beacon is at x=")
             .ok_or_else(|| anyhow!("Invalid format"))?;
-        let (b_x, b_y) = s.split_once(", y=").ok_or_else(|| anyhow!("Invalid format"))?;
+        let (b_x, b_y) = s
+            .split_once(", y=")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
 
         let position = Point2D {
             x: p_x.parse()?,

@@ -59,8 +59,9 @@ impl Node {
                     );
                 }
                 _ => {
-                    let (fsize, name) =
-                        line.split_once(' ').ok_or_else(|| anyhow!("Invalid file format"))?;
+                    let (fsize, name) = line
+                        .split_once(' ')
+                        .ok_or_else(|| anyhow!("Invalid file format"))?;
                     let fsize = fsize.parse::<usize>()?;
                     childs.insert(name, Node::File { name, size: fsize });
                     *size += fsize;

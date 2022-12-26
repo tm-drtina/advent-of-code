@@ -22,11 +22,15 @@ impl FromStr for Valve {
     type Err = Error;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let s = s.strip_prefix("Valve ").ok_or_else(|| anyhow!("Invalid format"))?;
+        let s = s
+            .strip_prefix("Valve ")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let (name, s) = s
             .split_once(" has flow rate=")
             .ok_or_else(|| anyhow!("Invalid format"))?;
-        let (rate, s) = s.split_once("; ").ok_or_else(|| anyhow!("Invalid format"))?;
+        let (rate, s) = s
+            .split_once("; ")
+            .ok_or_else(|| anyhow!("Invalid format"))?;
         let tunnels = s
             .strip_prefix("tunnels lead to valves ")
             .or_else(|| s.strip_prefix("tunnel leads to valve "))
