@@ -143,7 +143,7 @@ impl FromStr for Puzzle {
         let mut map = Vec::new();
         let mut lines = s.lines();
         loop {
-            let line = lines.next().ok_or(anyhow!("Invalid format"))?;
+            let line = lines.next().ok_or_else(|| anyhow!("Invalid format"))?;
             if line.is_empty() {
                 break;
             }
@@ -163,7 +163,7 @@ impl FromStr for Puzzle {
 
         let mut commands = Vec::new();
         let mut buffer = 0;
-        for b in lines.next().ok_or(anyhow!("Invalid format"))?.bytes() {
+        for b in lines.next().ok_or_else(|| anyhow!("Invalid format"))?.bytes() {
             match b {
                 b'0'..=b'9' => buffer = buffer * 10 + (b - b'0') as usize,
                 b'R' => {
@@ -231,7 +231,7 @@ impl Cube {
             match command {
                 Command::Step(n) => {
                     for _ in 0..n {
-                        state = self.teleports.get(&state).cloned().unwrap_or_else(|| {
+                        state = self.teleports.get(&state).copied().unwrap_or_else(|| {
                             let pos = state.pos.step_dir(state.dir);
                             if matches!(self.puzzle.map[pos.y][pos.x], Node::Empty) {
                                 State {
@@ -260,11 +260,10 @@ impl Cube {
         if let Some(pt @ Point2D { x, y }) = edge
             .end
             .try_step_dir(edge.dir)
-            .map(|p| p.try_step_dir(edge.dir.clockwise_90()))
-            .flatten()
+            .and_then(|p| p.try_step_dir(edge.dir.clockwise_90()))
         {
             if puzzle.map.get(y).map_or(false, |row| {
-                matches!(row.get(x), Some(Node::Empty) | Some(Node::Wall))
+                matches!(row.get(x), Some(Node::Empty | Node::Wall))
             }) {
                 let mut end = pt;
                 for _ in 1..side_len {
@@ -283,7 +282,7 @@ impl Cube {
         // try straight
         if let Some(pt @ Point2D { x, y }) = edge.end.try_step_dir(edge.dir.clockwise_90()) {
             if puzzle.map.get(y).map_or(false, |row| {
-                matches!(row.get(x), Some(Node::Empty) | Some(Node::Wall))
+                matches!(row.get(x), Some(Node::Empty | Node::Wall))
             }) {
                 let mut end = pt;
                 for _ in 1..side_len {
@@ -402,7 +401,7 @@ impl Cube {
             match edge.transition {
                 Transition::OuterEdge => {
                     if pull
-                        && stack.len() > 0
+                        && !stack.is_empty()
                         && end_transitions.last() == Some(&Transition::Straight)
                     {
                         Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
@@ -415,7 +414,7 @@ impl Cube {
                     }
                 }
                 Transition::Straight => {
-                    if pull && stack.len() > 0 {
+                    if pull && !stack.is_empty() {
                         Self::gen_teleports(stack.pop().unwrap(), edge, side_len, puzzle, &mut teleports);
                         end_transitions.pop();
                         tps += 1;

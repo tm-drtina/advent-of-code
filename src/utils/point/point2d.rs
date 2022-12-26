@@ -137,6 +137,7 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
     }
 }
 
+#[allow(clippy::unnecessary_wraps)]
 impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
     #[allow(dead_code)]
     pub fn try_step_dir(&self, dir: Dir) -> Option<Self> {
@@ -232,7 +233,7 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
             self.try_left(),
         ]
         .into_iter()
-        .filter_map(|x| x)
+        .flatten()
         .collect()
     }
 
@@ -249,7 +250,7 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
             self.try_left(),
         ]
         .into_iter()
-        .filter_map(|x| x)
+        .flatten()
         .collect()
     }
 }
