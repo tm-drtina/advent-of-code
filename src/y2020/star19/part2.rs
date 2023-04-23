@@ -11,9 +11,7 @@ enum Rule {
 }
 
 fn rule_to_regex(rules: &HashMap<i32, Vec<Vec<Rule>>>, index: i32) -> String {
-    if index == 8 || index == 11 {
-        panic!()
-    }
+    assert!(index != 8 && index != 11, "Invalid index");
     let ruleset = rules.get(&index).unwrap();
     let regexes: Vec<String> = ruleset
         .iter()
