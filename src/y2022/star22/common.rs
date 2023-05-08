@@ -236,10 +236,10 @@ impl Cube {
                 Command::Step(n) => {
                     for _ in 0..n {
                         state = self.teleports.get(&state).copied().unwrap_or_else(|| {
-                            let pos = state.pos.step_dir(state.dir);
+                            let pos = state.pos.try_step_dir(state.dir).unwrap();
                             if matches!(self.puzzle.map[pos.y][pos.x], Node::Empty) {
                                 State {
-                                    pos: state.pos.step_dir(state.dir),
+                                    pos: state.pos.try_step_dir(state.dir).unwrap(),
                                     dir: state.dir,
                                 }
                             } else {
@@ -271,7 +271,7 @@ impl Cube {
             }) {
                 let mut end = pt;
                 for _ in 1..side_len {
-                    end = end.step_dir(edge.dir);
+                    end = end.try_step_dir(edge.dir).unwrap();
                 }
                 *edge = Edge {
                     start: pt,
@@ -290,7 +290,7 @@ impl Cube {
             }) {
                 let mut end = pt;
                 for _ in 1..side_len {
-                    end = end.step_dir(edge.dir.clockwise_90());
+                    end = end.try_step_dir(edge.dir.clockwise_90()).unwrap();
                 }
                 *edge = Edge {
                     start: pt,
@@ -305,7 +305,7 @@ impl Cube {
         // outer edge
         let mut end = edge.end;
         for _ in 1..side_len {
-            end = end.step_dir(edge.dir.clockwise_90().clockwise_90());
+            end = end.try_step_dir(edge.dir.clockwise_90().clockwise_90()).unwrap();
         }
         *edge = Edge {
             start: edge.end,
@@ -372,8 +372,8 @@ impl Cube {
                 );
             }
             if i < side_len - 1 {
-                pt1 = pt1.step_dir(e1.dir.clockwise_90());
-                pt2 = pt2.step_dir(e2.dir.counterclockwise_90());
+                pt1 = pt1.try_step_dir(e1.dir.clockwise_90()).unwrap();
+                pt2 = pt2.try_step_dir(e2.dir.counterclockwise_90()).unwrap();
             }
         }
     }
