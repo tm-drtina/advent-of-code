@@ -45,18 +45,30 @@ pub fn run(input: &str) -> usize {
     let (mut maze, start_point) = Maze::load(input);
     let state = State {
         positions: [
-            start_point.top_left(),
-            start_point.top_right(),
+            start_point
+                .try_top_left()
+                .expect("Top left should be valid coord"),
+            start_point
+                .try_top_right()
+                .expect("Top right should be valid coord"),
             start_point.bottom_right(),
-            start_point.bottom_left(),
+            start_point
+                .try_bottom_left()
+                .expect("Bottom left should be valid coord"),
         ],
         keys: Keys::new(),
     };
     maze.map.set(start_point, Tile::Wall);
-    maze.map.set(start_point.top(), Tile::Wall);
+    maze.map.set(
+        start_point.try_top().expect("Top should be valid coord"),
+        Tile::Wall,
+    );
     maze.map.set(start_point.right(), Tile::Wall);
     maze.map.set(start_point.bottom(), Tile::Wall);
-    maze.map.set(start_point.left(), Tile::Wall);
+    maze.map.set(
+        start_point.try_left().expect("Left should be valid coord"),
+        Tile::Wall,
+    );
 
     let cache = Cache::new(Box::new(move |state, cache| compute(&maze, state, cache)));
     cache.get_or_compute(state)

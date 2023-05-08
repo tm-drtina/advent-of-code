@@ -63,8 +63,8 @@ impl Puzzle {
             }
             if !self.blocked.contains(&pos.bottom()) {
                 pos = pos.bottom();
-            } else if !self.blocked.contains(&pos.bottom_left()) {
-                pos = pos.bottom_left();
+            } else if !self.blocked.contains(&pos.try_bottom_left().unwrap()) {
+                pos = pos.try_bottom_left().unwrap();
             } else if !self.blocked.contains(&pos.bottom_right()) {
                 pos = pos.bottom_right();
             } else {
