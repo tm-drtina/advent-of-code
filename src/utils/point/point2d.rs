@@ -1,4 +1,4 @@
-use num::{Integer, Unsigned, Signed};
+use num::{Integer, Signed, Unsigned};
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

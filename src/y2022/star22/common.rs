@@ -305,7 +305,9 @@ impl Cube {
         // outer edge
         let mut end = edge.end;
         for _ in 1..side_len {
-            end = end.try_step_dir(edge.dir.clockwise_90().clockwise_90()).unwrap();
+            end = end
+                .try_step_dir(edge.dir.clockwise_90().clockwise_90())
+                .unwrap();
         }
         *edge = Edge {
             start: edge.end,
