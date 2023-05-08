@@ -106,10 +106,10 @@ impl Stone {
                 if self
                     .0
                     .iter()
-                    .all(|p| p.x > 0 && !blocked.contains(&p.left()))
+                    .all(|p| p.x > 0 && !blocked.contains(&p.try_left().unwrap()))
                 {
                     for p in &mut self.0 {
-                        *p = p.left();
+                        *p = p.try_left().unwrap();
                     }
                 }
             }
@@ -131,10 +131,10 @@ impl Stone {
         if self
             .0
             .iter()
-            .all(|p| p.y > 1 && !blocked.contains(&p.top()))
+            .all(|p| p.y > 1 && !blocked.contains(&p.try_top().unwrap()))
         {
             for p in &mut self.0 {
-                *p = p.top();
+                *p = p.try_top().unwrap();
             }
             self.1 -= 1;
             true

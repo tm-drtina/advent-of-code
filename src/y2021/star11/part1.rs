@@ -11,8 +11,7 @@ pub(super) fn step(map: &mut Vec<Vec<u8>>) -> usize {
         }
     }
 
-    while !q.is_empty() {
-        let (x1, y1) = q.pop().unwrap();
+    while let Some((x1, y1)) = q.pop() {
         #[allow(clippy::needless_range_loop)]
         for x in (x1.max(1) - 1)..=(x1.min(8) + 1) {
             for y in (y1.max(1) - 1)..=(y1.min(8) + 1) {

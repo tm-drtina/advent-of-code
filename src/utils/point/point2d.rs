@@ -1,4 +1,4 @@
-use num::{Integer, Unsigned};
+use num::{Integer, Signed, Unsigned};
 
 #[allow(dead_code)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -48,6 +48,29 @@ pub struct Point2D<Coord: Integer> {
 }
 
 impl<Coord: Integer + Copy> Point2D<Coord> {
+    pub fn right(&self) -> Self {
+        Self {
+            x: self.x + Coord::one(),
+            y: self.y,
+        }
+    }
+
+    pub fn bottom_right(&self) -> Self {
+        Self {
+            x: self.x + Coord::one(),
+            y: self.y + Coord::one(),
+        }
+    }
+
+    pub fn bottom(&self) -> Self {
+        Self {
+            x: self.x,
+            y: self.y + Coord::one(),
+        }
+    }
+}
+
+impl<Coord: Integer + Copy + Signed> Point2D<Coord> {
     #[allow(dead_code)]
     pub fn step_dir(&self, dir: Dir) -> Self {
         match dir {
@@ -80,27 +103,6 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
         Self {
             x: self.x + Coord::one(),
             y: self.y - Coord::one(),
-        }
-    }
-
-    pub fn right(&self) -> Self {
-        Self {
-            x: self.x + Coord::one(),
-            y: self.y,
-        }
-    }
-
-    pub fn bottom_right(&self) -> Self {
-        Self {
-            x: self.x + Coord::one(),
-            y: self.y + Coord::one(),
-        }
-    }
-
-    pub fn bottom(&self) -> Self {
-        Self {
-            x: self.x,
-            y: self.y + Coord::one(),
         }
     }
 
@@ -137,7 +139,6 @@ impl<Coord: Integer + Copy> Point2D<Coord> {
     }
 }
 
-#[allow(clippy::unnecessary_wraps)]
 impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
     #[allow(dead_code)]
     pub fn try_step_dir(&self, dir: Dir) -> Option<Self> {
@@ -145,9 +146,9 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
             Dir::TopLeft => self.try_top_left(),
             Dir::Top => self.try_top(),
             Dir::TopRight => self.try_top_right(),
-            Dir::Right => self.try_right(),
-            Dir::BottomRight => self.try_bottom_right(),
-            Dir::Bottom => self.try_bottom(),
+            Dir::Right => Some(self.right()),
+            Dir::BottomRight => Some(self.bottom_right()),
+            Dir::Bottom => Some(self.bottom()),
             Dir::BottomLeft => self.try_bottom_left(),
             Dir::Left => self.try_left(),
         }
@@ -183,27 +184,6 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
         })
     }
 
-    pub fn try_right(&self) -> Option<Self> {
-        Some(Self {
-            x: self.x + Coord::one(),
-            y: self.y,
-        })
-    }
-
-    pub fn try_bottom_right(&self) -> Option<Self> {
-        Some(Self {
-            x: self.x + Coord::one(),
-            y: self.y + Coord::one(),
-        })
-    }
-
-    pub fn try_bottom(&self) -> Option<Self> {
-        Some(Self {
-            x: self.x,
-            y: self.y + Coord::one(),
-        })
-    }
-
     pub fn try_bottom_left(&self) -> Option<Self> {
         if self.x.is_zero() {
             return None;
@@ -228,8 +208,8 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
     pub fn try_four_neighborhood(&self) -> Vec<Self> {
         vec![
             self.try_top(),
-            self.try_right(),
-            self.try_bottom(),
+            Some(self.right()),
+            Some(self.bottom()),
             self.try_left(),
         ]
         .into_iter()
@@ -243,9 +223,9 @@ impl<Coord: Integer + Copy + Unsigned> Point2D<Coord> {
             self.try_top_left(),
             self.try_top(),
             self.try_top_right(),
-            self.try_right(),
-            self.try_bottom_right(),
-            self.try_bottom(),
+            Some(self.right()),
+            Some(self.bottom_right()),
+            Some(self.bottom()),
             self.try_bottom_left(),
             self.try_left(),
         ]

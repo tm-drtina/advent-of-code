@@ -33,8 +33,7 @@ fn find_bubble(p: Point, points: &mut HashSet<Point>, pmin: Point, pmax: Point) 
     }
     let mut to_visit = vec![p];
     let mut res = 0;
-    while !to_visit.is_empty() {
-        let point = to_visit.pop().unwrap();
+    while let Some(point) = to_visit.pop() {
         if !visited.insert(point) {
             continue;
         }
