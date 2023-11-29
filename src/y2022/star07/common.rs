@@ -32,9 +32,18 @@ impl Node {
     }
 
     pub(super) fn load(&mut self, lines: &mut Lines<'static>) -> Result<usize> {
-        let Node::Dir { name: _, size, childs } = self else { unreachable!("Cannot load files!") };
+        let Node::Dir {
+            name: _,
+            size,
+            childs,
+        } = self
+        else {
+            unreachable!("Cannot load files!")
+        };
         loop {
-            let Some(line) = lines.next() else { return Ok(*size) };
+            let Some(line) = lines.next() else {
+                return Ok(*size);
+            };
             match line {
                 "$ ls" => {}
                 "$ cd .." => {
