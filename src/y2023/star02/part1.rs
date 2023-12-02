@@ -2,11 +2,11 @@ use std::str::FromStr;
 
 use anyhow::{anyhow, bail, Result};
 
-struct Game {
+pub(super) struct Game {
     id: usize,
-    red: usize,
-    green: usize,
-    blue: usize,
+    pub(super) red: usize,
+    pub(super) green: usize,
+    pub(super) blue: usize,
 }
 
 impl FromStr for Game {
