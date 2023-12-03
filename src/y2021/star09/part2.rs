@@ -1,6 +1,6 @@
 use std::collections::VecDeque;
 
-fn fill(row: usize, col: usize, map: &mut Vec<Vec<u32>>) -> usize {
+fn fill(row: usize, col: usize, map: &mut [Vec<u32>]) -> usize {
     let mut q = VecDeque::new();
     q.push_back((row, col));
     let mut count = 0;
