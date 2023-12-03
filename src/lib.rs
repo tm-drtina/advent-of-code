@@ -15,7 +15,8 @@
     clippy::module_name_repetitions,
     clippy::similar_names,
     clippy::bool_to_int_with_if,
-    clippy::missing_errors_doc
+    clippy::missing_errors_doc,
+    clippy::struct_field_names
 )]
 
 #[cfg(test)]
