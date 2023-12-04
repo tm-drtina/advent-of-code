@@ -61,14 +61,15 @@ into_result_impl!(u32, u64, usize, i32, i64, isize, String);
 macro_rules! aoc_test_suite {
     ($func:path, ($name:ident, $expected:expr $(, $input:expr)+ $(,)?) $(,)?) => {
         #[test]
-        fn $name() {
+        fn $name() -> anyhow::Result<()>{
             let expected = $expected;
             let start = std::time::Instant::now();
             let actual = $func($($input, )+);
             let elapsed = start.elapsed();
             eprintln!("Test {}::{} ran in {:#?}", module_path!(), stringify!($name), elapsed);
-            let actual = $crate::IntoResult::into_result(actual).unwrap();
+            let actual = $crate::IntoResult::into_result(actual)?;
             assert_eq!(expected, actual);
+            Ok(())
         }
     };
     ($func:path, ($name:ident, $expected:expr $(, $input:expr)+ $(,)?) $(, ($name_tail:ident, $expected_tail:expr $(, $input_tail:expr)+ $(,)?))+ $(,)?) => {
