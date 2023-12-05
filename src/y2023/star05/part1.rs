@@ -45,7 +45,7 @@ impl FromStr for Puzzle {
 
         while let Some(_) = lines.next() {
             let mut mapping = Mapping { data: Vec::new() };
-            while let Some(m) = lines.next() {
+            for m in lines.by_ref() {
                 if m.is_empty() {
                     break;
                 }
