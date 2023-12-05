@@ -16,6 +16,38 @@ impl Mapping {
         }
         value
     }
+
+    fn map_range(&self, mut value: Range<u64>) -> Vec<Range<u64>> {
+        let mut results = Vec::new();
+        let mut ranges = &self.data[..];
+        loop {
+            while !ranges.is_empty() && ranges[0].0.end <= value.start {
+                ranges = &ranges[1..];
+            }
+            if ranges.is_empty() || ranges[0].0.start >= value.end {
+                results.push(value);
+                return results;
+            }
+            if ranges[0].0.start > value.start {
+                results.push(value.start..ranges[0].0.start);
+                value = ranges[0].0.start..value.end;
+            }
+            if value.is_empty() {
+                return results;
+            }
+            let offset = value.start - ranges[0].0.start;
+            if ranges[0].0.end >= value.end {
+                results.push(
+                    ranges[0].1.start + offset
+                        ..(ranges[0].1.start + offset + value.end - value.start),
+                );
+                return results;
+            }
+            let overlap = ranges[0].0.end - value.start;
+            results.push(ranges[0].1.start + offset..ranges[0].1.start + offset + overlap);
+            value = value.start + overlap..value.end;
+        }
+    }
 }
 
 pub(super) struct Puzzle {
@@ -67,6 +99,7 @@ impl FromStr for Puzzle {
                     dest_start..dest_start + length,
                 ));
             }
+            mapping.data.sort_unstable_by_key(|(k, _v)| k.start);
             puzzle.mappings.push(mapping);
         }
 
@@ -79,6 +112,20 @@ impl Puzzle {
         self.mappings
             .iter()
             .fold(s, |prev, mapping| mapping.map(prev))
+    }
+
+    pub(super) fn min_by_map(&self, range: Range<u64>) -> u64 {
+        self.mappings
+            .iter()
+            .fold(vec![range], |prev, mapping| {
+                prev.into_iter()
+                    .flat_map(|r| mapping.map_range(r))
+                    .collect()
+            })
+            .into_iter()
+            .map(|r| r.start)
+            .min()
+            .unwrap()
     }
 }
 
