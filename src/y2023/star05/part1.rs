@@ -18,8 +18,8 @@ impl Mapping {
     }
 }
 
-struct Puzzle {
-    initial_seeds: Vec<u64>,
+pub(super) struct Puzzle {
+    pub(super) initial_seeds: Vec<u64>,
     mappings: Vec<Mapping>,
 }
 
@@ -74,17 +74,20 @@ impl FromStr for Puzzle {
     }
 }
 
+impl Puzzle {
+    pub(super) fn map(&self, s: u64) -> u64 {
+        self.mappings
+            .iter()
+            .fold(s, |prev, mapping| mapping.map(prev))
+    }
+}
+
 pub fn run(input: &str) -> Result<u64> {
     let puzzle: Puzzle = input.parse()?;
     puzzle
         .initial_seeds
         .iter()
-        .map(|s| {
-            puzzle
-                .mappings
-                .iter()
-                .fold(*s, |prev, mapping| mapping.map(prev))
-        })
+        .map(|s| puzzle.map(*s))
         .min()
         .ok_or(anyhow!("No initial seeds"))
 }
