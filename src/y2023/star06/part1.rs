@@ -12,10 +12,16 @@ impl Race {
         // n * (time - n) > distance
         // time > n > 0
         // -> -n^2 + time*n - distance = 0
-        // integers between 
+        // integers between
         // (time +- sqrt(time*time - 4*distance)) / 2
-        let mut lower_bound = ((f64::from(self.time) - f64::from(self.time*self.time - 4*self.distance).sqrt()) / 2.0).ceil() as u32;
-        let mut upper_bound = ((f64::from(self.time) + f64::from(self.time*self.time - 4*self.distance).sqrt()) / 2.0).floor() as u32;
+        let mut lower_bound = ((f64::from(self.time)
+            - f64::from(self.time * self.time - 4 * self.distance).sqrt())
+            / 2.0)
+            .ceil() as u32;
+        let mut upper_bound = ((f64::from(self.time)
+            + f64::from(self.time * self.time - 4 * self.distance).sqrt())
+            / 2.0)
+            .floor() as u32;
         upper_bound = upper_bound.clamp(0, self.time);
         lower_bound = lower_bound.clamp(0, self.time);
         if lower_bound * (self.time - lower_bound) <= self.distance {
@@ -64,5 +70,10 @@ impl FromStr for Puzzle {
 }
 
 pub fn run(input: &str) -> Result<u32> {
-    Ok(input.parse::<Puzzle>()?.0.into_iter().map(|r| r.count_wins()).product())
+    Ok(input
+        .parse::<Puzzle>()?
+        .0
+        .into_iter()
+        .map(|r| r.count_wins())
+        .product())
 }

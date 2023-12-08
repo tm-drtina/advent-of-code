@@ -12,10 +12,16 @@ impl Race {
         // n * (time - n) > distance
         // time > n > 0
         // -> -n^2 + time*n - distance = 0
-        // integers between 
+        // integers between
         // (time +- sqrt(time*time - 4*distance)) / 2
-        let mut lower_bound = ((self.time as f64 - ((self.time*self.time - 4*self.distance) as f64).sqrt()) / 2.0).ceil() as u64;
-        let mut upper_bound = ((self.time as f64 + ((self.time*self.time - 4*self.distance) as f64).sqrt()) / 2.0).floor() as u64;
+        let mut lower_bound = ((self.time as f64
+            - ((self.time * self.time - 4 * self.distance) as f64).sqrt())
+            / 2.0)
+            .ceil() as u64;
+        let mut upper_bound = ((self.time as f64
+            + ((self.time * self.time - 4 * self.distance) as f64).sqrt())
+            / 2.0)
+            .floor() as u64;
         upper_bound = upper_bound.clamp(0, self.time);
         lower_bound = lower_bound.clamp(0, self.time);
         if lower_bound * (self.time - lower_bound) <= self.distance {
@@ -50,10 +56,7 @@ impl FromStr for Race {
             .parse()
             .context("Failed to parse distance")?;
 
-        Ok(Race {
-            time,
-            distance,
-        })
+        Ok(Race { time, distance })
     }
 }
 
