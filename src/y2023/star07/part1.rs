@@ -67,7 +67,7 @@ impl FromStr for Hand {
 pub fn run(input: &str) -> Result<usize> {
     let mut hands = input
         .lines()
-        .map(|l| l.parse::<Hand>())
+        .map(str::parse::<Hand>)
         .collect::<Result<Vec<_>>>()?;
     hands.sort_unstable_by(|a, b| {
         a.hand_type
