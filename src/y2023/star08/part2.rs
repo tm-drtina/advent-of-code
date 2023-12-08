@@ -6,8 +6,10 @@ use anyhow::Result;
 
 use super::part1::{GoalIter, Loc, Puzzle};
 
+type Step = (Loc, usize);
+
 impl GoalIter<'_> {
-    fn find_end_pos(self) -> (Loc, usize) {
+    fn find_end_pos(self) -> Step {
         for (i, pos) in self.enumerate() {
             if pos & 255 == b'Z' as Loc {
                 return (pos, i + 1);
@@ -19,8 +21,8 @@ impl GoalIter<'_> {
 
 struct MergedIter<T>(T, T);
 
-impl<T: Iterator<Item = (Loc, usize)>> Iterator for MergedIter<T> {
-    type Item = (Loc, usize);
+impl<T: Iterator<Item = Step>> Iterator for MergedIter<T> {
+    type Item = Step;
 
     fn next(&mut self) -> Option<Self::Item> {
         let (mut pos1, mut steps1) = self.0.next()?;
@@ -31,13 +33,13 @@ impl<T: Iterator<Item = (Loc, usize)>> Iterator for MergedIter<T> {
                     let (a, b) = self.0.next()?;
                     pos1 = a;
                     steps1 += b;
-                },
+                }
                 Ordering::Equal => {
                     break Some((pos1, steps1));
-                },
+                }
                 Ordering::Greater => {
                     steps2 += self.1.next()?.1;
-                },
+                }
             }
         }
     }
@@ -46,19 +48,17 @@ impl<T: Iterator<Item = (Loc, usize)>> Iterator for MergedIter<T> {
 struct State {
     start: Loc,
     steps: usize,
-    increments: Vec<(Loc, usize)>,
-    cycle: Vec<(Loc, usize)>,
+    increments: Vec<Step>,
+    cycle: Vec<Step>,
 }
 
 impl State {
-    fn compute_increment_cycle(
-        it: impl Iterator<Item = (Loc, usize)>,
-    ) -> (Vec<(Loc, usize)>, Vec<(Loc, usize)>) {
-        let mut transitions: Vec<(Loc, usize)> = Vec::new();
+    fn compute_increment_cycle(it: impl Iterator<Item = Step>) -> (Vec<Step>, Vec<Step>) {
+        let mut transitions = Vec::<Step>::new();
         for a in it {
             if let Some(pos) = transitions.iter().position(|b| a.0 == b.0) {
                 let increments = transitions[..=pos].to_vec();
-                let mut cycle = transitions[(pos+1)..].to_vec();
+                let mut cycle = transitions[(pos + 1)..].to_vec();
                 cycle.push(a);
                 return (increments, cycle);
             }
@@ -68,11 +68,10 @@ impl State {
     }
 
     fn new(start: Loc, steps: usize, transitions: &HashMap<Loc, (Loc, usize)>) -> Self {
-        let (increments, cycle) = Self::compute_increment_cycle(
-            successors(transitions.get(&start).copied(), |prev| {
+        let (increments, cycle) =
+            Self::compute_increment_cycle(successors(transitions.get(&start).copied(), |prev| {
                 transitions.get(&prev.0).copied()
-            }),
-        );
+            }));
         Self {
             start,
             steps,
@@ -127,8 +126,7 @@ impl Puzzle {
             .map(|p| (p, self.goal_iter(p).find_end_pos()))
             .collect();
 
-        self
-            .transitions
+        self.transitions
             .keys()
             .copied()
             .filter(|p| p & 255 == b'A' as Loc)
