@@ -4,9 +4,9 @@ use std::str::FromStr;
 
 use anyhow::{anyhow, bail, Result};
 
-type Loc = u32;
+pub(super) type Loc = u32;
 
-const fn encode(s: &str) -> Loc {
+pub(super) const fn encode(s: &str) -> Loc {
     let b = s.as_bytes();
 
     ((b[0] as Loc) << 16) + ((b[1] as Loc) << 8) + (b[2] as Loc)
@@ -16,14 +16,14 @@ const START: Loc = encode("AAA");
 const END: Loc = encode("ZZZ");
 
 #[derive(Debug, Clone, Copy)]
-enum Dir {
+pub(super) enum Dir {
     Left,
     Right,
 }
 
-struct Puzzle {
-    seq: Vec<Dir>,
-    transitions: HashMap<Loc, (Loc, Loc)>,
+pub(super) struct Puzzle {
+    pub(super) seq: Vec<Dir>,
+    pub(super) transitions: HashMap<Loc, (Loc, Loc)>,
 }
 
 impl FromStr for Puzzle {
@@ -59,28 +59,25 @@ impl FromStr for Puzzle {
 }
 
 impl Puzzle {
-    fn into_goal_iter(self) -> GoalIter {
+    pub(super) fn goal_iter(&self, start: Loc) -> GoalIter<'_> {
         GoalIter {
-            pos: START,
-            transitions: self.transitions,
-            seq: self.seq.into_iter().cycle(),
+            pos: start,
+            transitions: &self.transitions,
+            seq: self.seq.iter().cycle(),
         }
     }
 }
 
-struct GoalIter {
+pub(super) struct GoalIter<'a> {
     pos: Loc,
-    transitions: HashMap<Loc, (Loc, Loc)>,
-    seq: Cycle<<Vec<Dir> as IntoIterator>::IntoIter>,
+    transitions: &'a HashMap<Loc, (Loc, Loc)>,
+    seq: Cycle<std::slice::Iter<'a, Dir>>,
 }
 
-impl Iterator for GoalIter {
+impl<'a> Iterator for GoalIter<'a> {
     type Item = Loc;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.pos == END {
-            return None;
-        }
         let dir = self.seq.next().unwrap();
         let transition = *self.transitions.get(&self.pos).unwrap();
         self.pos = match dir {
@@ -92,5 +89,10 @@ impl Iterator for GoalIter {
 }
 
 pub fn run(input: &str) -> Result<usize> {
-    Ok(input.parse::<Puzzle>()?.into_goal_iter().count())
+    Ok(input
+        .parse::<Puzzle>()?
+        .goal_iter(START)
+        .take_while(|p| *p != END)
+        .count()
+        + 1)
 }
