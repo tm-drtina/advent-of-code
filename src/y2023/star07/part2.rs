@@ -3,7 +3,7 @@ use std::str::FromStr;
 use anyhow::{anyhow, Result};
 
 const CARDS: [char; 13] = [
-    'A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2',
+    'A', 'K', 'Q', 'T', '9', '8', '7', '6', '5', '4', '3', '2', 'J',
 ];
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
@@ -43,9 +43,10 @@ impl FromStr for Hand {
         for &card in &cards {
             counts[card] += 1;
         }
+        let jokers = counts[12];
         let hand_type = match (
-            counts.iter().filter(|a| **a != 0).count(),
-            counts.iter().max().unwrap(),
+            counts[..12].iter().filter(|a| **a != 0).count().max(1),
+            counts[..12].iter().max().unwrap() + jokers,
         ) {
             (5, _) => HandType::HighCard,
             (4, _) => HandType::OnePair,
