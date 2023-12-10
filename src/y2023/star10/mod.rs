@@ -1,5 +1,5 @@
 pub mod part1;
-// pub mod part2;
+pub mod part2;
 
 #[cfg(test)]
 mod tests {
@@ -22,10 +22,11 @@ mod tests {
         ),
     );
 
-    // aoc_test_suite!(
-    //     super::part2::run,
-    //     (part2_main, 369, include_str!("input.txt")),
-    //     (part2_sanity1, 3, include_str!("input.sanity1.txt")),
-    //     (part2_sanity2, 6, include_str!("input.sanity2.txt")),
-    // );
+    aoc_test_suite!(
+        super::part2::run,
+        (part2_main, 287, include_str!("input.txt")),
+        (part2_sanity3, 4, include_str!("input.sanity3.txt")),
+        (part2_sanity4, 8, include_str!("input.sanity4.txt")),
+        (part2_sanity5, 10, include_str!("input.sanity5.txt")),
+    );
 }
