@@ -82,4 +82,12 @@ impl<T> Map<T> {
 
         points
     }
+
+    pub fn iter_values(&self) -> impl Iterator<Item = (Point2D<usize>, &T)> {
+        self.map.iter().enumerate().flat_map(|(y, line)| {
+            line.iter()
+                .enumerate()
+                .map(move |(x, val)| (Point2D { x, y }, val))
+        })
+    }
 }
