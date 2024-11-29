@@ -49,8 +49,8 @@ impl FromStr for Snafu {
     }
 }
 
-impl ToString for Snafu {
-    fn to_string(&self) -> String {
+impl Snafu {
+    fn process(self) -> String {
         let mut bytes = Vec::<u8>::new();
         let mut v = self.0;
         while v != 0 {
@@ -76,5 +76,5 @@ pub fn run(input: &str) -> Result<String> {
         .collect::<Result<Vec<Snafu>>>()?
         .into_iter()
         .sum::<Snafu>()
-        .to_string())
+        .process())
 }
