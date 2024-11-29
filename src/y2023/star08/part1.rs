@@ -74,7 +74,7 @@ pub(super) struct GoalIter<'a> {
     seq: Cycle<std::slice::Iter<'a, Dir>>,
 }
 
-impl<'a> Iterator for GoalIter<'a> {
+impl Iterator for GoalIter<'_> {
     type Item = Loc;
 
     fn next(&mut self) -> Option<Self::Item> {

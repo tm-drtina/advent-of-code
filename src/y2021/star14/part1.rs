@@ -36,7 +36,7 @@ pub(super) fn score(mut template: Vec<char>) -> usize {
     let ((_min_char, min_count), (_max_char, max_count)) = template
         .clone()
         .into_iter()
-        .group_by(|x| *x)
+        .chunk_by(|x| *x)
         .into_iter()
         .map(|(ch, l)| (ch, l.into_iter().count()))
         .minmax_by_key(|(_ch, len)| *len)
