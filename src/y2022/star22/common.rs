@@ -266,7 +266,7 @@ impl Cube {
             .try_step_dir(edge.dir)
             .and_then(|p| p.try_step_dir(edge.dir.clockwise_90()))
         {
-            if puzzle.map.get(y).map_or(false, |row| {
+            if puzzle.map.get(y).is_some_and(|row| {
                 matches!(row.get(x), Some(Node::Empty | Node::Wall))
             }) {
                 let mut end = pt;
@@ -285,7 +285,7 @@ impl Cube {
 
         // try straight
         if let Some(pt @ Point2D { x, y }) = edge.end.try_step_dir(edge.dir.clockwise_90()) {
-            if puzzle.map.get(y).map_or(false, |row| {
+            if puzzle.map.get(y).is_some_and(|row| {
                 matches!(row.get(x), Some(Node::Empty | Node::Wall))
             }) {
                 let mut end = pt;
