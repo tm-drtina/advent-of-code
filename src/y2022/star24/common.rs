@@ -164,7 +164,7 @@ impl FromStr for Map {
         for (y, line) in s.lines().enumerate() {
             height += 1;
             if y == 0 {
-                width = line.as_bytes().len();
+                width = line.len();
             }
             for (x, b) in line.bytes().enumerate() {
                 match b {

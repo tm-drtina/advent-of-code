@@ -24,7 +24,7 @@ impl<'a> HexStringIter<'a> {
         res
     }
 }
-impl<'a> Iterator for HexStringIter<'a> {
+impl Iterator for HexStringIter<'_> {
     type Item = u8;
 
     fn next(&mut self) -> Option<Self::Item> {

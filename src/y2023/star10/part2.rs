@@ -84,14 +84,10 @@ impl Iterator for State {
             '-' if self.next.x == self.position.try_left().unwrap().x => {
                 self.next.try_left().unwrap()
             }
-            'L' if self.next.x == self.position.x => self.next.right(),
-            'L' if self.next.y == self.position.y => self.next.try_top().unwrap(),
-            'J' if self.next.x == self.position.x => self.next.try_left().unwrap(),
-            'J' if self.next.y == self.position.y => self.next.try_top().unwrap(),
-            '7' if self.next.x == self.position.x => self.next.try_left().unwrap(),
-            '7' if self.next.y == self.position.y => self.next.bottom(),
-            'F' if self.next.x == self.position.x => self.next.right(),
-            'F' if self.next.y == self.position.y => self.next.bottom(),
+            'F' | 'L' if self.next.x == self.position.x => self.next.right(),
+            'L' | 'J' if self.next.y == self.position.y => self.next.try_top().unwrap(),
+            'J' | '7' if self.next.x == self.position.x => self.next.try_left().unwrap(),
+            '7' | 'F' if self.next.y == self.position.y => self.next.bottom(),
             ch => unreachable!("Invalid next point {ch}"),
         };
         self.position = self.next;
