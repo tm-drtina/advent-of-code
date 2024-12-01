@@ -29,6 +29,7 @@ pub mod y2020;
 pub mod y2021;
 pub mod y2022;
 pub mod y2023;
+pub mod y2024;
 
 #[allow(dead_code)] // False positive detection :(
 pub(crate) trait IntoResult<T> {
