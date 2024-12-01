@@ -20,8 +20,8 @@ pub fn run(input: &str) -> Result<usize> {
                 .context("Failed to parse input number")?,
         );
     }
-    left.sort();
-    right.sort();
+    left.sort_unstable();
+    right.sort_unstable();
 
     Ok(left.into_iter().zip(right).map(|(l, r)| l.abs_diff(r)).sum())
 }
