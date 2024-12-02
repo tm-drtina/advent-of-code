@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use anyhow::Result;
 
-struct Report(Vec<usize>);
+pub(super) struct Report(pub(super) Vec<usize>);
 
 impl FromStr for Report {
     type Err = anyhow::Error;
