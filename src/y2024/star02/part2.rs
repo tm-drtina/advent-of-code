@@ -11,7 +11,12 @@ impl Report {
     fn is_safe_with_removal(&self) -> bool {
         'outer: for i in 0..(self.0.len()) {
             let mut ord = Ordering::Equal;
-            for (prev, next) in self.0.iter().skip_iter(&[i]).zip(self.0.iter().skip_iter(&[i]).skip(1)) {
+            for (prev, next) in self
+                .0
+                .iter()
+                .skip_iter(&[i])
+                .zip(self.0.iter().skip_iter(&[i]).skip(1))
+            {
                 let diff = prev.abs_diff(*next);
                 if diff == 0 || diff > 3 {
                     continue 'outer;

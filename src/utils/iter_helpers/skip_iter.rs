@@ -13,7 +13,7 @@ where
 
     fn next(&mut self) -> Option<Self::Item> {
         let (index, next) = self.parent.next()?;
-        
+
         if self.skip.contains(&index) {
             self.next()
         } else {
