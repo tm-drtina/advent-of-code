@@ -24,7 +24,7 @@ impl Report {
             }
             return true;
         }
-        return false;
+        false
     }
 }
 

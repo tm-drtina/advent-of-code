@@ -32,7 +32,7 @@ impl Report {
                 return false;
             }
         }
-        return true;
+        true
     }
 }
 

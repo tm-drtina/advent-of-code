@@ -5,7 +5,7 @@ pub struct SkipIter<'s, I: Iterator> {
     pub(super) skip: &'s [usize],
 }
 
-impl<'s, I> Iterator for SkipIter<'s, I>
+impl<I> Iterator for SkipIter<'_, I>
 where
     I: Iterator,
 {
