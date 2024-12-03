@@ -3,15 +3,15 @@ use std::str::FromStr;
 
 use anyhow::Result;
 
+use crate::utils::IterHelpers;
+
 use super::part1::Report;
 
 impl Report {
     fn is_safe_with_removal(&self) -> bool {
-        'outer: for i in 0..(self.0.len() - 1) {
-            let mut data = self.0.clone();
-            data.remove(i);
+        'outer: for i in 0..(self.0.len()) {
             let mut ord = Ordering::Equal;
-            for (prev, next) in data.iter().zip(data.iter().skip(1)) {
+            for (prev, next) in self.0.iter().skip_iter(&[i]).zip(self.0.iter().skip_iter(&[i]).skip(1)) {
                 let diff = prev.abs_diff(*next);
                 if diff == 0 || diff > 3 {
                     continue 'outer;
