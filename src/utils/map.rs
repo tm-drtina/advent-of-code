@@ -90,4 +90,8 @@ impl<T> Map<T> {
                 .map(move |(x, val)| (Point2D { x, y }, val))
         })
     }
+
+    pub fn is_valid_point(&self, pt: &Point2D<usize>) -> bool {
+        pt.x < self.width && pt.y < self.height
+    }
 }
