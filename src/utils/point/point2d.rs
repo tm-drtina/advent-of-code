@@ -1,3 +1,5 @@
+use std::slice::Iter;
+
 use num::{Integer, Signed, Unsigned};
 
 #[allow(dead_code)]
@@ -38,6 +40,20 @@ impl Dir {
             Self::BottomLeft => Self::BottomRight,
             Self::Left => Self::Bottom,
         }
+    }
+
+    pub fn iter() -> Iter<'static, Self> {
+        static DIRECTIONS: [Dir; 8] = [
+            Dir::TopLeft,
+            Dir::Top,
+            Dir::TopRight,
+            Dir::Right,
+            Dir::BottomRight,
+            Dir::Bottom,
+            Dir::BottomLeft,
+            Dir::Left,
+        ];
+        DIRECTIONS.iter()
     }
 }
 
