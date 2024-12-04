@@ -50,6 +50,14 @@ impl<T> Map<T> {
         &self.map[point.y][point.x]
     }
 
+    pub fn try_at(&self, point: Point2D<usize>) -> Option<&T> {
+        if self.is_valid_point(&point) {
+            Some(&self.map[point.y][point.x])
+        } else {
+            None
+        }
+    }
+
     pub fn four_neighborhood(&self, point: Point2D<usize>) -> Vec<Point2D<usize>> {
         let mut points = Vec::with_capacity(4);
         if point.x > 0 {
@@ -89,5 +97,9 @@ impl<T> Map<T> {
                 .enumerate()
                 .map(move |(x, val)| (Point2D { x, y }, val))
         })
+    }
+
+    pub fn is_valid_point(&self, pt: &Point2D<usize>) -> bool {
+        pt.x < self.width && pt.y < self.height
     }
 }
