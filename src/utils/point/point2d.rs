@@ -3,7 +3,7 @@ use std::slice::Iter;
 use num::{Integer, Signed, Unsigned};
 
 #[allow(dead_code)]
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord)]
 pub enum Dir {
     TopLeft,
     Top,
