@@ -1,5 +1,6 @@
 use crate::utils::point::Point2D;
 
+#[derive(Clone)]
 pub struct Map<T> {
     map: Vec<Vec<T>>,
     width: usize,
@@ -48,6 +49,10 @@ impl<T> Map<T> {
 
     pub fn at(&self, point: Point2D<usize>) -> &T {
         &self.map[point.y][point.x]
+    }
+
+    pub fn at_mut(&mut self, point: Point2D<usize>) -> &mut T {
+        &mut self.map[point.y][point.x]
     }
 
     pub fn try_at(&self, point: Point2D<usize>) -> Option<&T> {
