@@ -4,9 +4,9 @@ use std::str::FromStr;
 use anyhow::{Context, Result, anyhow};
 
 #[derive(Debug)]
-struct Equation {
-    result: usize,
-    operands: Vec<usize>,
+pub struct Equation {
+    pub result: usize,
+    pub operands: Vec<usize>,
 }
 
 impl FromStr for Equation {
