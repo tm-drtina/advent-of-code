@@ -6,10 +6,10 @@ use itertools::Itertools;
 
 use crate::utils::point::Point2D;
 
-struct Antennas {
-    antennas: BTreeMap<char, Vec<Point2D<usize>>>,
-    height: usize,
-    width: usize,
+pub struct Antennas {
+    pub antennas: BTreeMap<char, Vec<Point2D<usize>>>,
+    pub height: usize,
+    pub width: usize,
 }
 
 impl FromStr for Antennas {
@@ -38,7 +38,7 @@ impl FromStr for Antennas {
 }
 
 impl Antennas {
-    fn is_valid_point(&self, x: Option<usize>, y: Option<usize>) -> Option<Point2D<usize>> {
+    pub fn is_valid_point(&self, x: Option<usize>, y: Option<usize>) -> Option<Point2D<usize>> {
         let x = x?;
         let y = y?;
         if x >= self.width || y >= self.height {
