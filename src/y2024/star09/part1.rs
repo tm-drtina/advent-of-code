@@ -23,21 +23,18 @@ impl From<(usize, char)> for Field {
 impl Field {
     pub fn length(&self) -> usize {
         match self {
-            Field::Data { length, .. } => *length,
-            Field::Empty(length) => *length,
+            Field::Data { length, .. } | Field::Empty(length) => *length,
         }
     }
 }
 
 struct CompressionIterator {
-    data: VecDeque<Field>
+    data: VecDeque<Field>,
 }
 
 impl CompressionIterator {
     pub fn new(data: VecDeque<Field>) -> Self {
-        Self { 
-            data,
-        }
+        Self { data }
     }
 }
 
@@ -54,10 +51,13 @@ impl Iterator for CompressionIterator {
             Field::Data { value, length } => {
                 *length -= 1;
                 Some(*value)
-            },
+            }
             Field::Empty(length) => {
                 *length -= 1;
-                while matches!(self.data.back()?, Field::Empty(_) | Field::Data {length: 0, ..}) {
+                while matches!(
+                    self.data.back()?,
+                    Field::Empty(_) | Field::Data { length: 0, .. }
+                ) {
                     self.data.pop_back();
                 }
 
@@ -66,11 +66,10 @@ impl Iterator for CompressionIterator {
                     Field::Data { value, length } => {
                         *length -= 1;
                         Some(*value)
-                    },
+                    }
                     Field::Empty(_) => unreachable!("Filtered in previous loop"),
                 }
-
-            },
+            }
         }
     }
 }
