@@ -3,7 +3,7 @@ use std::collections::VecDeque;
 use anyhow::Result;
 
 #[derive(Debug, Clone, Copy)]
-enum Field {
+pub enum Field {
     Data { value: usize, length: usize },
     Empty(usize),
 }
@@ -21,7 +21,7 @@ impl From<(usize, char)> for Field {
     }
 }
 impl Field {
-    fn length(&self) -> usize {
+    pub fn length(&self) -> usize {
         match self {
             Field::Data { length, .. } => *length,
             Field::Empty(length) => *length,
