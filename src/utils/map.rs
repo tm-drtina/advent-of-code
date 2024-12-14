@@ -107,4 +107,27 @@ impl<T> Map<T> {
     pub fn is_valid_point(&self, pt: &Point2D<usize>) -> bool {
         pt.x < self.width && pt.y < self.height
     }
+
+    #[allow(dead_code)]
+    pub fn map<U, M>(&self, mut mapper: M) -> Map<U>
+    where
+        M: FnMut(&T, usize, usize) -> U,
+    {
+        let map = self
+            .map
+            .iter()
+            .enumerate()
+            .map(|(y, row)| {
+                row.iter()
+                    .enumerate()
+                    .map(|(x, item)| mapper(item, x, y))
+                    .collect()
+            })
+            .collect();
+        Map {
+            map,
+            width: self.width,
+            height: self.height,
+        }
+    }
 }
