@@ -9,7 +9,7 @@ pub mod star08;
 pub mod star09;
 pub mod star10;
 pub mod star11;
-// pub mod star12;
+pub mod star12;
 // pub mod star13;
 // pub mod star14;
 // pub mod star15;
