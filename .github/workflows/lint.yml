@@ -10,24 +10,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # toolchain: [nightly] # Would prefer `[stable, beta]`, but we need `version="Two"` in rustfmt.toml
-        toolchain: [stable, beta]
+        toolchain: [stable, beta, nightly]
     steps:
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
           toolchain: ${{ matrix.toolchain }}
           components: rustfmt, clippy
-          override: true
-      - uses: actions/checkout@v2
-      #  rustfmt reformats the code in a weird way, disabled for now
-      #- name: cargo fmt --check
-      #  uses: actions-rs/cargo@v1
-      #  with:
-      #    command: fmt
-      #    args: --check
-      - name: cargo clippy
-        uses: actions-rs/clippy-check@v1
+      - uses: actions/checkout@v6
+      - run: cargo clippy
+      - run: cargo fmt --check
         if: always()
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}

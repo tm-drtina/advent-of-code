@@ -8,19 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     name: cargo deny
     steps:
-      - uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-      - uses: actions/checkout@v2
-      - name: Install cargo-deny
-        uses: actions-rs/install@v0.1
-        with:
-          crate: cargo-deny
-          version: latest
-          use-tool-cache: true
-      - name: cargo deny
-        uses: actions-rs/cargo@v1
-        with:
-          command: deny
-          args: check
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v6
+      - run: cargo install cargo-deny
+      - run: cargo deny check
