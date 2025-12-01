@@ -65,7 +65,7 @@ impl Ord for Packet {
                 for (l, r) in lhs.iter().zip(rhs) {
                     match l.cmp(r) {
                         Ordering::Less => return Ordering::Less,
-                        Ordering::Equal => {},
+                        Ordering::Equal => {}
                         Ordering::Greater => return Ordering::Greater,
                     }
                 }

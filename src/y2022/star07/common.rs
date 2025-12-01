@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::str::Lines;
 
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 #[derive(Debug)]
 pub(super) enum Node {

@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 pub fn run(input: &str) -> Result<usize> {
     let bytes = input.as_bytes();

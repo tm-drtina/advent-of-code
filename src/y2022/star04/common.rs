@@ -1,7 +1,7 @@
 use std::ops::RangeInclusive;
 use std::str::FromStr;
 
-use anyhow::{anyhow, Error, Result};
+use anyhow::{Error, Result, anyhow};
 
 #[derive(Debug, Clone)]
 pub(super) struct Pair(RangeInclusive<usize>, RangeInclusive<usize>);

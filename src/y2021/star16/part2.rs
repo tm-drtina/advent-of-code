@@ -1,4 +1,4 @@
-use super::part1::{parse, HexStringIter};
+use super::part1::{HexStringIter, parse};
 
 pub fn run(input: &str) -> usize {
     let mut iter = HexStringIter::new(input);

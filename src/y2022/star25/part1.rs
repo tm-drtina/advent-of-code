@@ -2,7 +2,7 @@ use std::iter::Sum;
 use std::ops::Add;
 use std::str::FromStr;
 
-use anyhow::{bail, Error, Result};
+use anyhow::{Error, Result, bail};
 
 type Value = i64;
 

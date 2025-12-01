@@ -19,7 +19,8 @@ pub fn run(input: &str) -> Result<usize> {
             } else {
                 let log10_2 = log10.div_ceil(2);
                 let pow10 = 10usize.pow(log10_2);
-                cache.get_or_compute((num / pow10, blinks - 1)) + cache.get_or_compute((num % pow10, blinks - 1))
+                cache.get_or_compute((num / pow10, blinks - 1))
+                    + cache.get_or_compute((num % pow10, blinks - 1))
             }
         }
     }));

@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use super::part1::{find_neighbors, parse_tiles, Neighbors};
+use super::part1::{Neighbors, find_neighbors, parse_tiles};
 use crate::utils::rotate_matrix_cc;
 
 impl Neighbors {

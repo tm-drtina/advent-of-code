@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::{Result, bail};
 
 use super::common::Sensor;
 use crate::utils::point::Point2D;
