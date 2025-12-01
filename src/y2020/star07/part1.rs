@@ -8,8 +8,7 @@ fn parse_line(line: &str) -> (&str, Vec<&str>) {
             .split(", ")
             .map(|bag_with_count| {
                 let (_count, color_bag) = bag_with_count.split_once(' ').unwrap();
-                let color = color_bag.rsplit_once(' ').unwrap().0;
-                color
+                color_bag.rsplit_once(' ').unwrap().0
             })
             .collect(),
     )

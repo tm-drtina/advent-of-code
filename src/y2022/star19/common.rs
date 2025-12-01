@@ -271,20 +271,14 @@ impl<const N: u32> State<N> {
         if let Some(s) = self.build_geode(blueprint) {
             res.push(s);
         }
-        if self.robots.obsidian < blueprint.max_obsidian {
-            if let Some(s) = self.build_obsidian(blueprint) {
-                res.push(s);
-            }
+        if self.robots.obsidian < blueprint.max_obsidian && let Some(s) = self.build_obsidian(blueprint) {
+            res.push(s);
         }
-        if self.robots.clay < blueprint.max_clay {
-            if let Some(s) = self.build_clay(blueprint) {
-                res.push(s);
-            }
+        if self.robots.clay < blueprint.max_clay && let Some(s) = self.build_clay(blueprint) {
+            res.push(s);
         }
-        if self.robots.ore < blueprint.max_ore {
-            if let Some(s) = self.build_ore(blueprint) {
-                res.push(s);
-            }
+        if self.robots.ore < blueprint.max_ore && let Some(s) = self.build_ore(blueprint) {
+            res.push(s);
         }
         if res.is_empty() {
             res.push(self.end());

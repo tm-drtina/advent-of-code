@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use anyhow::{anyhow, bail, Error, Result};
+use anyhow::{Error, Result, anyhow, bail};
 
 use crate::utils::point::{Dir, Point2D};
 
@@ -265,41 +265,42 @@ impl Cube {
             .end
             .try_step_dir(edge.dir)
             .and_then(|p| p.try_step_dir(edge.dir.clockwise_90()))
+            && puzzle
+                .map
+                .get(y)
+                .is_some_and(|row| matches!(row.get(x), Some(Node::Empty | Node::Wall)))
         {
-            if puzzle.map.get(y).is_some_and(|row| {
-                matches!(row.get(x), Some(Node::Empty | Node::Wall))
-            }) {
-                let mut end = pt;
-                for _ in 1..side_len {
-                    end = end.try_step_dir(edge.dir).unwrap();
-                }
-                *edge = Edge {
-                    start: pt,
-                    end,
-                    transition: Transition::InnerEdge,
-                    dir: edge.dir.counterclockwise_90(),
-                };
-                return;
+            let mut end = pt;
+            for _ in 1..side_len {
+                end = end.try_step_dir(edge.dir).unwrap();
             }
+            *edge = Edge {
+                start: pt,
+                end,
+                transition: Transition::InnerEdge,
+                dir: edge.dir.counterclockwise_90(),
+            };
+            return;
         }
 
         // try straight
-        if let Some(pt @ Point2D { x, y }) = edge.end.try_step_dir(edge.dir.clockwise_90()) {
-            if puzzle.map.get(y).is_some_and(|row| {
-                matches!(row.get(x), Some(Node::Empty | Node::Wall))
-            }) {
-                let mut end = pt;
-                for _ in 1..side_len {
-                    end = end.try_step_dir(edge.dir.clockwise_90()).unwrap();
-                }
-                *edge = Edge {
-                    start: pt,
-                    end,
-                    transition: Transition::Straight,
-                    dir: edge.dir,
-                };
-                return;
+        if let Some(pt @ Point2D { x, y }) = edge.end.try_step_dir(edge.dir.clockwise_90())
+            && puzzle
+                .map
+                .get(y)
+                .is_some_and(|row| matches!(row.get(x), Some(Node::Empty | Node::Wall)))
+        {
+            let mut end = pt;
+            for _ in 1..side_len {
+                end = end.try_step_dir(edge.dir.clockwise_90()).unwrap();
             }
+            *edge = Edge {
+                start: pt,
+                end,
+                transition: Transition::Straight,
+                dir: edge.dir,
+            };
+            return;
         }
 
         // outer edge
