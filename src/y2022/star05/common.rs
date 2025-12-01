@@ -22,7 +22,7 @@ impl FromStr for Puzzle {
         let mut acc: Vec<Vec<Option<char>>> = Vec::new();
         loop {
             let line = lines.next().ok_or_else(|| anyhow!("Invalid format"))?;
-            if lines.peek().map_or(true, |s| s.is_empty()) {
+            if lines.peek().is_none_or(|s| s.is_empty()) {
                 break;
             }
             let crates = line

@@ -21,7 +21,6 @@ impl From<&mut &[u8]> for Packet {
                     match value[0] {
                         b',' => {
                             *value = &value[1..];
-                            continue;
                         }
                         b']' => {
                             *value = &value[1..];
@@ -66,7 +65,7 @@ impl Ord for Packet {
                 for (l, r) in lhs.iter().zip(rhs) {
                     match l.cmp(r) {
                         Ordering::Less => return Ordering::Less,
-                        Ordering::Equal => continue,
+                        Ordering::Equal => {},
                         Ordering::Greater => return Ordering::Greater,
                     }
                 }

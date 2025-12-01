@@ -29,7 +29,7 @@ pub fn run(input: &str) -> String {
                     None => {
                         allergens.insert(allergen, ingredients.clone());
                     }
-                };
+                }
             });
     });
 

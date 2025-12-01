@@ -141,7 +141,7 @@ impl<const SANE: bool> Monkeys<SANE> {
                 } else {
                     new_item %= self.lcm;
                 }
-                let target_index = if new_item % self.monkeys[index].divisible == 0 {
+                let target_index = if new_item.is_multiple_of(self.monkeys[index].divisible) {
                     self.monkeys[index].true_cond
                 } else {
                     self.monkeys[index].false_cond
