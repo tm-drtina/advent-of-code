@@ -22,7 +22,7 @@ pub fn run(input: &str) -> Result<usize> {
         .iter_values()
         .find(|(_pt, tile)| matches!(tile, Tile::Guard(_)))
         .ok_or(anyhow!("Guard position not found"))?;
-    let Tile::Guard(mut dir) = tile else {
+    let &Tile::Guard(mut dir) = tile else {
         unreachable!()
     };
     loop {
