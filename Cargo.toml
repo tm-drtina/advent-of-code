@@ -19,4 +19,4 @@ opt-level = 2
 
 [features]
 default = []
-ignore-sanity = [] # Runs not only the first test for each part (first test should be the main, not sanity)
+skip-test-main = [] # For CI where input files are not present
