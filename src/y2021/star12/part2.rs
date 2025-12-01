@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 
-use super::part1::{parse, Node};
+use super::part1::{Node, parse};
 
 fn find_paths(
     visited: &HashSet<Node>,

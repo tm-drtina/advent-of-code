@@ -1,6 +1,6 @@
 use std::str::Lines;
 
-use anyhow::{bail, Error, Result};
+use anyhow::{Error, Result, bail};
 use itertools::{Chunk, Itertools};
 
 struct Group {

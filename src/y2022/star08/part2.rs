@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 pub fn run(input: &str) -> Result<usize> {
     let map: Vec<_> = input.lines().map(str::as_bytes).collect();

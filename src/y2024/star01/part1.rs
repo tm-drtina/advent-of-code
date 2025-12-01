@@ -23,5 +23,9 @@ pub fn run(input: &str) -> Result<usize> {
     left.sort_unstable();
     right.sort_unstable();
 
-    Ok(left.into_iter().zip(right).map(|(l, r)| l.abs_diff(r)).sum())
+    Ok(left
+        .into_iter()
+        .zip(right)
+        .map(|(l, r)| l.abs_diff(r))
+        .sum())
 }

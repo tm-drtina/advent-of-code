@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use pathfinding::prelude::dijkstra;
 
 use super::common::Puzzle;

@@ -1,7 +1,7 @@
 use std::ops::Range;
 use std::str::FromStr;
 
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 
 struct Mapping {
     data: Vec<(Range<u64>, Range<u64>)>,

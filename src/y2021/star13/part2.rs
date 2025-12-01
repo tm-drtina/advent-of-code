@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-use super::part1::{parse, Point};
+use super::part1::{Point, parse};
 
 pub fn run(input: &str) -> String {
     let (mut points, folds) = parse(input);

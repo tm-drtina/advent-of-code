@@ -3,9 +3,8 @@ use std::collections::BTreeSet;
 use anyhow::Result;
 use itertools::Itertools;
 
-use crate::utils::point::Point2D;
-
 use super::part1::Antennas;
+use crate::utils::point::Point2D;
 
 struct PointIter {
     counter: usize,
@@ -22,7 +21,7 @@ impl Iterator for PointIter {
         self.counter += 1;
         let x = ((1 + self.counter) * self.a.x).checked_sub(self.counter * self.b.x)?;
         let y = ((1 + self.counter) * self.a.y).checked_sub(self.counter * self.b.y)?;
-        
+
         if x >= self.width || y >= self.height {
             None
         } else {
@@ -33,12 +32,18 @@ impl Iterator for PointIter {
 
 impl Antennas {
     fn point_iter(&self, a: Point2D<usize>, b: Point2D<usize>) -> PointIter {
-        PointIter { counter: 0, a, b, width: self.width, height: self.height }
+        PointIter {
+            counter: 0,
+            a,
+            b,
+            width: self.width,
+            height: self.height,
+        }
     }
 
     fn antinodes_part2(&self) -> usize {
         let mut antinodes = BTreeSet::<Point2D<usize>>::new();
-        
+
         for collection in self.antennas.values() {
             if collection.len() > 1 {
                 antinodes.extend(collection);

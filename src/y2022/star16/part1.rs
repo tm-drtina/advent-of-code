@@ -1,7 +1,7 @@
 use std::collections::{BTreeSet, HashMap};
 use std::str::FromStr;
 
-use anyhow::{anyhow, Error, Result};
+use anyhow::{Error, Result, anyhow};
 use pathfinding::prelude::dijkstra_all;
 
 #[derive(Debug)]
