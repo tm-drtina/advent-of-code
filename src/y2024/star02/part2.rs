@@ -3,9 +3,8 @@ use std::str::FromStr;
 
 use anyhow::Result;
 
-use crate::utils::IterHelpers;
-
 use super::part1::Report;
+use crate::utils::IterHelpers;
 
 impl Report {
     fn is_safe_with_removal(&self) -> bool {

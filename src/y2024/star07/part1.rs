@@ -40,7 +40,7 @@ impl Equation {
                     match new_result.cmp(&self.result) {
                         std::cmp::Ordering::Less => new_partial_results.push(new_result),
                         std::cmp::Ordering::Equal => return true,
-                        std::cmp::Ordering::Greater => {},
+                        std::cmp::Ordering::Greater => {}
                     }
                 }
             }

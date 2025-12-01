@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::iter::Cycle;
 use std::str::FromStr;
 
-use anyhow::{anyhow, bail, Result};
+use anyhow::{Result, anyhow, bail};
 
 pub(super) type Loc = u32;
 

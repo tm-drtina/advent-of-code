@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use anyhow::{anyhow, Error, Result};
+use anyhow::{Error, Result, anyhow};
 
 use crate::utils::cache::unsync::Cache;
 
@@ -271,13 +271,19 @@ impl<const N: u32> State<N> {
         if let Some(s) = self.build_geode(blueprint) {
             res.push(s);
         }
-        if self.robots.obsidian < blueprint.max_obsidian && let Some(s) = self.build_obsidian(blueprint) {
+        if self.robots.obsidian < blueprint.max_obsidian
+            && let Some(s) = self.build_obsidian(blueprint)
+        {
             res.push(s);
         }
-        if self.robots.clay < blueprint.max_clay && let Some(s) = self.build_clay(blueprint) {
+        if self.robots.clay < blueprint.max_clay
+            && let Some(s) = self.build_clay(blueprint)
+        {
             res.push(s);
         }
-        if self.robots.ore < blueprint.max_ore && let Some(s) = self.build_ore(blueprint) {
+        if self.robots.ore < blueprint.max_ore
+            && let Some(s) = self.build_ore(blueprint)
+        {
             res.push(s);
         }
         if res.is_empty() {

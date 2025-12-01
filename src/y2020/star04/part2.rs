@@ -27,26 +27,17 @@ impl<'a, T: Iterator<Item = &'a str>> Iterator for Input<'a, T> {
 
 fn valid_byr(map: &HashMap<&str, &str>) -> bool {
     map.get("byr").is_some_and(|val| {
-        val.len() == 4
-            && val
-                .parse()
-                .is_ok_and(|ival| (1920..=2002).contains(&ival))
+        val.len() == 4 && val.parse().is_ok_and(|ival| (1920..=2002).contains(&ival))
     })
 }
 fn valid_iyr(map: &HashMap<&str, &str>) -> bool {
     map.get("iyr").is_some_and(|val| {
-        val.len() == 4
-            && val
-                .parse()
-                .is_ok_and(|ival| (2010..=2020).contains(&ival))
+        val.len() == 4 && val.parse().is_ok_and(|ival| (2010..=2020).contains(&ival))
     })
 }
 fn valid_eyr(map: &HashMap<&str, &str>) -> bool {
     map.get("eyr").is_some_and(|val| {
-        val.len() == 4
-            && val
-                .parse()
-                .is_ok_and(|ival| (2020..=2030).contains(&ival))
+        val.len() == 4 && val.parse().is_ok_and(|ival| (2020..=2030).contains(&ival))
     })
 }
 fn valid_hgt(map: &HashMap<&str, &str>) -> bool {
@@ -69,14 +60,12 @@ fn valid_hcl(map: &HashMap<&str, &str>) -> bool {
     })
 }
 fn valid_ecl(map: &HashMap<&str, &str>) -> bool {
-    map.get("ecl").is_some_and(|val| {
-        matches!(*val, "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth")
-    })
+    map.get("ecl")
+        .is_some_and(|val| matches!(*val, "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth"))
 }
 fn valid_pid(map: &HashMap<&str, &str>) -> bool {
-    map.get("pid").is_some_and(|val| {
-        val.len() == 9 && val.chars().all(char::is_numeric)
-    })
+    map.get("pid")
+        .is_some_and(|val| val.len() == 9 && val.chars().all(char::is_numeric))
 }
 
 pub fn run(input: &str) -> usize {

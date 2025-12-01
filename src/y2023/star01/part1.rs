@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 fn parse_line(line: &str) -> Result<(u32, u32)> {
     let mut iter = line.chars().filter_map(|c| c.to_digit(10));

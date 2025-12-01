@@ -1,7 +1,7 @@
 use std::collections::{HashMap, HashSet};
 use std::str::FromStr;
 
-use anyhow::{bail, Error, Result};
+use anyhow::{Error, Result, bail};
 
 use crate::utils::point::{Dir, Point2D};
 

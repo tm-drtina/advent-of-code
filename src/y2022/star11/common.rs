@@ -2,7 +2,7 @@ use std::cmp::Reverse;
 use std::collections::VecDeque;
 use std::str::{FromStr, Lines};
 
-use anyhow::{anyhow, bail, Context, Error, Ok, Result};
+use anyhow::{Context, Error, Ok, Result, anyhow, bail};
 use num::integer::lcm;
 
 #[derive(Debug, Clone, Copy)]

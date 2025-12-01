@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use anyhow::{bail, Error, Result};
+use anyhow::{Error, Result, bail};
 
 struct Rucksack {
     compartments: Vec<Vec<u8>>,

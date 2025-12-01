@@ -1,4 +1,4 @@
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 
 fn parse_line(mut line: &str) -> Result<(u32, u32)> {
     let mut first = None;

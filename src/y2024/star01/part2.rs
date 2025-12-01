@@ -23,5 +23,8 @@ pub fn run(input: &str) -> Result<usize> {
         *right.entry(right_num).or_default() += 1;
     }
 
-    Ok(left.into_iter().map(|l| right.get(&l).copied().unwrap_or_default() * l).sum())
+    Ok(left
+        .into_iter()
+        .map(|l| right.get(&l).copied().unwrap_or_default() * l)
+        .sum())
 }

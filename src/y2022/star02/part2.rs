@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use anyhow::{bail, Context, Error, Result};
+use anyhow::{Context, Error, Result, bail};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 enum Choice {

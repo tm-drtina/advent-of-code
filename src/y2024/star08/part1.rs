@@ -28,12 +28,16 @@ impl FromStr for Antennas {
                 }
 
                 if ch != '.' {
-                    antennas.entry(ch).or_default().push(Point2D {x, y});
+                    antennas.entry(ch).or_default().push(Point2D { x, y });
                 }
             }
         }
-        
-        Ok(Self { antennas, height, width })
+
+        Ok(Self {
+            antennas,
+            height,
+            width,
+        })
     }
 }
 
@@ -50,7 +54,7 @@ impl Antennas {
 
     fn antinodes(&self) -> usize {
         let mut antinodes = BTreeSet::<Point2D<usize>>::new();
-        
+
         for collection in self.antennas.values() {
             for (a, b) in collection.iter().tuple_combinations() {
                 let x1 = (2 * a.x).checked_sub(b.x);
