@@ -8,6 +8,7 @@ struct Race {
 }
 
 impl Race {
+    #[allow(clippy::manual_midpoint)]
     fn count_wins(&self) -> u32 {
         // n * (time - n) > distance
         // time > n > 0

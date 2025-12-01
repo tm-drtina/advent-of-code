@@ -27,7 +27,7 @@ pub fn run(input: &str) -> usize {
                     None => {
                         allergens.insert(allergen, ingredients.clone());
                     }
-                };
+                }
             });
     });
 

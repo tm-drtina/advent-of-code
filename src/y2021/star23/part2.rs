@@ -1,4 +1,5 @@
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
+
 use pathfinding::prelude::dijkstra;
 
 /*
@@ -21,7 +22,7 @@ const RESULT: [u8; 23] = [
     0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4,
 ];
 const COSTS: [usize; 4] = [1, 10, 100, 1000];
-static PATHS: Lazy<[Vec<Path>; 4]> = Lazy::new(|| {
+static PATHS: LazyLock<[Vec<Path>; 4]> = LazyLock::new(|| {
     [
         vec![
             Path {

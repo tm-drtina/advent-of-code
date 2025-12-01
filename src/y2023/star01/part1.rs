@@ -3,7 +3,7 @@ use anyhow::{anyhow, Result};
 fn parse_line(line: &str) -> Result<(u32, u32)> {
     let mut iter = line.chars().filter_map(|c| c.to_digit(10));
     let first = iter.next().ok_or(anyhow!(""))?;
-    let last = iter.last().unwrap_or(first);
+    let last = iter.next_back().unwrap_or(first);
     Ok((first, last))
 }
 

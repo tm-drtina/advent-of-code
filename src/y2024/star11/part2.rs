@@ -17,7 +17,7 @@ pub fn run(input: &str) -> Result<usize> {
             if log10 & 1 == 0 {
                 cache.get_or_compute((num * 2024, blinks - 1))
             } else {
-                let log10_2 = (log10 + 1) / 2;
+                let log10_2 = log10.div_ceil(2);
                 let pow10 = 10usize.pow(log10_2);
                 cache.get_or_compute((num / pow10, blinks - 1)) + cache.get_or_compute((num % pow10, blinks - 1))
             }

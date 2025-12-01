@@ -59,7 +59,7 @@ impl Number {
                             unreachable!("Well, this is awkward")
                         };
 
-                        *left = Box::new(Self::Literal(0));
+                        **left = Self::Literal(0);
                         right.increment_left(right_value);
                         (true, Some(left_value), None)
                     } else if let Number::Combined(inner_left, inner_right) = &**right {
@@ -71,7 +71,7 @@ impl Number {
                         };
 
                         left.increment_right(left_value);
-                        *right = Box::new(Self::Literal(0));
+                        **right = Self::Literal(0);
                         (true, None, Some(right_value))
                     } else {
                         (false, None, None)
@@ -119,14 +119,14 @@ impl Number {
                 let (res, replace) = left.split();
                 if res {
                     if let Some(replace) = replace {
-                        *left = Box::new(replace);
+                        **left = replace;
                     }
                     return (true, None);
                 }
                 let (res, replace) = right.split();
                 if res {
                     if let Some(replace) = replace {
-                        *right = Box::new(replace);
+                        **right = replace;
                     }
                     (true, None)
                 } else {

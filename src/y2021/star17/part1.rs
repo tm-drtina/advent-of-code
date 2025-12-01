@@ -51,5 +51,5 @@ pub fn run(input: &str) -> i32 {
         }
     }
 
-    (best_y_speed * best_y_speed + best_y_speed) / 2
+    i32::midpoint(best_y_speed * best_y_speed, best_y_speed)
 }

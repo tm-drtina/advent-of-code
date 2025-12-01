@@ -27,7 +27,7 @@ pub fn run(input: &str) -> usize {
                 epsilon <<= 1;
             }
             std::cmp::Ordering::Equal => {}
-        };
+        }
     }
 
     gamma * epsilon

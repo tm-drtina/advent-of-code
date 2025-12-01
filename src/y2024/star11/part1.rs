@@ -14,7 +14,7 @@ fn num_stones(num: usize, blinks: usize) -> usize {
         if log10 & 1 == 0 {
             num_stones(num * 2024, blinks - 1)
         } else {
-            let log10_2 = (log10 + 1) / 2;
+            let log10_2 = log10.div_ceil(2);
             let pow10 = 10usize.pow(log10_2);
             num_stones(num / pow10, blinks - 1) + num_stones(num % pow10, blinks - 1)
         }
