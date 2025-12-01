@@ -12,14 +12,8 @@ jobs:
       matrix:
         toolchain: [stable, beta, nightly]
     steps:
-      - uses: actions-rs/toolchain@v1
+      - uses: dtolnay/rust-toolchain@master
         with:
-          profile: minimal
           toolchain: ${{ matrix.toolchain }}
-          override: true
-      - uses: actions/checkout@v2
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -- --show-output
+      - uses: actions/checkout@v6
+      - run: cargo test -- --show-output
