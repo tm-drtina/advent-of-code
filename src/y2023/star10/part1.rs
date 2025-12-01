@@ -74,5 +74,5 @@ impl Iterator for State {
 }
 
 pub fn run(input: &str) -> Result<usize> {
-    Ok((input.parse::<State>()?.count() + 1) / 2)
+    Ok(input.parse::<State>()?.count().div_ceil(2))
 }
