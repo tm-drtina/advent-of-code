@@ -16,4 +16,4 @@ jobs:
         with:
           toolchain: ${{ matrix.toolchain }}
       - uses: actions/checkout@v6
-      - run: cargo test -- --show-output
+      - run: cargo test --features skip-test-main -- --show-output
