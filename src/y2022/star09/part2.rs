@@ -160,7 +160,7 @@ impl Puzzle {
             "R" => (0..amount).for_each(|_| self.right(0)),
             "U" => (0..amount).for_each(|_| self.up(0)),
             "D" => (0..amount).for_each(|_| self.down(0)),
-            _ => bail!("Invalid direction {}", dir),
+            _ => bail!("Invalid direction {dir}"),
         }
         Ok(())
     }
