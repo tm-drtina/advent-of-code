@@ -27,7 +27,7 @@ impl FromStr for Choice {
             "A" => Ok(Self::Rock),
             "B" => Ok(Self::Paper),
             "C" => Ok(Self::Scissors),
-            _ => bail!("Unexpected choice '{}'", s),
+            _ => bail!("Unexpected choice '{s}'"),
         }
     }
 }
@@ -57,7 +57,7 @@ impl FromStr for Outcome {
             "X" => Ok(Self::Lose),
             "Y" => Ok(Self::Draw),
             "Z" => Ok(Self::Win),
-            _ => bail!("Unexpected choice '{}'", s),
+            _ => bail!("Unexpected choice '{s}'"),
         }
     }
 }

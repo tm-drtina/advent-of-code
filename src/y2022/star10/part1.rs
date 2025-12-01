@@ -41,7 +41,7 @@ impl State {
             _ if line.starts_with("addx ") => {
                 self.addx(line.strip_prefix("addx ").unwrap().parse()?);
             }
-            _ => bail!("Unknown command {}", line),
+            _ => bail!("Unknown command {line}"),
         }
         Ok(())
     }

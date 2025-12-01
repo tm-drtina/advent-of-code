@@ -27,7 +27,7 @@ impl FromStr for Choice {
             "A" | "X" => Ok(Self::Rock),
             "B" | "Y" => Ok(Self::Paper),
             "C" | "Z" => Ok(Self::Scissors),
-            _ => bail!("Unexpected choice '{}'", s),
+            _ => bail!("Unexpected choice '{s}'"),
         }
     }
 }
