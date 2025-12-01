@@ -11,6 +11,6 @@ mod tests {
             "2-2--02=1---1200=0-1",
             include_str!("input.txt")
         ),
-        (part1_sanity1, "2=-1=0", include_str!("input.sanity1.txt")),
+        (part1_example1, "2=-1=0", include_str!("input.example1.txt")),
     );
 }

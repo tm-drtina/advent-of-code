@@ -8,7 +8,7 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 2020, include_str!("input.txt")),
-        (part1_sanity, 5, include_str!("input.sanity.txt")),
+        (part1_example, 5, include_str!("input.example.txt")),
     );
 
     aoc_test_suite!(
@@ -19,9 +19,9 @@ mod tests {
             include_str!("input.txt")
         ),
         (
-            part2_sanity,
+            part2_example,
             "mxmxvkd,sqjhc,fvjkl",
-            include_str!("input.sanity.txt")
+            include_str!("input.example.txt")
         ),
     );
 }

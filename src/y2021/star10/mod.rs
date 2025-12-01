@@ -8,12 +8,12 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 469_755, include_str!("input.txt")),
-        (part1_sanity, 26397, include_str!("input.sanity.txt")),
+        (part1_example, 26397, include_str!("input.example.txt")),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 2_762_335_572, include_str!("input.txt")),
-        (part2_sanity, 288_957, include_str!("input.sanity.txt")),
+        (part2_example, 288_957, include_str!("input.example.txt")),
     );
 }

@@ -8,9 +8,9 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 822, include_str!("input.txt")),
-        (part1_sanity1, 567, "BFFFBBFRRR"),
-        (part1_sanity2, 119, "FFFBBBFRRR"),
-        (part1_sanity3, 820, "BBFFBBFRLL"),
+        (part1_example1, 567, "BFFFBBFRRR"),
+        (part1_example2, 119, "FFFBBBFRRR"),
+        (part1_example3, 820, "BBFFBBFRLL"),
     );
 
     aoc_test_suite!(

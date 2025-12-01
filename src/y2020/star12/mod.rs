@@ -13,6 +13,6 @@ mod tests {
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 35292, include_str!("input.txt")),
-        (part2_sanity, 286, include_str!("input.sanity.txt")),
+        (part2_example, 286, include_str!("input.example.txt")),
     );
 }

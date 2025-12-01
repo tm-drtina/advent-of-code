@@ -9,12 +9,12 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 169_525_884_255_464, include_str!("input.txt")),
-        (part1_sanity1, 152, include_str!("input.sanity1.txt")),
+        (part1_example1, 152, include_str!("input.example1.txt")),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 3_247_317_268_284, include_str!("input.txt")),
-        (part2_sanity1, 301, include_str!("input.sanity1.txt")),
+        (part2_example1, 301, include_str!("input.example1.txt")),
     );
 }

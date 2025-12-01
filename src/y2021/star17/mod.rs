@@ -8,12 +8,12 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 7503, "target area: x=124..174, y=-123..-86"),
-        (part1_sanity, 45, "target area: x=20..30, y=-10..-5"),
+        (part1_example, 45, "target area: x=20..30, y=-10..-5"),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 3229, "target area: x=124..174, y=-123..-86"),
-        (part2_sanity, 112, "target area: x=20..30, y=-10..-5"),
+        (part2_example, 112, "target area: x=20..30, y=-10..-5"),
     );
 }

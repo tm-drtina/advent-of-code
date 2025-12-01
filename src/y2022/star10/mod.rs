@@ -8,7 +8,7 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 12560, include_str!("input.txt")),
-        (part1_sanity1, 13140, include_str!("input.sanity1.txt")),
+        (part1_example1, 13140, include_str!("input.example1.txt")),
     );
 
     aoc_test_suite!(
@@ -26,7 +26,7 @@ mod tests {
             include_str!("input.txt")
         ),
         (
-            part2_sanity1,
+            part2_example1,
             "\
 ##..##..##..##..##..##..##..##..##..##..
 ###...###...###...###...###...###...###.
@@ -35,7 +35,7 @@ mod tests {
 ######......######......######......####
 #######.......#######.......#######.....
 ",
-            include_str!("input.sanity1.txt")
+            include_str!("input.example1.txt")
         ),
     );
 }

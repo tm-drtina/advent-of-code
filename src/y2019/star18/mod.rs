@@ -10,19 +10,19 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 4246, include_str!("input.txt")),
-        (part1_sanity1, 8, include_str!("input.sanity1.txt")),
-        (part1_sanity2, 86, include_str!("input.sanity2.txt")),
-        (part1_sanity3, 132, include_str!("input.sanity3.txt")),
-        (part1_sanity4, 136, include_str!("input.sanity4.txt")),
-        (part1_sanity5, 81, include_str!("input.sanity5.txt")),
+        (part1_example1, 8, include_str!("input.example1.txt")),
+        (part1_example2, 86, include_str!("input.example2.txt")),
+        (part1_example3, 132, include_str!("input.example3.txt")),
+        (part1_example4, 136, include_str!("input.example4.txt")),
+        (part1_example5, 81, include_str!("input.example5.txt")),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 1940, include_str!("input.txt")),
-        (part2_sanity6, 8, include_str!("input.sanity6.txt")),
-        (part2_sanity7, 24, include_str!("input.sanity7.txt")),
-        (part2_sanity8, 32, include_str!("input.sanity8.txt")),
-        (part2_sanity9, 72, include_str!("input.sanity9.txt")),
+        (part2_example6, 8, include_str!("input.example6.txt")),
+        (part2_example7, 24, include_str!("input.example7.txt")),
+        (part2_example8, 32, include_str!("input.example8.txt")),
+        (part2_example9, 72, include_str!("input.example9.txt")),
     );
 }

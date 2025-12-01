@@ -8,20 +8,20 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 1625, include_str!("input.txt")),
-        (part1_sanity1, 7, include_str!("input.sanity1.txt")),
-        (part1_sanity2, 5, include_str!("input.sanity2.txt")),
-        (part1_sanity3, 6, include_str!("input.sanity3.txt")),
-        (part1_sanity4, 10, include_str!("input.sanity4.txt")),
-        (part1_sanity5, 11, include_str!("input.sanity5.txt")),
+        (part1_example1, 7, include_str!("input.example1.txt")),
+        (part1_example2, 5, include_str!("input.example2.txt")),
+        (part1_example3, 6, include_str!("input.example3.txt")),
+        (part1_example4, 10, include_str!("input.example4.txt")),
+        (part1_example5, 11, include_str!("input.example5.txt")),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 2250, include_str!("input.txt")),
-        (part2_sanity1, 19, include_str!("input.sanity1.txt")),
-        (part2_sanity2, 23, include_str!("input.sanity2.txt")),
-        (part2_sanity3, 23, include_str!("input.sanity3.txt")),
-        (part2_sanity4, 29, include_str!("input.sanity4.txt")),
-        (part2_sanity5, 26, include_str!("input.sanity5.txt")),
+        (part2_example1, 19, include_str!("input.example1.txt")),
+        (part2_example2, 23, include_str!("input.example2.txt")),
+        (part2_example3, 23, include_str!("input.example3.txt")),
+        (part2_example4, 29, include_str!("input.example4.txt")),
+        (part2_example5, 26, include_str!("input.example5.txt")),
     );
 }

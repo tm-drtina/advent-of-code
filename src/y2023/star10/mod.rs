@@ -8,25 +8,25 @@ mod tests {
     aoc_test_suite!(
         super::part1::run,
         (part1_main, 6870, include_str!("input.txt")),
-        (part1_sanity1, 4, include_str!("input.sanity1.txt")),
+        (part1_example1, 4, include_str!("input.example1.txt")),
         (
-            part1_sanity1_clean,
+            part1_example1_clean,
             4,
-            include_str!("input.sanity1_clean.txt")
+            include_str!("input.example1_clean.txt")
         ),
-        (part1_sanity2, 8, include_str!("input.sanity2.txt")),
+        (part1_example2, 8, include_str!("input.example2.txt")),
         (
-            part1_sanity2_clean,
+            part1_example2_clean,
             8,
-            include_str!("input.sanity2_clean.txt")
+            include_str!("input.example2_clean.txt")
         ),
     );
 
     aoc_test_suite!(
         super::part2::run,
         (part2_main, 287, include_str!("input.txt")),
-        (part2_sanity3, 4, include_str!("input.sanity3.txt")),
-        (part2_sanity4, 8, include_str!("input.sanity4.txt")),
-        (part2_sanity5, 10, include_str!("input.sanity5.txt")),
+        (part2_example3, 4, include_str!("input.example3.txt")),
+        (part2_example4, 8, include_str!("input.example4.txt")),
+        (part2_example5, 10, include_str!("input.example5.txt")),
     );
 }
