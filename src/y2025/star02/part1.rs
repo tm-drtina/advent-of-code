@@ -2,17 +2,12 @@ use std::str::FromStr;
 
 use anyhow::{Result, anyhow};
 
-fn log10_floor(n: u64) -> u32 {
-    (n as f64).log10().floor() as u32
-}
-
 struct Range(u64, u64);
-
 impl Range {
     fn invalid_ids(self) -> impl Iterator<Item = u64> {
         let start = {
-            let d = log10_floor(self.0);
-            if d % 2 == 0 {
+            let d = self.0.ilog10();
+            if d.is_multiple_of(2) {
                 // Odd number of digits, return first number with even digits
                 // 100 (d=2) -> 1000
                 10u64.pow(d / 2)
@@ -23,8 +18,8 @@ impl Range {
             }
         };
         let end = {
-            let d = log10_floor(self.1);
-            if d % 2 == 0 {
+            let d = self.1.ilog10();
+            if d.is_multiple_of(2) {
                 // Odd number of digits, return previous number with even digits
                 // 120 (d=2) -> 99
                 10u64.pow(d / 2) - 1
@@ -34,9 +29,7 @@ impl Range {
                 if s * x + s > self.1 { s - 1 } else { s }
             }
         };
-        (start..=end)
-            .into_iter()
-            .map(|n| n + n * 10u64.pow(log10_floor(n) + 1))
+        (start..=end).map(|n| n + n * 10u64.pow(n.ilog10() + 1))
     }
 }
 
