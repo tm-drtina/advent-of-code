@@ -1,5 +1,5 @@
 pub mod part1;
-// pub mod part2;
+pub mod part2;
 
 #[cfg(test)]
 mod tests {
@@ -11,9 +11,13 @@ mod tests {
         (part1_example1, 357, include_str!("input.example1.txt")),
     );
 
-    /*aoc_test_suite!(
+    aoc_test_suite!(
         super::part2::run,
-        (part2_main, 369, include_str!("input.txt")),
-        (part2_example1, 3, include_str!("input.example1.txt")),
-    );*/
+        (part2_main, 172740584266849, include_str!("input.txt")),
+        (
+            part2_example1,
+            3121910778619,
+            include_str!("input.example1.txt")
+        ),
+    );
 }
