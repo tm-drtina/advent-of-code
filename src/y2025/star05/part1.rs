@@ -4,7 +4,9 @@ pub fn run(input: &str) -> Result<usize> {
     let mut lines = input.lines();
     let mut ranges = Vec::new();
 
-    while let Some(line) = lines.next() && !line.is_empty() {
+    while let Some(line) = lines.next()
+        && !line.is_empty()
+    {
         let (start, end) = line.split_once('-').ok_or(anyhow!("Wrong format"))?;
         let start = start.parse::<u64>()?;
         let end = end.parse::<u64>()?;
