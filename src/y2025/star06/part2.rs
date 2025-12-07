@@ -27,7 +27,7 @@ impl Iterator for NumGen<'_> {
         self.buf.clear();
         for line in &mut self.input {
             if let ch @ b'0'..=b'9' = line.next()? {
-                self.buf.push(ch - b'0')
+                self.buf.push(ch - b'0');
             }
         }
         Some(if self.buf.is_empty() {
