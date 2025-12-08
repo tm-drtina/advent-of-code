@@ -1,4 +1,5 @@
 use num::Integer;
+use num::pow::Pow;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Point3D<Coord: Integer> {
@@ -42,6 +43,18 @@ impl<Coord: Integer + Copy> Point3D<Coord> {
                 z: z - Coord::one(),
             },
         ]
+    }
+}
+
+impl<Coord: Integer + Copy> Point3D<Coord>
+where
+    f64: From<Coord>,
+{
+    pub fn euclidean_distance(&self, other: &Self) -> f64 {
+        let x2: f64 = (f64::from(self.x) - f64::from(other.x)).pow(2)
+            + (f64::from(self.y) - f64::from(other.y)).pow(2)
+            + (f64::from(self.z) - f64::from(other.z)).pow(2);
+        x2.sqrt()
     }
 }
 
